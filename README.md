@@ -19,7 +19,7 @@ There is something powerful about setting a date and time for having a serious s
 
 ## How it works
 
-0. Create an account / Login with (google, facebook etc.)
+0. Create an account / Login with (google, Facebook etc.)
 1. Write down the topic title (ANY TOPIC! No matter how small or large)
 2. Write a short description
 3. Pick a date and time (e.g. 12:00 - 12:47)
