@@ -1,7 +1,7 @@
 export function ErrorView() {
   return (
-    <div>
+    <section>
       <h1>Page not found</h1>
-    </div>
+    </section>
   );
 }

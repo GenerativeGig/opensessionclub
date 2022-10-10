@@ -63,12 +63,18 @@ There is something powerful about setting a date and time for having a serious s
 
 - Typescript
 - React
+- Tailwindcss
 
 #### Routes
 
-/ -> Session List
-/session/create
-/session/:id/edit
+/ -> Home Page that explains how this website works
+/login
+/signup
+/sessions -> Session List where the sessions can be viewed (Filter to see only yours)
+
+- Show more to see all the info about the session
+  /session/create
+  /session/:id/edit
 
 ### Backend
 

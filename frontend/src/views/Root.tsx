@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "../App.css";
 import {
   Session,
   SessionCommunicationMode,
@@ -7,7 +6,7 @@ import {
 } from "../interfaces/Session";
 import { CreateSessionView } from "./CreateSession/CreateSession";
 import { ErrorView } from "./Error";
-import { FooterView } from "./FooterView";
+import { FooterView } from "./Footer";
 import { HeaderView } from "./Header";
 import { SessionListView } from "./SessionList";
 
@@ -39,11 +38,13 @@ export function RootView() {
   return (
     <BrowserRouter>
       <HeaderView />
-      <Routes>
-        <Route path="/" element={<SessionListView sessions={sessions} />} />
-        <Route path="/session/create" element={<CreateSessionView />} />
-        <Route path="*" element={<ErrorView />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path="/" element={<SessionListView sessions={sessions} />} />
+          <Route path="/session/create" element={<CreateSessionView />} />
+          <Route path="*" element={<ErrorView />} />
+        </Routes>
+      </main>
       <FooterView />
     </BrowserRouter>
   );

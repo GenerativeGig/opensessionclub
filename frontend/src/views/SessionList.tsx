@@ -7,12 +7,14 @@ export interface SessionListProps {
 
 export function SessionListView({ sessions }: SessionListProps) {
   return (
-    <ol>
-      {sessions.map((session: Session) => (
-        <li key={session.id}>
-          <SessionView session={session} />
-        </li>
-      ))}
-    </ol>
+    <section>
+      <ol>
+        {sessions.map((session: Session) => (
+          <li key={session.id}>
+            <SessionView session={session} />
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
