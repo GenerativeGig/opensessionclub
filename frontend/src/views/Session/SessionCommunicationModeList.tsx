@@ -1,11 +1,11 @@
 import { SessionCommunicationMode } from "../../interfaces/Session";
 
-export interface SessionCommunicationModeProps {
+export interface SessionCommunicationModeListProps {
   communicationModes: SessionCommunicationMode[];
 }
-export function SessionCommunicationModeView({
+export function SessionCommunicationModeListView({
   communicationModes,
-}: SessionCommunicationModeProps) {
+}: SessionCommunicationModeListProps) {
   return (
     <div>
       {communicationModes.map((communicationMode) => (

@@ -1,9 +1,9 @@
 import { SessionFormat } from "../../interfaces/Session";
 
-export interface SessionFormatProps {
+export interface SessionFormatListProps {
   formats: SessionFormat[];
 }
-export function SessionFormatView({ formats }: SessionFormatProps) {
+export function SessionFormatListView({ formats }: SessionFormatListProps) {
   return (
     <div>
       {formats.map((format) => (

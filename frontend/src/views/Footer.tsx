@@ -1,3 +1,3 @@
 export function FooterView() {
-  return <footer>footer</footer>;
+  return <footer className="text-center bg-slate-700 p-4">footer</footer>;
 }

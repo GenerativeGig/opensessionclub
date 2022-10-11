@@ -7,10 +7,13 @@ export interface SessionListProps {
 
 export function SessionListView({ sessions }: SessionListProps) {
   return (
-    <section>
-      <ol>
+    <section className="h-full w-full">
+      <ol className="flex flex-col items-center">
         {sessions.map((session: Session) => (
-          <li key={session.id}>
+          <li
+            key={session.id}
+            className="m-1 p-4 first:mt-2 last:mb-2 w-full max-w-[768px] bg-slate-800"
+          >
             <SessionView session={session} />
           </li>
         ))}
