@@ -7,9 +7,6 @@ export interface Session {
   description: string;
   startDate: Date;
   endDate: Date;
-  languages: Language[];
-  communicationModes: SessionCommunicationMode[];
-  formats: SessionFormat[];
   participantLimit: number;
   participants: User[];
   creator: User;
@@ -17,31 +14,5 @@ export interface Session {
   notes: SessionNote[];
 }
 
-export enum SessionCommunicationMode {
-  Text = "Text",
-  Speech = "Speech",
-  Video = "Video",
-  SignLanguage = "Sign language",
-  Music = "Music",
-  Whispering = "Whispering",
-  MorseCode = "Morse code",
-  Charades = "Charades",
-  MicroExpressions = "Micro expressions",
-  Other = "Other",
-}
-
-export enum SessionFormat {
-  Dialog = "Dialog",
-  Discussion = "Discussion",
-  Presentation = "Presentation",
-  Debate = "Debate",
-  Interview = "Interview",
-  QuestionsAndAnswers = "Q&A",
-  Feedback = "Feedback",
-  DeepDive = "Deep dive",
-  Other = "Other",
-}
-
-// Bonus Features
 export interface SessionChat {}
 export interface SessionNote {}

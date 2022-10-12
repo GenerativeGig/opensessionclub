@@ -1,9 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import {
-  Session,
-  SessionCommunicationMode,
-  SessionFormat,
-} from "../interfaces/Session";
+import { Session } from "../interfaces/Session";
 import { CreateSessionView } from "./CreateSession/CreateSession";
 import { EditSessionView } from "./EditSession/EditSession";
 import { ErrorView } from "./Error";
@@ -21,15 +17,6 @@ const sessions: Session[] = [
     description: "Test description",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },
@@ -42,15 +29,6 @@ const sessions: Session[] = [
     description: "Test description",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },
@@ -63,15 +41,6 @@ const sessions: Session[] = [
     description: "Test description",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },
@@ -84,15 +53,6 @@ const sessions: Session[] = [
     description: "Test description",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },
@@ -105,15 +65,6 @@ const sessions: Session[] = [
     description: "Test description",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },
@@ -127,15 +78,6 @@ const sessions: Session[] = [
       "Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here. Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here. Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here.",
     startDate: new Date(),
     endDate: new Date(),
-    languages: [
-      { code: "en", name: "English", nativeName: "English" },
-      { code: "se", name: "Indian", nativeName: "भारतीय" },
-    ],
-    communicationModes: [
-      SessionCommunicationMode.Text,
-      SessionCommunicationMode.Speech,
-    ],
-    formats: [SessionFormat.DeepDive, SessionFormat.Dialog],
     participantLimit: 3,
     participants: [{ name: "GenerativeGig" }, { name: "Test participant" }],
     creator: { name: "GenerativeGig" },

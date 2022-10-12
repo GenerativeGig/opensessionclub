@@ -1,8 +1,5 @@
 import { Session } from "../../interfaces/Session";
-import { SessionCommunicationModeListView } from "./SessionCommunicationModeList";
 import { SessionDateTimeView } from "./SessionDateTime";
-import { SessionFormatListView } from "./SessionFormatList";
-import { SessionLanguageListView } from "./SessionLanguageList";
 
 export interface SessionProps {
   session: Session;
@@ -20,17 +17,11 @@ export function SessionView({ session }: SessionProps) {
             startDate={session.startDate}
             endDate={session.endDate}
           />
-          <SessionLanguageListView languages={session.languages} />
         </div>
       </div>
       <p className="my-3 mx-1">{session.description}</p>
       <div className="flex justify-between">
-        <div>
-          <SessionCommunicationModeListView
-            communicationModes={session.communicationModes}
-          />
-          <SessionFormatListView formats={session.formats} />
-        </div>
+        <div></div>
         <div className="self-end flex items-center">
           <div>
             <span>{session.participants.length}</span>

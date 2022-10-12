@@ -1,7 +1,3 @@
-import { SelectCommunicationModeView } from "./SelectCommunicationMode";
-import { SelectFormatView } from "./SelectFormat";
-import { SelectLanguageView } from "./SelectLanguage";
-
 export function CreateSessionView() {
   return (
     <section className="h-full w-full flex flex-col items-center">
@@ -30,27 +26,6 @@ export function CreateSessionView() {
             <input name="time" type="time" required />
             <span> - </span>
             <input name="time" type="time" required />
-          </div>
-          <div>
-            <label htmlFor="languages">Languages</label>
-            <SelectLanguageView
-              name="languages"
-              multiple
-              defaultValue={"English"}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="communicationModes">Communication modes</label>
-            <SelectCommunicationModeView
-              name="communicationModes"
-              multiple
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="formats">Formats</label>
-            <SelectFormatView name="formats" multiple required />
           </div>
           <div>
             <label htmlFor="participantLimit">Participant limit</label>
