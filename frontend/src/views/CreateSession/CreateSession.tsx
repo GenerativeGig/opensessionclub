@@ -10,23 +10,26 @@ export function CreateSessionView() {
         <form className="p-2 flex flex-col items-start">
           <div>
             <label htmlFor="title">Title</label>
-            <input name="title" type="text" placeholder="Title" />
+            <input name="title" type="text" placeholder="Title" required />
           </div>
           <div>
             <label htmlFor="description">Description</label>
-            <input name="description" type="text" placeholder="Description" />
+            <input
+              name="description"
+              type="text"
+              placeholder="Description"
+              required
+            />
           </div>
           <div>
             <label htmlFor="date">Date</label>
-            <input name="date" type="date" />
+            <input name="date" type="date" required />
           </div>
           <div>
-            <label htmlFor="startTime">Start time</label>
-            <input name="startTime" type="time" />
-          </div>
-          <div>
-            <label htmlFor="endTime">End time</label>
-            <input name="endTime" type="time" />
+            <label htmlFor="time">Time</label>
+            <input name="time" type="time" required />
+            <span> - </span>
+            <input name="time" type="time" required />
           </div>
           <div>
             <label htmlFor="languages">Languages</label>
@@ -34,15 +37,20 @@ export function CreateSessionView() {
               name="languages"
               multiple
               defaultValue={"English"}
+              required
             />
           </div>
           <div>
             <label htmlFor="communicationModes">Communication modes</label>
-            <SelectCommunicationModeView name="communicationModes" multiple />
+            <SelectCommunicationModeView
+              name="communicationModes"
+              multiple
+              required
+            />
           </div>
           <div>
             <label htmlFor="formats">Formats</label>
-            <SelectFormatView name="formats" multiple />
+            <SelectFormatView name="formats" multiple required />
           </div>
           <div>
             <label htmlFor="participantLimit">Participant limit</label>
@@ -51,6 +59,7 @@ export function CreateSessionView() {
               type="number"
               min={0}
               defaultValue={5}
+              required
             />
           </div>
 

@@ -12,7 +12,7 @@ export function SessionListView({ sessions }: SessionListProps) {
         {sessions.map((session: Session) => (
           <li
             key={session.id}
-            className="m-1 p-4 first:mt-2 last:mb-2 w-full max-w-[768px] bg-slate-800"
+            className="m-1 p-4 first:mt-2 last:mb-2 w-full max-w-[768px] rounded-md bg-slate-800"
           >
             <SessionView session={session} />
           </li>

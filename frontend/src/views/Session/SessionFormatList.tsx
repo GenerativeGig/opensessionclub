@@ -5,9 +5,9 @@ export interface SessionFormatListProps {
 }
 export function SessionFormatListView({ formats }: SessionFormatListProps) {
   return (
-    <div>
+    <div className="mt-2 mb-1">
       {formats.map((format) => (
-        <span>{format}</span>
+        <span className="p-1 mr-1 bg-blue-700 rounded">{format}</span>
       ))}
     </div>
   );

@@ -17,13 +17,13 @@ export function SessionView({ session }: SessionProps) {
         </div>
         <div className="flex flex-col items-end mr-1">
           <SessionDateTimeView
-            startTime={session.startTime}
-            endTime={session.endTime}
+            startDate={session.startDate}
+            endDate={session.endDate}
           />
           <SessionLanguageListView languages={session.languages} />
         </div>
       </div>
-      <p className="my-3 mr-1">{session.description}</p>
+      <p className="my-3 mx-1">{session.description}</p>
       <div className="flex justify-between">
         <div>
           <SessionCommunicationModeListView
@@ -31,7 +31,7 @@ export function SessionView({ session }: SessionProps) {
           />
           <SessionFormatListView formats={session.formats} />
         </div>
-        <div className="flex items-center">
+        <div className="self-end flex items-center">
           <div>
             <span>{session.participants.length}</span>
             <span>/</span>

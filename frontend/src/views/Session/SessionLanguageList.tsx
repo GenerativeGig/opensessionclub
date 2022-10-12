@@ -6,5 +6,13 @@ export interface SessionLanguageListProps {
 export function SessionLanguageListView({
   languages,
 }: SessionLanguageListProps) {
-  return <div>lang</div>;
+  return (
+    <div>
+      {languages.map((language) => (
+        <span className="text-sm px-1 last:pr-0 border-l first:border-l-0">
+          {language.name}
+        </span>
+      ))}
+    </div>
+  );
 }

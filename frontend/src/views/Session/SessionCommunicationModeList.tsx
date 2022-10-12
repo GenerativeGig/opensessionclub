@@ -7,9 +7,11 @@ export function SessionCommunicationModeListView({
   communicationModes,
 }: SessionCommunicationModeListProps) {
   return (
-    <div>
+    <div className="mt-1">
       {communicationModes.map((communicationMode) => (
-        <span>{communicationMode}</span>
+        <span className="p-1 mr-1 bg-purple-700 rounded">
+          {communicationMode}
+        </span>
       ))}
     </div>
   );

@@ -19,8 +19,8 @@ const sessions: Session[] = [
     id: "1",
     titel: "Test title",
     description: "Test description",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },
@@ -40,8 +40,8 @@ const sessions: Session[] = [
     id: "2",
     titel: "Test title",
     description: "Test description",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },
@@ -61,8 +61,8 @@ const sessions: Session[] = [
     id: "3",
     titel: "Test title",
     description: "Test description",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },
@@ -82,8 +82,8 @@ const sessions: Session[] = [
     id: "4",
     titel: "Test title",
     description: "Test description",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },
@@ -103,8 +103,8 @@ const sessions: Session[] = [
     id: "5",
     titel: "Test title",
     description: "Test description",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },
@@ -125,8 +125,8 @@ const sessions: Session[] = [
     titel: "Test title",
     description:
       "Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here. Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here. Test description is very long. lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk here.",
-    startTime: new Date(),
-    endTime: new Date(),
+    startDate: new Date(),
+    endDate: new Date(),
     languages: [
       { code: "en", name: "English", nativeName: "English" },
       { code: "se", name: "Indian", nativeName: "भारतीय" },

@@ -5,8 +5,8 @@ export interface Session {
   id: string;
   titel: string;
   description: string;
-  startTime: Date;
-  endTime: Date;
+  startDate: Date;
+  endDate: Date;
   languages: Language[];
   communicationModes: SessionCommunicationMode[];
   formats: SessionFormat[];

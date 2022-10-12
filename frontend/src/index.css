@@ -8,7 +8,7 @@
   }
   input,
   select {
-    @apply bg-transparent;
+    @apply bg-transparent border;
   }
   button {
     @apply m-1 p-2 font-semibold rounded-sm;
