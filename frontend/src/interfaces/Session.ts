@@ -1,4 +1,3 @@
-import { Language } from "./Language";
 import { User } from "./User";
 
 export interface Session {
