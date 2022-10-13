@@ -1,4 +1,4 @@
-# Open
+# Open Session Club
 
 ## Purpose
 
@@ -21,12 +21,9 @@ There is something powerful about setting a date and time for having a serious s
 
 0. Create an account / Login with (google, Facebook etc.)
 1. Write down the topic title (ANY TOPIC! No matter how small or large)
-2. Write a short description (with a link to connect before we have a chat)
+2. Write a short description (with a link (discord room) to connect before we have a chat)
 3. Pick a date and time (e.g. 12:00 - 12:47)
-4. Pick a language (default: English) (include sign language)
-5. Pick communication mode: text, text-to-speech, voice, video, whispering, gestures, sign language, music, morse code etc. (choose one or multiple)
-6. Pick the format: presentation, dialog, discussion, debate, interview etc. (choose one or multiple)
-7. Pick the max number of participants (1 - endless)
+4. Pick the max number of participants (1 - endless)
 
 ### Reasoning
 
@@ -81,17 +78,3 @@ There is something powerful about setting a date and time for having a serious s
 - Typescript (Node.js)
 - Express
 - PostgreSQL
-
-## Business model
-
-- Open Source (collaboration is welcome)
-- The basic app is free to use
-- Consumables / Special Features can be bought or gifted
-
-## Misc.
-
-### Name ideas
-
-Open Topic
-Open Session
-Openly
