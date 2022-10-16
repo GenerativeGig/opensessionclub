@@ -19,32 +19,12 @@ There is something powerful about setting a date and time for having a serious s
 
 ## How it works
 
-0. Create an account / Login with (google, Facebook etc.)
+0. Create an account
 1. Write down the topic title (ANY TOPIC! No matter how small or large)
 2. Write a short description (with a link (discord room) to connect before we have a chat)
 3. Pick a date and time (e.g. 12:00 - 12:47)
 4. Pick the max number of participants (1 - endless)
-
-### Reasoning
-
-1:
-
-2:
-
-3:
-
-4:
-
-5:
-
-6:
-
-7:
-
-8:
-
-- Focused learning time
-- No usernames or ways of contacting the person have to be displayed to the whole world to see. Only the people in the session are able to access the chat
+5. Enjoy your session!
 
 ## Bonus features
 
@@ -53,28 +33,3 @@ There is something powerful about setting a date and time for having a serious s
 - Button to add date to calendar automatically (or semi automatically)
 - Add note to session (public or private)
 - All communication happens on the website (audio and video as well)
-
-## Technology
-
-### Frontend
-
-- Typescript
-- React
-- Tailwindcss
-
-#### Routes
-
-/ -> Home Page that explains how this website works
-/login
-/signup
-/sessions -> Session List where the sessions can be viewed (Filter to see only yours)
-
-- Show more to see all the info about the session
-  /session/create
-  /session/:id/edit
-
-### Backend
-
-- Typescript (Node.js)
-- Express
-- PostgreSQL

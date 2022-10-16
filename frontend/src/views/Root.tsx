@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Session } from "../interfaces/Session";
+import { Session } from "../interfaces/session.interface";
 import { CreateSessionView } from "./CreateSession/CreateSession";
 import { EditSessionView } from "./EditSession/EditSession";
 import { ErrorView } from "./Error";

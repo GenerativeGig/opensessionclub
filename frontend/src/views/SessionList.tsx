@@ -1,4 +1,4 @@
-import { Session } from "../interfaces/Session";
+import { Session } from "../interfaces/session.interface";
 import { SessionView } from "./Session/Session";
 
 export interface SessionListProps {

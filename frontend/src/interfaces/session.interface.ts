@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { Actor } from "./actor.interface";
 
 export interface Session {
   id: string;
@@ -7,8 +7,8 @@ export interface Session {
   startDate: Date;
   endDate: Date;
   participantLimit: number;
-  participants: User[];
-  creator: User;
+  participants: Actor[];
+  creator: Actor;
   chat: SessionChat;
   notes: SessionNote[];
 }
