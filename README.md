@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create a space for learning about anything with others. (It is fine if no one makes it. You still have to space to learn in your own way.)
+Create a space for learning about anything with others.
 
 I have a burning need to learn and it is a lot more fun with others and with interesting topics.
 

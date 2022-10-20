@@ -11,8 +11,8 @@ import { Actor } from "./actor.entity";
 
 @Entity()
 export class Session {
-  @PrimaryKey({ type: "numeric" })
-  id!: number;
+  @PrimaryKey({ type: "numeric", autoincrement: true })
+  id: number;
 
   @Property({ type: "datetime" })
   createdAt = new Date();
@@ -20,10 +20,10 @@ export class Session {
   @Property({ type: "datetime", onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Property({ type: "string" })
-  title!: string;
+  @Property({ type: "text" })
+  title: string;
 
-  @Property({ type: "string" })
+  /*@Property({ type: "string", default: "" })
   description: string;
 
   @Property({ type: "datetime" })
@@ -44,5 +44,5 @@ export class Session {
   @OneToOne({
     entity: () => SessionChat,
   })
-  chat: SessionChat;
+  chat: SessionChat;*/
 }

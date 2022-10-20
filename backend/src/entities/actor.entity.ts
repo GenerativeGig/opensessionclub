@@ -20,10 +20,11 @@ export class Actor {
 
   @Property({ type: "string" })
   name: string;
-
+  /*
   @ManyToMany(() => Session, (session) => session.attendees)
   sessions: Session[];
 
   @OneToMany(() => Session, (session) => session.creator)
   createdSessions: Session[];
+*/
 }
