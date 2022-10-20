@@ -11,17 +11,17 @@ dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 const main = async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
 
-  const session = orm.em.create(Session, {
+  /*const session = orm.em.create(Session, {
     title: "my session",
   });
   await orm.em.persistAndFlush(session);
 
   const sessions = await orm.em.find(Session, {});
-  console.log(sessions);
+  console.log(sessions);*/
 };
 
 main().catch((error) => {
   console.error(error);
 });
 
-// video: 39:50
+// video: 39:50 https://youtu.be/I6ypD7qv3Z8?t=2387
