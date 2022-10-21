@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import { Actor } from "./entities/actor.entity";
 import { Session } from "./entities/session.entity";
@@ -5,23 +6,36 @@ import { SessionChat } from "./entities/sessionChat.entity";
 import mikroOrmConfig from "./mikro-orm.config";
 import * as dotenv from "dotenv";
 import path from "path";
+import express from "express";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import { SessionResolver } from "./resolvers/session.resolver";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
 const main = async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
+  await orm.getMigrator().up();
 
-  /*const session = orm.em.create(Session, {
-    title: "my session",
+  const app = express();
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [SessionResolver],
+      validate: false,
+    }),
+    context: () => ({ em: orm.em }),
   });
-  await orm.em.persistAndFlush(session);
 
-  const sessions = await orm.em.find(Session, {});
-  console.log(sessions);*/
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+
+  app.listen(4000, () => {
+    console.log("Server started on localhost:4000");
+  });
 };
 
 main().catch((error) => {
   console.error(error);
 });
 
-// video: 39:50 https://youtu.be/I6ypD7qv3Z8?t=2387
+// https://youtu.be/I6ypD7qv3Z8?t=4164

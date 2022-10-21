@@ -8,18 +8,24 @@ import {
 } from "@mikro-orm/core";
 import { SessionChat } from "./sessionChat.entity";
 import { Actor } from "./actor.entity";
+import { Field, Int, ObjectType } from "type-graphql";
 
+@ObjectType()
 @Entity()
 export class Session {
+  @Field(() => Int)
   @PrimaryKey({ type: "numeric", autoincrement: true })
   id: number;
 
+  @Field(() => String)
   @Property({ type: "datetime" })
   createdAt = new Date();
 
+  @Field(() => String)
   @Property({ type: "datetime", onUpdate: () => new Date() })
   updatedAt = new Date();
 
+  @Field(() => String)
   @Property({ type: "text" })
   title: string;
 
