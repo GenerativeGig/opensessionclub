@@ -15,7 +15,7 @@ import { Field, Int, ObjectType } from "type-graphql";
 export class Session {
   @Field(() => Int)
   @PrimaryKey({ type: "numeric", autoincrement: true })
-  id: number;
+  id!: number;
 
   @Field(() => String)
   @Property({ type: "datetime" })
@@ -27,7 +27,7 @@ export class Session {
 
   @Field(() => String)
   @Property({ type: "text" })
-  title: string;
+  title!: string;
 
   /*@Property({ type: "string", default: "" })
   description: string;

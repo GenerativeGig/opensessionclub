@@ -8,8 +8,15 @@ import * as dotenv from "dotenv";
 import path from "path";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { buildSchema } from "type-graphql";
+import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
+import * as redis from "redis";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import env from "./env";
+import { ApolloContext } from "./types";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
@@ -18,12 +25,39 @@ const main = async () => {
   await orm.getMigrator().up();
 
   const app = express();
+
+  const RedisStore = connectRedis(session);
+  const redisClient = redis.createClient({ legacyMode: true });
+  await redisClient.connect();
+
+  const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
+
+  app.use(
+    session({
+      name: "qid",
+      store: new RedisStore({
+        client: redisClient as any,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: tenYearsInMs,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: env.isProduction,
+      },
+      saveUninitialized: false,
+      secret: "asdfasdjfaimkldlfkgmkl", // env
+      resave: false,
+    })
+  );
+
   const apolloServer = new ApolloServer({
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     schema: await buildSchema({
-      resolvers: [SessionResolver],
+      resolvers: [ActorResolver, SessionResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }),
+    context: ({ req, res }): ApolloContext => ({ em: orm.em, req, res }),
   });
 
   await apolloServer.start();

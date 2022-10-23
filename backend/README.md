@@ -1,28 +1,4 @@
-- Node
-- Typescript
-- PostgreSQL
-
-## PostgreSQL
-
-### Starting
-
-```console
-sudo service postgresql start
-```
-
-### Stopping
-
-```console
-sudo service postgresql stop
-```
-
-## Mirko-ORM
-
-Initalize migrations:
-
-```console
-npx mikro-orm migration:create --initial
-```
+# Backend
 
 ## env
 

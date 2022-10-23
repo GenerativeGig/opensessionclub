@@ -1,10 +1,10 @@
 import { MikroORM } from "@mikro-orm/core";
 import env from "./env";
-import { Session } from "./entities/session.entity";
 import path from "path";
+import { Actor } from "./entities/actor.entity";
+import { Session } from "./entities/session.entity";
 import { SessionChat } from "./entities/sessionChat.entity";
 import { SessionChatMessage } from "./entities/sessionChatMessage.entity";
-import { Actor } from "./entities/actor.entity";
 
 export default {
   user: env.postgresUsername,
@@ -13,7 +13,7 @@ export default {
     path: path.join(__dirname, "./migrations"),
     pattern: /^[\w-]+\d+\.[tj]s$/,
   },
-  entities: [Session],
+  entities: [Actor, Session],
   dbName: "open",
   type: "postgresql",
   debug: !env.isProduction,
