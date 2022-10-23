@@ -1,4 +1,4 @@
-export function CreateSessionView() {
+export function CreateSession() {
   return (
     <section className="h-full w-full flex flex-col items-center">
       <div className="m-2  p-2 w-full max-w-[768px] bg-slate-800">
@@ -8,7 +8,7 @@ export function CreateSessionView() {
         <form className="p-2 flex flex-col items-start">
           <div>
             <label htmlFor="title">Title</label>
-            <input name="title" type="text" placeholder="Title" required />
+            <input name="title" type="text" placeholder="title" required />
           </div>
           <div className="flex">
             <label className="self-start" htmlFor="description">
@@ -17,7 +17,7 @@ export function CreateSessionView() {
             <textarea
               className="w-[500px] h-[200px]"
               name="description"
-              placeholder="Description"
+              placeholder="description"
               required
             />
           </div>

@@ -1,11 +1,11 @@
-import { Session } from "../../interfaces/session.interface";
-import { SessionDateTimeView } from "./SessionDateTime";
+import { Session } from "../interfaces/session.interface";
+import { SessionDateTime } from "./SessionDateTime";
 
 export interface SessionProps {
   session: Session;
 }
 
-export function SessionView({ session }: SessionProps) {
+export function SessionCard({ session }: SessionProps) {
   return (
     <article className="flex flex-col ml-1">
       <div className="flex justify-between">
@@ -13,7 +13,7 @@ export function SessionView({ session }: SessionProps) {
           <h1 className="text-2xl">{session.titel}</h1>
         </div>
         <div className="flex flex-col items-end mr-1">
-          <SessionDateTimeView
+          <SessionDateTime
             startDate={session.startDate}
             endDate={session.endDate}
           />

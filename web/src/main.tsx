@@ -1,10 +1,10 @@
 import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RootView } from "./Root";
+import { Root } from "./Root";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RootView />
+    <Root />
   </React.StrictMode>
 );

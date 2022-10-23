@@ -1,3 +1,0 @@
-- Typescript
-- React
-- Tailwindcss

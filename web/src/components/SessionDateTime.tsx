@@ -2,10 +2,7 @@ export interface SessionDateTimeProps {
   startDate: Date;
   endDate: Date;
 }
-export function SessionDateTimeView({
-  startDate,
-  endDate,
-}: SessionDateTimeProps) {
+export function SessionDateTime({ startDate, endDate }: SessionDateTimeProps) {
   const weekday = [
     "Sunday",
     "Monday",

@@ -1,14 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Session } from "./interfaces/session.interface";
-import { CreateSessionView } from "./routes/CreateSession";
-import { EditSessionView } from "./routes/EditSession";
-import { ErrorView } from "./routes/Error";
-import { FooterView } from "./components/Footer";
-import { HeaderView } from "./components/Header";
-import { HomeView } from "./routes/Home";
-import { LoginView } from "./routes/Login";
-import { SignupView } from "./routes/Signup";
-import { SessionsView } from "./routes/Sessions";
+import { CreateSession } from "./routes/CreateSession";
+import { EditSession } from "./routes/EditSession";
+import { Error } from "./routes/Error";
+import { Home } from "./routes/Home";
+import { Login } from "./routes/Login";
+import { Signup } from "./routes/Signup";
+import { Sessions } from "./routes/Sessions";
+import { Wrapper } from "./components/Wrapper";
 
 const sessions: Session[] = [
   {
@@ -86,30 +85,20 @@ const sessions: Session[] = [
   },
 ];
 
-export function RootView() {
+export function Root() {
   return (
     <BrowserRouter>
-      <div className="flex flex-col h-screen">
-        <HeaderView />
-        <main className="bg-slate-900 flex flex-grow">
-          <Routes>
-            <Route path="/" element={<HomeView />} />
-            <Route
-              path="/sessions"
-              element={<SessionsView sessions={sessions} />}
-            />
-            <Route path="/session/create" element={<CreateSessionView />} />
-            <Route
-              path="/session/:sessionId/edit"
-              element={<EditSessionView />}
-            />
-            <Route path="/login" element={<LoginView />} />
-            <Route path="/signup" element={<SignupView />} />
-            <Route path="*" element={<ErrorView />} />
-          </Routes>
-        </main>
-        <FooterView />
-      </div>
+      <Wrapper>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sessions" element={<Sessions sessions={sessions} />} />
+          <Route path="/session/create" element={<CreateSession />} />
+          <Route path="/session/:sessionId/edit" element={<EditSession />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </Wrapper>
     </BrowserRouter>
   );
 }
