@@ -1,11 +1,11 @@
 import { Session } from "../interfaces/session.interface";
-import { SessionView } from "./Session/Session";
+import { SessionView } from "../components/Session";
 
-export interface SessionListProps {
+export interface SessionsProps {
   sessions: Session[];
 }
 
-export function SessionListView({ sessions }: SessionListProps) {
+export function SessionsView({ sessions }: SessionsProps) {
   return (
     <section className="h-full w-full">
       <ol className="flex flex-col items-center">

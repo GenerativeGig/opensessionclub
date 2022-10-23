@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Session } from "../interfaces/session.interface";
-import { CreateSessionView } from "./CreateSession/CreateSession";
-import { EditSessionView } from "./EditSession/EditSession";
-import { ErrorView } from "./Error";
-import { FooterView } from "./Footer";
-import { HeaderView } from "./Header";
-import { HomeView } from "./Home/Home";
-import { LoginView } from "./Login/Login";
-import { SignupView } from "./Login/Signup";
-import { SessionListView } from "./SessionList";
+import { Session } from "./interfaces/session.interface";
+import { CreateSessionView } from "./routes/CreateSession";
+import { EditSessionView } from "./routes/EditSession";
+import { ErrorView } from "./routes/Error";
+import { FooterView } from "./components/Footer";
+import { HeaderView } from "./components/Header";
+import { HomeView } from "./routes/Home";
+import { LoginView } from "./routes/Login";
+import { SignupView } from "./routes/Signup";
+import { SessionsView } from "./routes/Sessions";
 
 const sessions: Session[] = [
   {
@@ -96,7 +96,7 @@ export function RootView() {
             <Route path="/" element={<HomeView />} />
             <Route
               path="/sessions"
-              element={<SessionListView sessions={sessions} />}
+              element={<SessionsView sessions={sessions} />}
             />
             <Route path="/session/create" element={<CreateSessionView />} />
             <Route
