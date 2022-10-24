@@ -8,6 +8,7 @@ import { Login } from "./routes/Login";
 import { Signup } from "./routes/Signup";
 import { Sessions } from "./routes/Sessions";
 import { Wrapper } from "./components/Wrapper";
+import { createClient, Provider } from "urql";
 
 const sessions: Session[] = [
   {
@@ -85,20 +86,30 @@ const sessions: Session[] = [
   },
 ];
 
+const client = createClient({
+  url: "http://localhost:4000/graphql",
+  fetchOptions: { credentials: "include" },
+});
+
 export function Root() {
   return (
-    <BrowserRouter>
-      <Wrapper>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sessions" element={<Sessions sessions={sessions} />} />
-          <Route path="/session/create" element={<CreateSession />} />
-          <Route path="/session/:sessionId/edit" element={<EditSession />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </Wrapper>
-    </BrowserRouter>
+    <Provider value={client}>
+      <BrowserRouter>
+        <Wrapper>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/sessions"
+              element={<Sessions sessions={sessions} />}
+            />
+            <Route path="/session/create" element={<CreateSession />} />
+            <Route path="/session/:sessionId/edit" element={<EditSession />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </Wrapper>
+      </BrowserRouter>
+    </Provider>
   );
 }

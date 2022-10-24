@@ -17,6 +17,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import env from "./env";
 import { ApolloContext } from "./types";
+import cors from "cors";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
@@ -25,6 +26,8 @@ const main = async () => {
   await orm.getMigrator().up();
 
   const app = express();
+
+  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({ legacyMode: true });
@@ -61,7 +64,10 @@ const main = async () => {
   });
 
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 
   app.listen(4000, () => {
     console.log("Server started on localhost:4000");
@@ -72,4 +78,4 @@ main().catch((error) => {
   console.error(error);
 });
 
-// https://youtu.be/I6ypD7qv3Z8?t=9244
+// https://youtu.be/I6ypD7qv3Z8?t=11813

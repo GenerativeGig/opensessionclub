@@ -1,0 +1,12 @@
+mutation Signup($name: String!, $password: String!) {
+  signup(name: $name, password: $password) {
+    errors {
+      field
+      message
+    }
+    actor {
+      id
+      name
+    }
+  }
+}
