@@ -10,6 +10,7 @@ import {
 import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
 import argon2 from "argon2";
+import { cookieName } from "../constants";
 
 @ObjectType()
 class FieldError {
@@ -116,5 +117,20 @@ export class ActorResolver {
     return {
       actor,
     };
+  }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: ApolloContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((error) => {
+        res.clearCookie(cookieName);
+        if (error) {
+          console.log(error);
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      })
+    );
   }
 }

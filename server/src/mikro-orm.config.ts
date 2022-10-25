@@ -1,5 +1,5 @@
 import { MikroORM } from "@mikro-orm/core";
-import env from "./env";
+import { isProduction, postgresPassword, postgresUsername } from "./constants";
 import path from "path";
 import { Actor } from "./entities/actor.entity";
 import { Session } from "./entities/session.entity";
@@ -7,8 +7,8 @@ import { SessionChat } from "./entities/sessionChat.entity";
 import { SessionChatMessage } from "./entities/sessionChatMessage.entity";
 
 export default {
-  user: env.postgresUsername,
-  password: env.postgresPassword,
+  user: postgresUsername,
+  password: postgresPassword,
   migrations: {
     path: path.join(__dirname, "./migrations"),
     pattern: /^[\w-]+\d+\.[tj]s$/,
@@ -16,6 +16,6 @@ export default {
   entities: [Actor, Session],
   dbName: "open",
   type: "postgresql",
-  debug: !env.isProduction,
+  debug: isProduction,
   allowGlobalContext: true,
 } as Parameters<typeof MikroORM.init>[0];

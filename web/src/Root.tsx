@@ -8,7 +8,15 @@ import { Login } from "./routes/Login";
 import { Signup } from "./routes/Signup";
 import { Sessions } from "./routes/Sessions";
 import { Wrapper } from "./components/Wrapper";
-import { createClient, Provider } from "urql";
+import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
+import { Cache, cacheExchange, QueryInput } from "@urql/exchange-graphcache";
+import {
+  LoginMutation,
+  LogoutMutation,
+  MeDocument,
+  MeQuery,
+  SignupMutation,
+} from "./generated/graphql";
 
 const sessions: Session[] = [
   {
@@ -86,9 +94,67 @@ const sessions: Session[] = [
   },
 ];
 
+function betterUpdateQuery<Result, Query>(
+  cache: Cache,
+  queryInput: QueryInput,
+  result: any,
+  updateFunction: (result: Result, query: Query) => Query
+) {
+  return cache.updateQuery(
+    queryInput,
+    (data) => updateFunction(result, data as any) as any
+  );
+}
+
 const client = createClient({
   url: "http://localhost:4000/graphql",
   fetchOptions: { credentials: "include" },
+  exchanges: [
+    dedupExchange,
+    cacheExchange({
+      updates: {
+        Mutation: {
+          signup: (result_, _args, cache, _info) => {
+            betterUpdateQuery<SignupMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              result_,
+              (result, query) => {
+                if (result.signup.errors) {
+                  return query;
+                } else {
+                  return { me: result.signup.actor };
+                }
+              }
+            );
+          },
+          login: (result_, _args, cache, _info) => {
+            betterUpdateQuery<LoginMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              result_,
+              (result, query) => {
+                if (result.login.errors) {
+                  return query;
+                } else {
+                  return { me: result.login.actor };
+                }
+              }
+            );
+          },
+          logout: (result_, _args, cache, _info) => {
+            betterUpdateQuery<LogoutMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              result_,
+              () => ({ me: null })
+            );
+          },
+        },
+      },
+    }),
+    fetchExchange,
+  ],
 });
 
 export function Root() {

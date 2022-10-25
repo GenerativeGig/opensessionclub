@@ -15,9 +15,9 @@ import { SessionResolver } from "./resolvers/session.resolver";
 import * as redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import env from "./env";
 import { ApolloContext } from "./types";
 import cors from "cors";
+import { cookieName, isProduction } from "./constants";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
@@ -37,7 +37,7 @@ const main = async () => {
 
   app.use(
     session({
-      name: "qid",
+      name: cookieName,
       store: new RedisStore({
         client: redisClient as any,
         disableTouch: true,
@@ -46,7 +46,7 @@ const main = async () => {
         maxAge: tenYearsInMs,
         httpOnly: true,
         sameSite: "lax",
-        secure: env.isProduction,
+        secure: isProduction,
       },
       saveUninitialized: false,
       secret: "asdfasdjfaimkldlfkgmkl", // env

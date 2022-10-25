@@ -5,8 +5,7 @@ mutation Signup($name: String!, $password: String!) {
       message
     }
     actor {
-      id
-      name
+      ...BasicActor
     }
   }
 }

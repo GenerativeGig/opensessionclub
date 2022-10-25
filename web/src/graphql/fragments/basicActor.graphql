@@ -1,0 +1,4 @@
+fragment BasicActor on Actor {
+  id
+  name
+}
