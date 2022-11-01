@@ -30,6 +30,10 @@ export class Actor {
   @Property({ type: "text", unique: true })
   lowerCaseName!: string;
 
+  @Field(() => String)
+  @Property({ type: "text", unique: true })
+  email!: string;
+
   @Property({ type: "text" })
   password!: string;
   /*

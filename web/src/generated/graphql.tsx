@@ -18,6 +18,7 @@ export type Scalars = {
 export type Actor = {
   __typename?: 'Actor';
   createdAt: Scalars['String'];
+  email: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -39,6 +40,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createSession: Session;
   deleteSession: Scalars['Boolean'];
+  forgotPassword: Scalars['Boolean'];
   login: ActorResponse;
   logout: Scalars['Boolean'];
   signup: ActorResponse;
@@ -56,13 +58,19 @@ export type MutationDeleteSessionArgs = {
 };
 
 
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationLoginArgs = {
-  name: Scalars['String'];
+  nameOrEmail: Scalars['String'];
   password: Scalars['String'];
 };
 
 
 export type MutationSignupArgs = {
+  email: Scalars['String'];
   name: Scalars['String'];
   password: Scalars['String'];
 };
@@ -96,7 +104,7 @@ export type Session = {
 export type BasicActorFragment = { __typename?: 'Actor', id: number, name: string };
 
 export type LoginMutationVariables = Exact<{
-  name: Scalars['String'];
+  nameOrEmail: Scalars['String'];
   password: Scalars['String'];
 }>;
 
@@ -110,6 +118,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type SignupMutationVariables = Exact<{
   name: Scalars['String'];
+  email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
@@ -133,8 +142,8 @@ export const BasicActorFragmentDoc = gql`
 }
     `;
 export const LoginDocument = gql`
-    mutation Login($name: String!, $password: String!) {
-  login(name: $name, password: $password) {
+    mutation Login($nameOrEmail: String!, $password: String!) {
+  login(nameOrEmail: $nameOrEmail, password: $password) {
     errors {
       field
       message
@@ -159,8 +168,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const SignupDocument = gql`
-    mutation Signup($name: String!, $password: String!) {
-  signup(name: $name, password: $password) {
+    mutation Signup($name: String!, $email: String!, $password: String!) {
+  signup(name: $name, email: $email, password: $password) {
     errors {
       field
       message

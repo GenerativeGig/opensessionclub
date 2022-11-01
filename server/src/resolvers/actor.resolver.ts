@@ -11,6 +11,8 @@ import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
 import argon2 from "argon2";
 import { cookieName } from "../constants";
+import { validateSignup } from "../validation/signup.validation";
+import { sendEmail } from "../utils/sendEmail";
 
 @ObjectType()
 class FieldError {
@@ -44,35 +46,20 @@ export class ActorResolver {
   @Mutation(() => ActorResponse)
   async signup(
     @Arg("name", () => String) name: string,
+    @Arg("email", () => String) email: string,
     @Arg("password", () => String) password: string,
     @Ctx() { em, req }: ApolloContext
   ): Promise<ActorResponse> {
-    if (name.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "name",
-            message: "name has to be at least 3 characters long",
-          },
-        ],
-      };
-    }
-
-    if (password.length <= 7) {
-      return {
-        errors: [
-          {
-            field: "password",
-            message: "password has to be at least 8 characters long",
-          },
-        ],
-      };
+    const errors = validateSignup(name, email, password);
+    if (errors) {
+      return { errors };
     }
 
     const hashedPassword = await argon2.hash(password);
     const newActor = em.create(Actor, {
       name,
       lowerCaseName: name.toLowerCase(),
+      email,
       password: hashedPassword,
     });
 
@@ -93,16 +80,21 @@ export class ActorResolver {
 
   @Mutation(() => ActorResponse)
   async login(
-    @Arg("name", () => String) name: string,
+    @Arg("nameOrEmail", () => String) nameOrEmail: string,
     @Arg("password", () => String) password: string,
     @Ctx() { em, req }: ApolloContext
   ): Promise<ActorResponse> {
-    const actor = await em.findOne(Actor, {
-      lowerCaseName: name.toLowerCase(),
-    });
+    const actor = await em.findOne(
+      Actor,
+      nameOrEmail.includes("@")
+        ? { email: nameOrEmail }
+        : { lowerCaseName: nameOrEmail.toLowerCase() }
+    );
     if (!actor) {
       return {
-        errors: [{ field: "name", message: "name doesn't exist" }],
+        errors: [
+          { field: "nameOrEmail", message: "name or email doesn't exist" },
+        ],
       };
     }
     const valid = await argon2.verify(actor.password, password);
@@ -132,5 +124,20 @@ export class ActorResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("email", () => String) email: string,
+    @Ctx() { em }: ApolloContext
+  ) {
+    const user = await em.findOne(Actor, { email });
+    if (!user) {
+      return true;
+    }
+
+    await sendEmail(email, "");
+
+    return true;
   }
 }

@@ -9,7 +9,7 @@ export function Signup() {
   const navigate = useNavigate();
   return (
     <Formik
-      initialValues={{ name: "", password: "" }}
+      initialValues={{ name: "", email: "", password: "" }}
       onSubmit={async (values, { setErrors }) => {
         const response = await signup(values);
         console.log(response);
@@ -23,6 +23,7 @@ export function Signup() {
       {({ isSubmitting }) => (
         <Form>
           <InputField name="name" label="Name" placeholder="name" />
+          <InputField name="email" label="Email" placeholder="email" />
           <InputField
             name="password"
             label="Password"
