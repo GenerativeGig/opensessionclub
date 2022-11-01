@@ -121,6 +121,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string } | null };
 
+export type SessionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, createdAt: string, updatedAt: string, title: string }> };
+
 export const BasicActorFragmentDoc = gql`
     fragment BasicActor on Actor {
   id
@@ -180,4 +185,18 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
+};
+export const SessionsDocument = gql`
+    query Sessions {
+  sessions {
+    id
+    createdAt
+    updatedAt
+    title
+  }
+}
+    `;
+
+export function useSessionsQuery(options?: Omit<Urql.UseQueryArgs<SessionsQueryVariables>, 'query'>) {
+  return Urql.useQuery<SessionsQuery, SessionsQueryVariables>({ query: SessionsDocument, ...options });
 };
