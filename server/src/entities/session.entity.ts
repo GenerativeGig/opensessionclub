@@ -1,44 +1,66 @@
-import {
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToOne,
-  PrimaryKey,
-  Property,
-} from "@mikro-orm/core";
-import { SessionChat } from "./sessionChat.entity";
-import { Actor } from "./actor.entity";
 import { Field, Int, ObjectType } from "type-graphql";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { Actor } from "./actor.entity";
 
 @ObjectType()
 @Entity()
-export class Session {
+export class Session extends BaseEntity {
   @Field(() => Int)
-  @PrimaryKey({ type: "numeric", autoincrement: true })
-  id!: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Field(() => String)
-  @Property({ type: "datetime" })
-  createdAt = new Date();
+  @Column()
+  title: string;
 
   @Field(() => String)
-  @Property({ type: "datetime", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @Column()
+  text: string;
+
+  @Field(() => Date)
+  @Column({ type: "timestamptz" })
+  start: Date;
+
+  @Field(() => Date)
+  @Column({ type: "timestamptz" })
+  end: Date;
+
+  @Field(() => Int)
+  @Column({ type: "int" })
+  attendeeLimit: number;
+
+  @Field()
+  @Column()
+  creatorId: number;
+
+  @ManyToOne(() => Actor, (actor) => actor.sessions)
+  creator: Actor;
 
   @Field(() => String)
-  @Property({ type: "text" })
-  title!: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  /*@Property({ type: "string", default: "" })
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
+  /*@Column({ default: "" })
   description: string;
 
-  @Property({ type: "datetime" })
+  @Column({ type: "datetime" })
   startDate: Date;
 
-  @Property({ type: "datetime" })
+  @Column({ type: "datetime" })
   endDate: Date;
 
-  @Property({ type: "numeric" })
+  @Column({ type: "numeric" })
   attendeeLimit: number;
 
   @ManyToMany(() => Actor, (actor) => actor.sessions, { owner: true })

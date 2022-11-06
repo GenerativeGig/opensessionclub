@@ -1,41 +1,46 @@
-import {
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryKey,
-  Property,
-} from "@mikro-orm/core";
 import { Field, Int, ObjectType } from "type-graphql";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Session } from "./session.entity";
 
 @ObjectType()
 @Entity()
-export class Actor {
+export class Actor extends BaseEntity {
   @Field(() => Int)
-  @PrimaryKey({ type: "numeric", autoincrement: true })
-  id!: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Field(() => String)
-  @Property({ type: "datetime" })
-  createdAt = new Date();
+  @Column({ unique: true })
+  name: string;
+
+  @Column({ unique: true })
+  lowerCaseName: string;
 
   @Field(() => String)
-  @Property({ type: "datetime", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @OneToMany(() => Session, (session) => session.creator)
+  sessions: Session[];
 
   @Field(() => String)
-  @Property({ type: "text", unique: true })
-  name!: string;
-
-  @Property({ type: "text", unique: true })
-  lowerCaseName!: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
-  @Property({ type: "text", unique: true })
-  email!: string;
-
-  @Property({ type: "text" })
-  password!: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
   /*
   @ManyToMany(() => Session, (session) => session.attendees)
   sessions: Session[];

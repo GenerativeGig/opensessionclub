@@ -2,7 +2,7 @@ import { Formik, Form } from "formik";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormContent } from "../components/FormContent";
+import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { useChangePasswordMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";

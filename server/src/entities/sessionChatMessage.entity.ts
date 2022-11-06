@@ -1,19 +1,19 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Actor } from "./actor.entity";
 import { SessionChat } from "./sessionChat.entity";
-
+// TODO Convert to typeorm and setup for graphql
 @Entity()
 export class SessionChatMessage {
-  @PrimaryKey({ type: "numeric" })
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property({ type: "datetime" })
-  createdAt = new Date();
+  @Column()
+  createdAt: Date;
 
-  @Property({ type: "datetime", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @Column()
+  updatedAt: Date;
 
-  @Property({ type: "string" })
+  @Column({ type: "string" })
   text: string;
 
   @ManyToOne(() => Actor)

@@ -1,10 +1,10 @@
-import { Entity, OneToMany, OneToOne, PrimaryKey } from "@mikro-orm/core";
+import { Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Session } from "./session.entity";
 import { SessionChatMessage } from "./sessionChatMessage.entity";
-
+// TODO Convert to typeorm and setup for graphql
 @Entity()
 export class SessionChat {
-  @PrimaryKey({ type: "numeric" })
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @OneToMany(
@@ -13,6 +13,6 @@ export class SessionChat {
   )
   messages: SessionChatMessage[];
 
-  @OneToOne({ entity: () => Session })
+  // @OneToOne()
   session: Session;
 }

@@ -1,55 +1,74 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { Session } from "../entities/session.entity";
+import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
+
+@InputType()
+class SessionOptions {
+  @Field()
+  title: string;
+  @Field()
+  text: string;
+  @Field()
+  start: Date;
+  @Field()
+  end: Date;
+  @Field()
+  attendeeLimit: number;
+}
 
 @Resolver()
 export class SessionResolver {
   @Query(() => [Session])
-  sessions(@Ctx() { em }: ApolloContext): Promise<Session[]> {
-    return em.find(Session, {});
+  sessions(): Promise<Session[]> {
+    return Session.find();
   }
 
   @Query(() => Session, { nullable: true })
-  session(
-    @Arg("id", () => Int) id: number,
-    @Ctx() { em }: ApolloContext
-  ): Promise<Session | null> {
-    return em.findOne(Session, { id });
+  session(@Arg("id", () => Int) id: number): Promise<Session | null> {
+    return Session.findOne({ where: { id } });
   }
 
   @Mutation(() => Session)
+  @UseMiddleware(isAuthenticated)
   async createSession(
-    @Arg("title", () => String) title: string,
-    @Ctx() { em }: ApolloContext
+    @Arg("options") options: SessionOptions,
+    @Ctx() { req }: ApolloContext
   ): Promise<Session> {
-    const session = em.create(Session, { title });
-    await em.persistAndFlush(session);
-    return session;
+    return Session.create({
+      ...options,
+      creatorId: req.session.actorId,
+    }).save();
   }
 
   @Mutation(() => Session)
   async updateSession(
     @Arg("id", () => Int) id: number,
-    @Arg("title", () => String) title: string,
-    @Ctx() { em }: ApolloContext
+    @Arg("title", () => String) title: string
   ): Promise<Session | null> {
-    const session = await em.findOne(Session, { id });
+    const session = await Session.findOne({ where: { id } });
     if (!session) {
       return null;
     }
     if (typeof title !== "undefined") {
-      session.title = title;
-      await em.persistAndFlush(session);
+      await Session.update({ id }, { title });
     }
     return session;
   }
 
   @Mutation(() => Boolean)
-  async deleteSession(
-    @Arg("id", () => Int) id: number,
-    @Ctx() { em }: ApolloContext
-  ): Promise<boolean> {
-    await em.nativeDelete(Session, { id });
+  async deleteSession(@Arg("id", () => Int) id: number): Promise<boolean> {
+    await Session.delete(id);
     return true;
   }
 }

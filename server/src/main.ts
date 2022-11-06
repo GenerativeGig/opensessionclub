@@ -1,9 +1,4 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
-import { Actor } from "./entities/actor.entity";
-import { Session } from "./entities/session.entity";
-import { SessionChat } from "./entities/sessionChat.entity";
-import mikroOrmConfig from "./mikro-orm.config";
 import * as dotenv from "dotenv";
 import path from "path";
 import express from "express";
@@ -22,9 +17,6 @@ import { cookieName, isProduction } from "./constants";
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
 const main = async () => {
-  const orm = await MikroORM.init(mikroOrmConfig);
-  await orm.getMigrator().up();
-
   const app = express();
 
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));
@@ -59,7 +51,7 @@ const main = async () => {
       resolvers: [ActorResolver, SessionResolver],
       validate: false,
     }),
-    context: ({ req, res }): ApolloContext => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }): ApolloContext => ({ req, res, redis }),
   });
 
   await apolloServer.start();
@@ -77,5 +69,10 @@ main().catch((error) => {
   console.error(error);
 });
 
-// https://youtu.be/I6ypD7qv3Z8?t=19528
-// Skipping SSR for now
+/* https://youtu.be/I6ypD7qv3Z8?t=19528
+ Skipping SSR for now
+ TODOs:
+  - Add spinner for loading synchronous server requests
+  - Styling
+
+*/

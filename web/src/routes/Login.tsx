@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { Link, useNavigate } from "react-router-dom";
-import { FormContent } from "../components/FormContent";
+import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";

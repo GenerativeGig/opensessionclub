@@ -1,7 +1,7 @@
 export function Error() {
   return (
-    <section>
+    <article>
       <h1>Page not found</h1>
-    </section>
+    </article>
   );
 }

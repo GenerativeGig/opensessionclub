@@ -14,6 +14,7 @@ import { cookieName, forgotPasswordPrefix } from "../constants";
 import { validateSignup } from "../validation/signup.validation";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
+import { dataSource } from "../dataSource";
 
 @ObjectType()
 class FieldError {
@@ -36,12 +37,11 @@ class ActorResponse {
 @Resolver()
 export class ActorResolver {
   @Query(() => Actor, { nullable: true })
-  async me(@Ctx() { em, req }: ApolloContext) {
+  me(@Ctx() { req }: ApolloContext) {
     if (!req.session.actorId) {
       return null;
     }
-    const actor = em.findOne(Actor, { id: req.session.actorId });
-    return actor;
+    return Actor.findOne({ where: { id: req.session.actorId } });
   }
 
   @Mutation(() => ActorResponse)
@@ -49,7 +49,7 @@ export class ActorResolver {
     @Arg("name", () => String) name: string,
     @Arg("email", () => String) email: string,
     @Arg("password", () => String) password: string,
-    @Ctx() { em, req }: ApolloContext
+    @Ctx() { req }: ApolloContext
   ): Promise<ActorResponse> {
     const errors = validateSignup(name, email, password);
     if (errors) {
@@ -57,15 +57,25 @@ export class ActorResolver {
     }
 
     const hashedPassword = await argon2.hash(password);
-    const newActor = em.create(Actor, {
-      name,
-      lowerCaseName: name.toLowerCase(),
-      email,
-      password: hashedPassword,
-    });
 
+    let actor;
     try {
-      await em.persistAndFlush(newActor);
+      const result = await (
+        await dataSource.initialize()
+      )
+        .createQueryBuilder()
+        .insert()
+        .into(Actor)
+        .values({
+          name,
+          lowerCaseName: name.toLowerCase(),
+          email,
+          password: hashedPassword,
+        })
+        .returning("*")
+        .execute();
+      actor = result.raw[0];
+      console.log({ actor });
     } catch (error) {
       if (error.code === "23505") {
         return {
@@ -74,22 +84,21 @@ export class ActorResolver {
       }
     }
 
-    req.session.actorId = newActor.id;
+    req.session.actorId = actor.id;
 
-    return { actor: newActor };
+    return { actor };
   }
 
   @Mutation(() => ActorResponse)
   async login(
     @Arg("nameOrEmail", () => String) nameOrEmail: string,
     @Arg("password", () => String) password: string,
-    @Ctx() { em, req }: ApolloContext
+    @Ctx() { req }: ApolloContext
   ): Promise<ActorResponse> {
-    const actor = await em.findOne(
-      Actor,
+    const actor = await Actor.findOne(
       nameOrEmail.includes("@")
-        ? { email: nameOrEmail }
-        : { lowerCaseName: nameOrEmail.toLowerCase() }
+        ? { where: { email: nameOrEmail } }
+        : { where: { lowerCaseName: nameOrEmail.toLowerCase() } }
     );
     if (!actor) {
       return {
@@ -130,9 +139,9 @@ export class ActorResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email", () => String) email: string,
-    @Ctx() { em, redis }: ApolloContext
+    @Ctx() { redis }: ApolloContext
   ) {
-    const actor = await em.findOne(Actor, { email });
+    const actor = await Actor.findOne({ where: { email } });
     if (!actor) {
       return true;
     }
@@ -160,7 +169,7 @@ export class ActorResolver {
   async changePassword(
     @Arg("token", () => String) token: string,
     @Arg("newPassword", () => String) newPassword: string,
-    @Ctx() { redis, em, req }: ApolloContext
+    @Ctx() { redis, req }: ApolloContext
   ): Promise<ActorResponse> {
     if (newPassword.length <= 7) {
       return {
@@ -187,7 +196,8 @@ export class ActorResolver {
       };
     }
 
-    const actor = await em.findOne(Actor, { id: parseInt(actorId) });
+    const actorIdNumber = parseInt(actorId);
+    const actor = await Actor.findOne({ where: { id: actorIdNumber } });
 
     if (!actor) {
       return {
@@ -200,8 +210,10 @@ export class ActorResolver {
       };
     }
 
-    actor.password = await argon2.hash(newPassword);
-    await em.persistAndFlush(actor);
+    await Actor.update(
+      { id: actorIdNumber },
+      { password: await argon2.hash(newPassword) }
+    );
 
     await redis.del(key);
 

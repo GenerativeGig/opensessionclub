@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
-import { FormContent } from "../components/FormContent";
+import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { useForgotPasswordMutation } from "../generated/graphql";
 
