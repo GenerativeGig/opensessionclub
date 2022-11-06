@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 
 export function Header() {
@@ -33,8 +33,6 @@ export function Header() {
       </>
     );
   }
-
-  const location = useLocation();
 
   return (
     <header className="bg-slate-700 p-4 sticky top-0 flex justify-between w-full">

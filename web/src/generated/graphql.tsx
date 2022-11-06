@@ -38,6 +38,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword: ActorResponse;
   createSession: Session;
   deleteSession: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
@@ -45,6 +46,12 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   signup: ActorResponse;
   updateSession: Session;
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -103,6 +110,25 @@ export type Session = {
 
 export type BasicActorFragment = { __typename?: 'Actor', id: number, name: string };
 
+export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null };
+
+export type BasicErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+
+export type ChangePasswordMutationVariables = Exact<{
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
+
 export type LoginMutationVariables = Exact<{
   nameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -135,25 +161,56 @@ export type SessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, createdAt: string, updatedAt: string, title: string }> };
 
+export const BasicErrorFragmentDoc = gql`
+    fragment BasicError on FieldError {
+  field
+  message
+}
+    `;
 export const BasicActorFragmentDoc = gql`
     fragment BasicActor on Actor {
   id
   name
 }
     `;
+export const BasicActorResponseFragmentDoc = gql`
+    fragment BasicActorResponse on ActorResponse {
+  errors {
+    ...BasicError
+  }
+  actor {
+    ...BasicActor
+  }
+}
+    ${BasicErrorFragmentDoc}
+${BasicActorFragmentDoc}`;
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($token: String!, $newPassword: String!) {
+  changePassword(token: $token, newPassword: $newPassword) {
+    ...BasicActorResponse
+  }
+}
+    ${BasicActorResponseFragmentDoc}`;
+
+export function useChangePasswordMutation() {
+  return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
+
+export function useForgotPasswordMutation() {
+  return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
+};
 export const LoginDocument = gql`
     mutation Login($nameOrEmail: String!, $password: String!) {
   login(nameOrEmail: $nameOrEmail, password: $password) {
-    errors {
-      field
-      message
-    }
-    actor {
-      ...BasicActor
-    }
+    ...BasicActorResponse
   }
 }
-    ${BasicActorFragmentDoc}`;
+    ${BasicActorResponseFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
@@ -170,16 +227,10 @@ export function useLogoutMutation() {
 export const SignupDocument = gql`
     mutation Signup($name: String!, $email: String!, $password: String!) {
   signup(name: $name, email: $email, password: $password) {
-    errors {
-      field
-      message
-    }
-    actor {
-      ...BasicActor
-    }
+    ...BasicActorResponse
   }
 }
-    ${BasicActorFragmentDoc}`;
+    ${BasicActorResponseFragmentDoc}`;
 
 export function useSignupMutation() {
   return Urql.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument);

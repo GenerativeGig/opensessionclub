@@ -10,9 +10,10 @@ import {
 import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
 import argon2 from "argon2";
-import { cookieName } from "../constants";
+import { cookieName, forgotPasswordPrefix } from "../constants";
 import { validateSignup } from "../validation/signup.validation";
 import { sendEmail } from "../utils/sendEmail";
+import { v4 } from "uuid";
 
 @ObjectType()
 class FieldError {
@@ -129,15 +130,84 @@ export class ActorResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email", () => String) email: string,
-    @Ctx() { em }: ApolloContext
+    @Ctx() { em, redis }: ApolloContext
   ) {
-    const user = await em.findOne(Actor, { email });
-    if (!user) {
+    const actor = await em.findOne(Actor, { email });
+    if (!actor) {
       return true;
     }
 
-    await sendEmail(email, "");
+    const token = v4();
+
+    const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
+
+    await redis.set(
+      forgotPasswordPrefix + token,
+      actor.id,
+      "EX",
+      threeDaysInMs
+    );
+
+    await sendEmail(
+      email,
+      `<a href="http://localhost:5173/change-password/${token}">reset password</a>`
+    );
 
     return true;
+  }
+
+  @Mutation(() => ActorResponse)
+  async changePassword(
+    @Arg("token", () => String) token: string,
+    @Arg("newPassword", () => String) newPassword: string,
+    @Ctx() { redis, em, req }: ApolloContext
+  ): Promise<ActorResponse> {
+    if (newPassword.length <= 7) {
+      return {
+        errors: [
+          {
+            field: "newPassword",
+            message: "password has to be at least 8 characters long",
+          },
+        ],
+      };
+    }
+
+    const key = forgotPasswordPrefix + token;
+
+    const actorId = await redis.get(key);
+    if (!actorId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "token is expired",
+          },
+        ],
+      };
+    }
+
+    const actor = await em.findOne(Actor, { id: parseInt(actorId) });
+
+    if (!actor) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "user does not exist",
+          },
+        ],
+      };
+    }
+
+    actor.password = await argon2.hash(newPassword);
+    await em.persistAndFlush(actor);
+
+    await redis.del(key);
+
+    // Log in actor after changing password
+    req.session.actorId = actor.id;
+
+    return { actor };
   }
 }

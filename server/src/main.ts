@@ -12,7 +12,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import { buildSchema } from "type-graphql";
 import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
-import * as redis from "redis";
+import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { ApolloContext } from "./types";
@@ -30,8 +30,7 @@ const main = async () => {
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient({ legacyMode: true });
-  await redisClient.connect();
+  const redis = new Redis();
 
   const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
 
@@ -39,7 +38,7 @@ const main = async () => {
     session({
       name: cookieName,
       store: new RedisStore({
-        client: redisClient as any,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -60,7 +59,7 @@ const main = async () => {
       resolvers: [ActorResolver, SessionResolver],
       validate: false,
     }),
-    context: ({ req, res }): ApolloContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }): ApolloContext => ({ em: orm.em, req, res, redis }),
   });
 
   await apolloServer.start();
@@ -78,5 +77,5 @@ main().catch((error) => {
   console.error(error);
 });
 
-// https://youtu.be/I6ypD7qv3Z8?t=16633
+// https://youtu.be/I6ypD7qv3Z8?t=19528
 // Skipping SSR for now

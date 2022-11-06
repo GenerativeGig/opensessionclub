@@ -9,10 +9,14 @@ export interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 export function InputField({ label, ...props }: InputFieldProps) {
   const [field] = useField(props);
   return (
-    <div>
-      <label htmlFor={field.name}>{label}</label>
-      <input {...field} {...props} id={field.name} />
-      <ErrorMessage name={field.name} />
+    <div className="flex flex-col">
+      <div>
+        <label htmlFor={field.name}>{label}</label>
+        <input {...field} {...props} id={field.name} />
+      </div>
+      <div className="place-self-end mr-2 text-red-600">
+        <ErrorMessage name={field.name} />
+      </div>
     </div>
   );
 }

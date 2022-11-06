@@ -1,0 +1,8 @@
+fragment BasicActorResponse on ActorResponse {
+  errors {
+    ...BasicError
+  }
+  actor {
+    ...BasicActor
+  }
+}

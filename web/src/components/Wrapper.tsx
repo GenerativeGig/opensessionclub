@@ -1,17 +1,16 @@
 import { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
-export interface WrapperProps {
-  children: ReactNode;
-}
-
-export function Wrapper({ children }: WrapperProps) {
+export function Wrapper() {
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <main className="bg-slate-900 flex-grow overflow-visible">
-        <div className="max-w-[768px] mr-auto ml-auto">{children}</div>
+        <div className="max-w-[768px] mr-auto ml-auto flex flex-col place-items-center">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </div>
