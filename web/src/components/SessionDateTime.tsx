@@ -1,8 +1,8 @@
 export interface SessionDateTimeProps {
-  startDate: Date;
-  endDate: Date;
+  start: Date;
+  end: Date;
 }
-export function SessionDateTime({ startDate, endDate }: SessionDateTimeProps) {
+export function SessionDateTime({ start, end }: SessionDateTimeProps) {
   const weekday = [
     "Sunday",
     "Monday",
@@ -12,6 +12,11 @@ export function SessionDateTime({ startDate, endDate }: SessionDateTimeProps) {
     "Friday",
     "Saturday",
   ];
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if (startDate.getHours().toString().length) {
+  }
   return (
     <div className="text-sm">
       <span>{weekday[startDate.getDay()]}</span>
@@ -19,12 +24,21 @@ export function SessionDateTime({ startDate, endDate }: SessionDateTimeProps) {
       <span>{startDate.toLocaleDateString()}</span>
       <span>, </span>
       <span>
-        {startDate.getHours()}:{startDate.getMinutes()}
+        {addMissingZeros(startDate.getHours())}:
+        {addMissingZeros(startDate.getMinutes())}
       </span>
       <span> - </span>
       <span>
-        {endDate.getHours()}:{endDate.getMinutes()}
+        {addMissingZeros(endDate.getHours())}:
+        {addMissingZeros(endDate.getMinutes())}
       </span>
     </div>
   );
+}
+
+function addMissingZeros(time: number) {
+  if (time < 10) {
+    return "0" + time;
+  }
+  return time;
 }

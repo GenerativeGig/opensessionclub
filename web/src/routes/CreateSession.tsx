@@ -1,19 +1,38 @@
-import { Formik } from "formik";
-import { useNavigate, Form } from "react-router-dom";
+import { Formik, Form, useField } from "formik";
+import { useNavigate } from "react-router-dom";
 import { InputField } from "../components/InputField";
-import { toErrorMap } from "../utils/toErrorMap";
+import { InputTextArea } from "../components/InputTextArea";
+import { InputTimePeriod } from "../components/InputTimePeriod";
+import { useCreateSessionMutation } from "../generated/graphql";
+import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function CreateSession() {
+  const [, createSession] = useCreateSessionMutation();
   const navigate = useNavigate();
+
+  useIsAuthenticated();
+
   return (
     <Formik
-      initialValues={{ nameOrEmail: "", password: "" }}
-      onSubmit={async (values, { setErrors }) => {
-        const response = await createSession(values);
-        if (response.data?.login.errors) {
-          setErrors(toErrorMap(response.data.login.errors));
-        } else if (response.data?.login.actor) {
-          navigate("/");
+      initialValues={{
+        title: "",
+        text: "",
+        date: "",
+        startTime: "",
+        endTime: "",
+        attendeeLimit: 5,
+      }}
+      onSubmit={async (
+        { title, text, date, startTime, endTime, attendeeLimit },
+        { setErrors }
+      ) => {
+        const start = new Date(date + ", " + startTime);
+        const end = new Date(date + ", " + endTime);
+        const { error } = await createSession({
+          options: { title, text, attendeeLimit, start, end },
+        });
+        if (!error) {
+          navigate("/sessions");
         }
       }}
     >
@@ -23,53 +42,34 @@ export function CreateSession() {
             <h1 className="text-2xl font-medium mx-8 mt-6 mb-4">
               Create your Session
             </h1>
-            <form className="p-2 flex flex-col items-start">
+            <div className="p-2 flex flex-col items-start">
               <InputField name="title" label="Title" placeholder="title" />
-              <div className="flex">
-                <label className="self-start" htmlFor="description">
-                  Description
-                </label>
-                <textarea
-                  className="w-[500px] h-[200px]"
-                  name="description"
-                  placeholder="description"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="date">Date</label>
-                <input name="date" type="date" required />
-              </div>
+              <InputTextArea name="text" label="Text" placeholder="text" />
+              <InputField name="date" label="Date" type="date" />
               <div className="w-full flex justify-between">
                 <div>
-                  <div>
-                    <label htmlFor="time">Time</label>
-                    <input name="time" type="time" required />
-                    <span> - </span>
-                    <input name="time" type="time" required />
-                  </div>
-                  <div>
-                    <label htmlFor="participantLimit">Participant limit</label>
-                    <input
-                      className="w-16"
-                      name="participantLimit"
-                      type="number"
-                      min={0}
-                      defaultValue={8}
-                      required
-                    />
-                  </div>
+                  <InputTimePeriod
+                    startTimeName="startTime"
+                    endTimeName="endTime"
+                  />
+                  <InputField
+                    className="w-16"
+                    name="attendeeLimit"
+                    label="Attendee limit"
+                    type="number"
+                    min={0}
+                    defaultValue={5}
+                    required
+                  />
                 </div>
-                <div className="self-end">
-                  <button
-                    type="submit"
-                    className="bg-pink-600 hover:bg-pink-500"
-                  >
-                    Create Session
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="self-end bg-pink-600 hover:bg-pink-500"
+                >
+                  Create Session
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </Form>
       )}

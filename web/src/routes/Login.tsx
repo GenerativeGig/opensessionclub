@@ -1,13 +1,14 @@
 import { Formik, Form } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function Login() {
-  const [{}, login] = useLoginMutation();
+  const [, login] = useLoginMutation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   return (
     <Formik
       initialValues={{ nameOrEmail: "", password: "" }}
@@ -16,7 +17,11 @@ export function Login() {
         if (response.data?.login.errors) {
           setErrors(toErrorMap(response.data.login.errors));
         } else if (response.data?.login.actor) {
-          navigate("/");
+          if (typeof searchParams.get("next") === "string") {
+            navigate(searchParams.get("next")!);
+          } else {
+            navigate("/");
+          }
         }
       }}
     >

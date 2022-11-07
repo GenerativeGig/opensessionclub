@@ -13,10 +13,13 @@ import connectRedis from "connect-redis";
 import { ApolloContext } from "./types";
 import cors from "cors";
 import { cookieName, isProduction } from "./constants";
+import { dataSource } from "./dataSource";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
 const main = async () => {
+  await dataSource.initialize();
+
   const app = express();
 
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));
@@ -69,10 +72,10 @@ main().catch((error) => {
   console.error(error);
 });
 
-/* https://youtu.be/I6ypD7qv3Z8?t=19528
+/*
+ https://youtu.be/I6ypD7qv3Z8?t=24610
  Skipping SSR for now
  TODOs:
   - Add spinner for loading synchronous server requests
   - Styling
-
 */

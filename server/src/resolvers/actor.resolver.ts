@@ -60,9 +60,7 @@ export class ActorResolver {
 
     let actor;
     try {
-      const result = await (
-        await dataSource.initialize()
-      )
+      const result = await dataSource
         .createQueryBuilder()
         .insert()
         .into(Actor)
@@ -75,7 +73,6 @@ export class ActorResolver {
         .returning("*")
         .execute();
       actor = result.raw[0];
-      console.log({ actor });
     } catch (error) {
       if (error.code === "23505") {
         return {

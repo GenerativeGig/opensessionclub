@@ -5,13 +5,12 @@ import { InputField } from "../components/InputField";
 import { useForgotPasswordMutation } from "../generated/graphql";
 
 export function ForgotPassword() {
-  const [{}, forgotPassword] = useForgotPasswordMutation();
+  const [, forgotPassword] = useForgotPasswordMutation();
   const [complete, setComplete] = useState(false);
   return (
     <Formik
       initialValues={{ email: "" }}
       onSubmit={async (values) => {
-        console.log("test");
         await forgotPassword(values);
         setComplete(true);
       }}

@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 export type Actor = {
@@ -56,7 +57,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreateSessionArgs = {
-  title: Scalars['String'];
+  options: SessionOptions;
 };
 
 
@@ -100,12 +101,31 @@ export type QuerySessionArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QuerySessionsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
 export type Session = {
   __typename?: 'Session';
+  attendeeLimit: Scalars['Int'];
   createdAt: Scalars['String'];
+  creatorId: Scalars['Float'];
+  end: Scalars['DateTime'];
   id: Scalars['Int'];
+  start: Scalars['DateTime'];
+  text: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type SessionOptions = {
+  attendeeLimit: Scalars['Float'];
+  end: Scalars['DateTime'];
+  start: Scalars['DateTime'];
+  text: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type BasicActorFragment = { __typename?: 'Actor', id: number, name: string };
@@ -121,6 +141,13 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+
+export type CreateSessionMutationVariables = Exact<{
+  options: SessionOptions;
+}>;
+
+
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, title: string, text: string, start: any, end: any, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -156,10 +183,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string } | null };
 
-export type SessionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type SessionsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export type SessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, createdAt: string, updatedAt: string, title: string }> };
+export type SessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, title: string, text: string, start: any, end: any, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string }> };
 
 export const BasicErrorFragmentDoc = gql`
     fragment BasicError on FieldError {
@@ -194,6 +224,25 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateSessionDocument = gql`
+    mutation CreateSession($options: SessionOptions!) {
+  createSession(options: $options) {
+    id
+    title
+    text
+    start
+    end
+    attendeeLimit
+    creatorId
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateSessionMutation() {
+  return Urql.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -247,16 +296,21 @@ export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, '
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
 export const SessionsDocument = gql`
-    query Sessions {
-  sessions {
+    query Sessions($limit: Int!, $cursor: String) {
+  sessions(limit: $limit, cursor: $cursor) {
     id
+    title
+    text
+    start
+    end
+    attendeeLimit
+    creatorId
     createdAt
     updatedAt
-    title
   }
 }
     `;
 
-export function useSessionsQuery(options?: Omit<Urql.UseQueryArgs<SessionsQueryVariables>, 'query'>) {
+export function useSessionsQuery(options: Omit<Urql.UseQueryArgs<SessionsQueryVariables>, 'query'>) {
   return Urql.useQuery<SessionsQuery, SessionsQueryVariables>({ query: SessionsDocument, ...options });
 };

@@ -1,3 +1,4 @@
+import { dataSource } from "../dataSource";
 import {
   Arg,
   Ctx,
@@ -30,8 +31,22 @@ class SessionOptions {
 @Resolver()
 export class SessionResolver {
   @Query(() => [Session])
-  sessions(): Promise<Session[]> {
-    return Session.find();
+  async sessions(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<Session[]> {
+    const realLimit = Math.min(50, limit);
+    const queryBuilder = dataSource
+      .getRepository(Session)
+      .createQueryBuilder("p")
+      .orderBy('"createdAt"', "DESC")
+      .take(realLimit);
+    if (cursor) {
+      queryBuilder.where('"createdAt" < :cursor', {
+        cursor: new Date(parseInt(cursor)),
+      });
+    }
+    return queryBuilder.getMany();
   }
 
   @Query(() => Session, { nullable: true })

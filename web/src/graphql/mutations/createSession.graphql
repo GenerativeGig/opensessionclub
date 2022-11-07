@@ -1,5 +1,5 @@
-query Sessions($limit: Int!, $cursor: String) {
-  sessions(limit: $limit, cursor: $cursor) {
+mutation CreateSession($options: SessionOptions!) {
+  createSession(options: $options) {
     id
     title
     text

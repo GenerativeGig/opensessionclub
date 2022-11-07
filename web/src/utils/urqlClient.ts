@@ -8,6 +8,22 @@ import {
   LogoutMutation,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+import { pipe, tap } from "wonka";
+import { Exchange } from "urql";
+import { redirect } from "react-router-dom";
+
+export const errorExchange: Exchange =
+  ({ forward }) =>
+  (ops$) => {
+    return pipe(
+      forward(ops$),
+      tap(({ error }) => {
+        if (error?.message.includes("not authenticated")) {
+          redirect("/login");
+        }
+      })
+    );
+  };
 
 export const urqlClient = createClient({
   url: "http://localhost:4000/graphql",
@@ -56,6 +72,7 @@ export const urqlClient = createClient({
         },
       },
     }),
+    errorExchange,
     fetchExchange,
   ],
 });

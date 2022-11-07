@@ -6,7 +6,7 @@ import { useSignupMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function Signup() {
-  const [{}, signup] = useSignupMutation();
+  const [, signup] = useSignupMutation();
   const navigate = useNavigate();
   return (
     <Formik

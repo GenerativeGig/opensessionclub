@@ -8,7 +8,7 @@ import { useChangePasswordMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function ChangePassword() {
-  const [{}, changePassword] = useChangePasswordMutation();
+  const [, changePassword] = useChangePasswordMutation();
   const { token } = useParams();
   const navigate = useNavigate();
   const [tokenError, setTokenError] = useState("");
@@ -19,7 +19,7 @@ export function ChangePassword() {
       onSubmit={async (values, { setErrors }) => {
         const response = await changePassword({
           newPassword: values.newPassword,
-          token: token!,
+          token: typeof token === "string" ? token : "",
         });
         if (response.data?.changePassword.errors) {
           const errorMap = toErrorMap(response.data.changePassword.errors);
