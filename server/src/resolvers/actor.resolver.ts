@@ -2,10 +2,12 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
 } from "type-graphql";
 import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
@@ -34,8 +36,16 @@ class ActorResponse {
   actor?: Actor;
 }
 
-@Resolver()
+@Resolver(Actor)
 export class ActorResolver {
+  @FieldResolver(() => String)
+  email(@Root() actor: Actor, @Ctx() { req }: ApolloContext) {
+    if (req.session.actorId === actor.id) {
+      return actor.email;
+    }
+    return "";
+  }
+
   @Query(() => Actor, { nullable: true })
   me(@Ctx() { req }: ApolloContext) {
     if (!req.session.actorId) {

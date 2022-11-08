@@ -23,7 +23,7 @@ export function Header() {
   } else {
     authenticationJsx = (
       <>
-        <div>{data.me.name}</div>
+        <div className="m-2">{data.me.name}</div>
         <button
           onClick={() => {
             logout({});

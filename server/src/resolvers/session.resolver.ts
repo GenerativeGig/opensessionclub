@@ -43,7 +43,7 @@ class PaginatedSessions {
 export class SessionResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() root: Session) {
-    return root.text.slice(0, 50);
+    return root.text.slice(0, 250);
   }
 
   @Query(() => PaginatedSessions)
@@ -54,20 +54,31 @@ export class SessionResolver {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
 
-    const queryBuilder = dataSource
-      .getRepository(Session)
-      .createQueryBuilder("p")
-      .orderBy('"createdAt"', "DESC")
-      .take(realLimitPlusOne);
+    const replacements: any[] = [realLimitPlusOne];
 
     if (cursor) {
-      queryBuilder.where('"createdAt" < :cursor', {
-        cursor: new Date(parseInt(cursor)),
-      });
+      replacements.push(new Date(parseInt(cursor)));
     }
 
-    const sessions = await queryBuilder.getMany();
-    console.log({ sessions });
+    const sessions = await dataSource.query(
+      `
+      select s.*,
+      json_build_object(
+        'id', a.id,
+        'name', a.name,
+        'email', a.email,
+        'createdAt', a."createdAt",
+        'updatedAt', a."updatedAt"
+        ) creator
+      from session s
+      inner join public.actor a on a.id = s."creatorId"
+      ${cursor ? `where s."createdAt" < $2` : ""}
+      order by s."createdAt" DESC
+      limit $1
+      `,
+      replacements
+    );
+
     return {
       sessions: sessions.slice(0, realLimit),
       hasMore: sessions.length === realLimitPlusOne,

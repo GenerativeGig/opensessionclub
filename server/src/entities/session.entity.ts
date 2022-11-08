@@ -41,6 +41,7 @@ export class Session extends BaseEntity {
   @Column()
   creatorId: number;
 
+  @Field(() => Actor)
   @ManyToOne(() => Actor, (actor) => actor.sessions)
   creator: Actor;
 

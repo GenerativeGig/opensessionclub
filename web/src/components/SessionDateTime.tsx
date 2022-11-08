@@ -1,6 +1,6 @@
 export interface SessionDateTimeProps {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
 }
 export function SessionDateTime({ start, end }: SessionDateTimeProps) {
   const weekday = [
@@ -12,8 +12,8 @@ export function SessionDateTime({ start, end }: SessionDateTimeProps) {
     "Friday",
     "Saturday",
   ];
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const startDate = new Date(parseInt(start));
+  const endDate = new Date(parseInt(end));
 
   if (startDate.getHours().toString().length) {
   }
