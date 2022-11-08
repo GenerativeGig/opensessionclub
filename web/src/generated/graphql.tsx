@@ -89,11 +89,17 @@ export type MutationUpdateSessionArgs = {
   title: Scalars['String'];
 };
 
+export type PaginatedSessions = {
+  __typename?: 'PaginatedSessions';
+  hasMore: Scalars['Boolean'];
+  sessions: Array<Session>;
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<Actor>;
   session?: Maybe<Session>;
-  sessions: Array<Session>;
+  sessions: PaginatedSessions;
 };
 
 
@@ -111,11 +117,12 @@ export type Session = {
   __typename?: 'Session';
   attendeeLimit: Scalars['Int'];
   createdAt: Scalars['String'];
-  creatorId: Scalars['Float'];
-  end: Scalars['DateTime'];
+  creatorId: Scalars['Int'];
+  end: Scalars['String'];
   id: Scalars['Int'];
-  start: Scalars['DateTime'];
+  start: Scalars['String'];
   text: Scalars['String'];
+  textSnippet: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -147,7 +154,7 @@ export type CreateSessionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, title: string, text: string, start: any, end: any, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string } };
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, title: string, text: string, start: string, end: string, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -189,7 +196,7 @@ export type SessionsQueryVariables = Exact<{
 }>;
 
 
-export type SessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, title: string, text: string, start: any, end: any, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string }> };
+export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, start: string, end: string, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string }> } };
 
 export const BasicErrorFragmentDoc = gql`
     fragment BasicError on FieldError {
@@ -298,15 +305,18 @@ export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, '
 export const SessionsDocument = gql`
     query Sessions($limit: Int!, $cursor: String) {
   sessions(limit: $limit, cursor: $cursor) {
-    id
-    title
-    text
-    start
-    end
-    attendeeLimit
-    creatorId
-    createdAt
-    updatedAt
+    hasMore
+    sessions {
+      id
+      title
+      textSnippet
+      start
+      end
+      attendeeLimit
+      creatorId
+      createdAt
+      updatedAt
+    }
   }
 }
     `;

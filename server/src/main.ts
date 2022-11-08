@@ -14,12 +14,14 @@ import { ApolloContext } from "./types";
 import cors from "cors";
 import { cookieName, isProduction } from "./constants";
 import { dataSource } from "./dataSource";
+// import { Session } from "./entities/session.entity";
 
 dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
 const main = async () => {
   await dataSource.initialize();
-
+  await dataSource.runMigrations();
+  // await Session.delete({});
   const app = express();
 
   app.use(cors({ origin: "http://localhost:5173", credentials: true }));

@@ -25,19 +25,19 @@ export class Session extends BaseEntity {
   @Column()
   text: string;
 
-  @Field(() => Date)
-  @Column({ type: "timestamptz" })
+  @Field(() => String)
+  @Column()
   start: Date;
 
-  @Field(() => Date)
-  @Column({ type: "timestamptz" })
+  @Field(() => String)
+  @Column()
   end: Date;
 
   @Field(() => Int)
   @Column({ type: "int" })
   attendeeLimit: number;
 
-  @Field()
+  @Field(() => Int)
   @Column()
   creatorId: number;
 

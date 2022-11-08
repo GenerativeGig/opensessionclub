@@ -2,7 +2,7 @@ import { Session } from "../generated/graphql";
 import { SessionDateTime } from "./SessionDateTime";
 
 export interface SessionCardProps {
-  session: Session;
+  session: Omit<Session, "text">;
 }
 
 export function SessionCard({ session }: SessionCardProps) {
@@ -16,7 +16,7 @@ export function SessionCard({ session }: SessionCardProps) {
           <SessionDateTime start={session.start} end={session.end} />
         </div>
       </div>
-      <p className="my-3 mx-1">{session.text}</p>
+      <p className="my-3 mx-1">{session.textSnippet}</p>
       <div className="flex justify-between">
         <div></div>
         <div className="self-end flex items-center">

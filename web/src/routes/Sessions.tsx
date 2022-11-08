@@ -1,22 +1,48 @@
+import { useState } from "react";
 import { SessionCard } from "../components/SessionCard";
-import { useSessionsQuery } from "../generated/graphql";
+import { Session, useSessionsQuery } from "../generated/graphql";
 
 export function Sessions() {
-  const [{ data }] = useSessionsQuery({ variables: { limit: 10 } });
+  const [variables, setVariables] = useState({
+    limit: 25,
+    cursor: null as null | string,
+  });
+  const [{ data, fetching }] = useSessionsQuery({ variables });
+
+  if (!data && !fetching) {
+    return <p>Failed loading data.</p>;
+  }
+
   return (
-    <ol className="flex flex-col">
-      {!data ? (
-        <div>Loading...</div>
+    <>
+      {!data && fetching ? (
+        <span>Loading...</span>
       ) : (
-        data?.sessions.map((session) => (
-          <li
-            key={session.id}
-            className="m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800"
-          >
-            <SessionCard session={session} />
-          </li>
-        ))
+        <ol className="flex flex-col w-full">
+          {data!.sessions.sessions.map((session: Omit<Session, "text">) => (
+            <li
+              key={session.id}
+              className="m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800"
+            >
+              <SessionCard session={session} />
+            </li>
+          ))}
+        </ol>
       )}
-    </ol>
+      {data && data.sessions.hasMore && (
+        <button
+          onClick={() =>
+            setVariables({
+              limit: variables.limit,
+              cursor:
+                data.sessions.sessions[data.sessions.sessions.length - 1]
+                  .createdAt,
+            })
+          }
+        >
+          Load more
+        </button>
+      )}
+    </>
   );
 }

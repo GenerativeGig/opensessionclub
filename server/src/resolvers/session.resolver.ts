@@ -3,11 +3,14 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
 } from "type-graphql";
 import { Session } from "../entities/session.entity";
@@ -28,25 +31,47 @@ class SessionOptions {
   attendeeLimit: number;
 }
 
-@Resolver()
+@ObjectType()
+class PaginatedSessions {
+  @Field(() => [Session])
+  sessions: Session[];
+  @Field()
+  hasMore: boolean;
+}
+
+@Resolver(Session)
 export class SessionResolver {
-  @Query(() => [Session])
+  @FieldResolver(() => String)
+  textSnippet(@Root() root: Session) {
+    return root.text.slice(0, 50);
+  }
+
+  @Query(() => PaginatedSessions)
   async sessions(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null
-  ): Promise<Session[]> {
+  ): Promise<PaginatedSessions> {
     const realLimit = Math.min(50, limit);
+    const realLimitPlusOne = realLimit + 1;
+
     const queryBuilder = dataSource
       .getRepository(Session)
       .createQueryBuilder("p")
       .orderBy('"createdAt"', "DESC")
-      .take(realLimit);
+      .take(realLimitPlusOne);
+
     if (cursor) {
       queryBuilder.where('"createdAt" < :cursor', {
         cursor: new Date(parseInt(cursor)),
       });
     }
-    return queryBuilder.getMany();
+
+    const sessions = await queryBuilder.getMany();
+    console.log({ sessions });
+    return {
+      sessions: sessions.slice(0, realLimit),
+      hasMore: sessions.length === realLimitPlusOne,
+    };
   }
 
   @Query(() => Session, { nullable: true })

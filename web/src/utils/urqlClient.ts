@@ -1,5 +1,10 @@
-import { createClient, dedupExchange, fetchExchange } from "urql";
-import { cacheExchange } from "@urql/exchange-graphcache";
+import {
+  createClient,
+  dedupExchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
+import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import {
   SignupMutation,
   MeQuery,
@@ -12,7 +17,7 @@ import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import { redirect } from "react-router-dom";
 
-export const errorExchange: Exchange =
+const errorExchange: Exchange =
   ({ forward }) =>
   (ops$) => {
     return pipe(
@@ -25,12 +30,52 @@ export const errorExchange: Exchange =
     );
   };
 
+const cursorPagination = (): Resolver => {
+  return (_parent, fieldArgs, cache, info) => {
+    const { parentKey: entityKey, fieldName } = info;
+    const allFields = cache.inspectFields(entityKey);
+    const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
+    const size = fieldInfos.length;
+    if (size === 0) {
+      return undefined;
+    }
+
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
+    const isItInTheCache = cache.resolve(
+      cache.resolve(entityKey, fieldKey) as string,
+      "posts"
+    );
+    info.partial = !isItInTheCache;
+    let hasMore = true;
+    const results: string[] = [];
+    fieldInfos.forEach((fi) => {
+      const key = cache.resolve(entityKey, fi.fieldKey) as string;
+      const data = cache.resolve(key, "sessions") as string[];
+      const _hasMore = cache.resolve(key, "hasMore");
+      if (!_hasMore) {
+        hasMore = _hasMore as boolean;
+      }
+      results.push(...data);
+    });
+
+    return {
+      __typename: "PaginatedSessions",
+      hasMore,
+      sessions: results,
+    };
+  };
+};
+
 export const urqlClient = createClient({
   url: "http://localhost:4000/graphql",
   fetchOptions: { credentials: "include" as const },
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: { PaginatedSessions: () => null },
+      resolvers: {
+        Query: { sessions: cursorPagination() },
+      },
       updates: {
         Mutation: {
           signup: (result_, _args, cache, _info) => {

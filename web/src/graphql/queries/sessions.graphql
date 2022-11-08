@@ -1,13 +1,16 @@
 query Sessions($limit: Int!, $cursor: String) {
   sessions(limit: $limit, cursor: $cursor) {
-    id
-    title
-    text
-    start
-    end
-    attendeeLimit
-    creatorId
-    createdAt
-    updatedAt
+    hasMore
+    sessions {
+      id
+      title
+      textSnippet
+      start
+      end
+      attendeeLimit
+      creatorId
+      createdAt
+      updatedAt
+    }
   }
 }
