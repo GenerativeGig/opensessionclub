@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class FakeSesssions1667917779407 implements MigrationInterface {
+export class FakeSesssions1667917779408 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     queryRunner.query(`
 insert into session (title, text, "start", "end", "attendeeLimit", "creatorId", "createdAt") values ('Human Resources', 'Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.
@@ -500,5 +500,5 @@ insert into session (title, text, "start", "end", "attendeeLimit", "creatorId", 
 `);
   }
 
-  public async down(_queryRunner: QueryRunner): Promise<void> {}
+  public async down(_: QueryRunner): Promise<void> {}
 }

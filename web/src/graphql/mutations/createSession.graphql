@@ -1,5 +1,5 @@
-mutation CreateSession($options: SessionOptions!) {
-  createSession(options: $options) {
+mutation CreateSession($input: SessionInput!) {
+  createSession(input: $input) {
     id
     title
     text

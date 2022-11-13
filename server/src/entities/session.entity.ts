@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Actor } from "./actor.entity";
+import { ActorSession } from "./actorSession.entity";
+import { SessionComment } from "./sessionComment.entity";
 
 @ObjectType()
 @Entity()
@@ -42,8 +45,14 @@ export class Session extends BaseEntity {
   creatorId: number;
 
   @Field(() => Actor)
-  @ManyToOne(() => Actor, (actor) => actor.sessions)
+  @ManyToOne(() => Actor, (actor) => actor.createdSessions)
   creator: Actor;
+
+  @OneToMany(() => ActorSession, (actorSession) => actorSession.session)
+  actorConnection: ActorSession[];
+
+  @OneToMany(() => SessionComment, (sessionComment) => sessionComment.sessionId)
+  comments: SessionComment[];
 
   @Field(() => String)
   @CreateDateColumn()
@@ -52,26 +61,4 @@ export class Session extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;
-  /*@Column({ default: "" })
-  description: string;
-
-  @Column({ type: "datetime" })
-  startDate: Date;
-
-  @Column({ type: "datetime" })
-  endDate: Date;
-
-  @Column({ type: "numeric" })
-  attendeeLimit: number;
-
-  @ManyToMany(() => Actor, (actor) => actor.sessions, { owner: true })
-  attendees: Actor[];
-
-  @ManyToOne(() => Actor)
-  creator: Actor;
-
-  @OneToOne({
-    entity: () => SessionChat,
-  })
-  chat: SessionChat;*/
 }

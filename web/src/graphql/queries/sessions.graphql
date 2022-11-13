@@ -5,9 +5,12 @@ query Sessions($limit: Int!, $cursor: String) {
       id
       title
       textSnippet
+      hasMoreText
       start
       end
+      numberOfAttendees
       attendeeLimit
+      actorIsPartOfSession
       creatorId
       createdAt
       updatedAt

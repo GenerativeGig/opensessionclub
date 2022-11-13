@@ -43,6 +43,8 @@ export type Mutation = {
   createSession: Session;
   deleteSession: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
+  joinSession: Scalars['Boolean'];
+  leaveSession: Scalars['Boolean'];
   login: ActorResponse;
   logout: Scalars['Boolean'];
   signup: ActorResponse;
@@ -57,7 +59,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreateSessionArgs = {
-  options: SessionOptions;
+  input: SessionInput;
 };
 
 
@@ -68,6 +70,16 @@ export type MutationDeleteSessionArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationJoinSessionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationLeaveSessionArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -86,7 +98,7 @@ export type MutationSignupArgs = {
 
 export type MutationUpdateSessionArgs = {
   id: Scalars['Int'];
-  title: Scalars['String'];
+  input: SessionInput;
 };
 
 export type PaginatedSessions = {
@@ -115,11 +127,15 @@ export type QuerySessionsArgs = {
 
 export type Session = {
   __typename?: 'Session';
+  actorIsPartOfSession: Scalars['Boolean'];
   attendeeLimit: Scalars['Int'];
   createdAt: Scalars['String'];
+  creator: Actor;
   creatorId: Scalars['Int'];
   end: Scalars['String'];
+  hasMoreText: Scalars['Boolean'];
   id: Scalars['Int'];
+  numberOfAttendees: Scalars['Int'];
   start: Scalars['String'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -127,7 +143,7 @@ export type Session = {
   updatedAt: Scalars['String'];
 };
 
-export type SessionOptions = {
+export type SessionInput = {
   attendeeLimit: Scalars['Float'];
   end: Scalars['DateTime'];
   start: Scalars['DateTime'];
@@ -150,7 +166,7 @@ export type ChangePasswordMutationVariables = Exact<{
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
 
 export type CreateSessionMutationVariables = Exact<{
-  options: SessionOptions;
+  input: SessionInput;
 }>;
 
 
@@ -196,7 +212,7 @@ export type SessionsQueryVariables = Exact<{
 }>;
 
 
-export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, start: string, end: string, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string }> } };
+export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, createdAt: string, updatedAt: string }> } };
 
 export const BasicErrorFragmentDoc = gql`
     fragment BasicError on FieldError {
@@ -233,8 +249,8 @@ export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
 };
 export const CreateSessionDocument = gql`
-    mutation CreateSession($options: SessionOptions!) {
-  createSession(options: $options) {
+    mutation CreateSession($input: SessionInput!) {
+  createSession(input: $input) {
     id
     title
     text
@@ -310,9 +326,12 @@ export const SessionsDocument = gql`
       id
       title
       textSnippet
+      hasMoreText
       start
       end
+      numberOfAttendees
       attendeeLimit
+      actorIsPartOfSession
       creatorId
       createdAt
       updatedAt

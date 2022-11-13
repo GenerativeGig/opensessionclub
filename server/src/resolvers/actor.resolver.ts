@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import {
   Arg,
   Ctx,
@@ -9,14 +10,13 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
+import { v4 } from "uuid";
+import { COOKIE_NAME, FORGOT_PASSWORD_PREFIX } from "../constants";
+import { dataSource } from "../dataSource";
 import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
-import argon2 from "argon2";
-import { cookieName, forgotPasswordPrefix } from "../constants";
-import { validateSignup } from "../validation/signup.validation";
 import { sendEmail } from "../utils/sendEmail";
-import { v4 } from "uuid";
-import { dataSource } from "../dataSource";
+import { validateSignup } from "../validation/signup.validation";
 
 @ObjectType()
 class FieldError {
@@ -132,7 +132,7 @@ export class ActorResolver {
   logout(@Ctx() { req, res }: ApolloContext) {
     return new Promise((resolve) =>
       req.session.destroy((error) => {
-        res.clearCookie(cookieName);
+        res.clearCookie(COOKIE_NAME);
         if (error) {
           console.log(error);
           resolve(false);
@@ -158,7 +158,7 @@ export class ActorResolver {
     const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
 
     await redis.set(
-      forgotPasswordPrefix + token,
+      FORGOT_PASSWORD_PREFIX + token,
       actor.id,
       "EX",
       threeDaysInMs
@@ -189,7 +189,7 @@ export class ActorResolver {
       };
     }
 
-    const key = forgotPasswordPrefix + token;
+    const key = FORGOT_PASSWORD_PREFIX + token;
 
     const actorId = await redis.get(key);
     if (!actorId) {

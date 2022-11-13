@@ -1,22 +1,22 @@
-import "reflect-metadata";
-import * as dotenv from "dotenv";
-import path from "path";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
+// Setup dotenv before importing from "./constants"
+import dotenv from "dotenv";
+dotenv.config();
+
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { ApolloServer } from "apollo-server-express";
+import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import Redis from "ioredis";
+import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { COOKIE_NAME, SESSION_SECRET, IS_PRODUCTION } from "./constants";
+import { dataSource } from "./dataSource";
 import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
-import Redis from "ioredis";
-import session from "express-session";
-import connectRedis from "connect-redis";
 import { ApolloContext } from "./types";
-import cors from "cors";
-import { cookieName, isProduction } from "./constants";
-import { dataSource } from "./dataSource";
 // import { Session } from "./entities/session.entity";
-
-dotenv.config({ path: path.resolve(__dirname + "../.env.local") });
 
 const main = async () => {
   await dataSource.initialize();
@@ -31,9 +31,13 @@ const main = async () => {
 
   const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
 
+  if (!SESSION_SECRET) {
+    throw new Error("missing session secret");
+  }
+
   app.use(
     session({
-      name: cookieName,
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redis,
         disableTouch: true,
@@ -42,10 +46,10 @@ const main = async () => {
         maxAge: tenYearsInMs,
         httpOnly: true,
         sameSite: "lax",
-        secure: isProduction,
+        secure: IS_PRODUCTION,
       },
       saveUninitialized: false,
-      secret: "asdfasdjfaimkldlfkgmkl", // env
+      secret: SESSION_SECRET,
       resave: false,
     })
   );
