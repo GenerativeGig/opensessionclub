@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SessionCard } from "../components/SessionCard";
-import { Session, useSessionsQuery } from "../generated/graphql";
+import { useSessionsQuery } from "../generated/graphql";
 
 export function Sessions() {
   const [variables, setVariables] = useState({
@@ -19,12 +19,12 @@ export function Sessions() {
         <span>Loading...</span>
       ) : (
         <ol className="flex flex-col w-full">
-          {data!.sessions.sessions.map((session: Omit<Session, "text">) => (
+          {data!.sessions.sessions.map((session) => (
             <li
               key={session.id}
               className="m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800"
             >
-              <SessionCard session={session} />
+              <SessionCard {...session} />
             </li>
           ))}
         </ol>
@@ -35,8 +35,7 @@ export function Sessions() {
             setVariables({
               limit: variables.limit,
               cursor:
-                data.sessions.sessions[data.sessions.sessions.length - 1]
-                  .createdAt,
+                data.sessions.sessions[data.sessions.sessions.length - 1].start,
             })
           }
         >
@@ -46,3 +45,6 @@ export function Sessions() {
     </>
   );
 }
+
+// ongoing, upcoming & past tabs
+// need new queries that add a where for checking for the

@@ -1,0 +1,3 @@
+mutation LeaveSession($id: Int!) {
+  leaveSession(id: $id)
+}

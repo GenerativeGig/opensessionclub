@@ -139,6 +139,7 @@ export type Session = {
   start: Scalars['String'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
+  timeStatus: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -179,6 +180,20 @@ export type ForgotPasswordMutationVariables = Exact<{
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
 
+export type JoinSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type JoinSessionMutation = { __typename?: 'Mutation', joinSession: boolean };
+
+export type LeaveSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type LeaveSessionMutation = { __typename?: 'Mutation', leaveSession: boolean };
+
 export type LoginMutationVariables = Exact<{
   nameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -206,13 +221,20 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string } | null };
 
+export type SessionQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, text: string, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, updatedAt: string, createdAt: string } } | null };
+
 export type SessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, createdAt: string, updatedAt: string }> } };
+export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export const BasicErrorFragmentDoc = gql`
     fragment BasicError on FieldError {
@@ -276,6 +298,24 @@ export const ForgotPasswordDocument = gql`
 export function useForgotPasswordMutation() {
   return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
 };
+export const JoinSessionDocument = gql`
+    mutation JoinSession($id: Int!) {
+  joinSession(id: $id)
+}
+    `;
+
+export function useJoinSessionMutation() {
+  return Urql.useMutation<JoinSessionMutation, JoinSessionMutationVariables>(JoinSessionDocument);
+};
+export const LeaveSessionDocument = gql`
+    mutation LeaveSession($id: Int!) {
+  leaveSession(id: $id)
+}
+    `;
+
+export function useLeaveSessionMutation() {
+  return Urql.useMutation<LeaveSessionMutation, LeaveSessionMutationVariables>(LeaveSessionDocument);
+};
 export const LoginDocument = gql`
     mutation Login($nameOrEmail: String!, $password: String!) {
   login(nameOrEmail: $nameOrEmail, password: $password) {
@@ -318,6 +358,35 @@ export const MeDocument = gql`
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
+export const SessionDocument = gql`
+    query Session($id: Int!) {
+  session(id: $id) {
+    id
+    title
+    text
+    start
+    end
+    numberOfAttendees
+    attendeeLimit
+    actorIsPartOfSession
+    creatorId
+    timeStatus
+    createdAt
+    updatedAt
+    creator {
+      id
+      name
+      email
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `;
+
+export function useSessionQuery(options: Omit<Urql.UseQueryArgs<SessionQueryVariables>, 'query'>) {
+  return Urql.useQuery<SessionQuery, SessionQueryVariables>({ query: SessionDocument, ...options });
+};
 export const SessionsDocument = gql`
     query Sessions($limit: Int!, $cursor: String) {
   sessions(limit: $limit, cursor: $cursor) {
@@ -327,14 +396,23 @@ export const SessionsDocument = gql`
       title
       textSnippet
       hasMoreText
+      text
       start
       end
       numberOfAttendees
       attendeeLimit
       actorIsPartOfSession
       creatorId
+      timeStatus
       createdAt
       updatedAt
+      creator {
+        id
+        name
+        email
+        createdAt
+        updatedAt
+      }
     }
   }
 }

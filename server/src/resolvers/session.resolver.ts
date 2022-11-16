@@ -18,6 +18,12 @@ import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
 
+enum TimeStatus {
+  PAST = "PAST",
+  UPCOMING = "UPCOMING",
+  ONGOING = "ONGOING",
+}
+
 @InputType()
 class SessionInput {
   @Field()
@@ -43,26 +49,26 @@ class PaginatedSessions {
 @Resolver(Session)
 export class SessionResolver {
   @FieldResolver(() => String)
-  textSnippet(@Root() root: Session) {
-    return root.text.slice(0, 250);
+  textSnippet(@Root() { text }: Session) {
+    return text.slice(0, 250);
   }
 
   @FieldResolver(() => Boolean)
-  hasMoreText(@Root() root: Session) {
-    return root.text.length > 250 + 1;
+  hasMoreText(@Root() { text }: Session) {
+    return text.length > 250 + 1;
   }
 
   @FieldResolver(() => Int)
-  async numberOfAttendees(@Root() root: Session) {
+  async numberOfAttendees(@Root() { id }: Session) {
     const [, numberOfAttendees] = await ActorSession.findAndCount({
-      where: { sessionId: root.id, actorIsPartOfSession: true },
+      where: { sessionId: id, actorIsPartOfSession: true },
     });
     return numberOfAttendees;
   }
 
   @FieldResolver(() => Boolean)
   async actorIsPartOfSession(
-    @Root() root: Session,
+    @Root() { id }: Session,
     @Ctx() { req }: ApolloContext
   ) {
     if (!req.session.actorId) {
@@ -70,13 +76,27 @@ export class SessionResolver {
     }
 
     const actorSession = await ActorSession.findOne({
-      where: { sessionId: root.id, actorId: req.session.actorId },
+      where: { sessionId: id, actorId: req.session.actorId },
     });
 
     if (!actorSession) {
       return false;
     }
     return actorSession.actorIsPartOfSession;
+  }
+
+  @FieldResolver(() => String)
+  timeStatus(@Root() { start: startDate, end: endDate }: Session) {
+    const currentDate = new Date();
+
+    if (currentDate > endDate) {
+      return TimeStatus.PAST;
+    }
+
+    if (currentDate < startDate) {
+      return TimeStatus.UPCOMING;
+    }
+    return TimeStatus.ONGOING;
   }
 
   // might rename sessions to paginatedSessions to make the frontend code a bit more readable
@@ -107,8 +127,8 @@ export class SessionResolver {
         ) creator
       from session s
       inner join public.actor a on a.id = s."creatorId"
-      ${cursor ? `where s."createdAt" < $2` : ""}
-      order by s."createdAt" DESC
+      ${cursor ? `where s."start" < $2` : ""}
+      order by s."start" ASC
       limit $1
       `,
       replacements
@@ -121,8 +141,14 @@ export class SessionResolver {
   }
 
   @Query(() => Session, { nullable: true })
-  session(@Arg("id", () => Int) id: number) {
-    return Session.findOne({ where: { id } });
+  async session(@Arg("id", () => Int) id: number) {
+    return await dataSource
+      .createQueryBuilder()
+      .select("session")
+      .from(Session, "session")
+      .leftJoinAndSelect("session.creator", "actor")
+      .where("session.id = :id", { id: id })
+      .getOne();
   }
 
   @Mutation(() => Session)

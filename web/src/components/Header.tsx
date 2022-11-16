@@ -23,7 +23,12 @@ export function Header() {
   } else {
     authenticationJsx = (
       <>
-        <div className="m-2">{data.me.name}</div>
+        <Link
+          to={`/actor/${data.me.id}`}
+          className="m-2 text-blue-500 hover:text-blue-400"
+        >
+          {data.me.name}
+        </Link>
         <button
           onClick={() => {
             logout({});

@@ -1,4 +1,4 @@
-import { Formik, Form, useField } from "formik";
+import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../components/InputField";
 import { InputTextArea } from "../components/InputTextArea";
@@ -29,7 +29,7 @@ export function CreateSession() {
         const start = new Date(date + ", " + startTime);
         const end = new Date(date + ", " + endTime);
         const { error } = await createSession({
-          options: { title, text, attendeeLimit, start, end },
+          input: { title, text, attendeeLimit, start, end },
         });
         if (!error) {
           navigate("/sessions");
