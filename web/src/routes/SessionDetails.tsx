@@ -1,6 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { SessionDateTime } from "../components/SessionDateTime";
-import { useSessionQuery } from "../generated/graphql";
+import {
+  useJoinSessionMutation,
+  useLeaveSessionMutation,
+  useSessionQuery,
+} from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function SessionDetails() {
@@ -14,12 +19,18 @@ export function SessionDetails() {
     variables: { id: parseInt(id!) },
   });
 
+  const navigate = useNavigate();
+  const [, joinSession] = useJoinSessionMutation();
+  const [, leaveSession] = useLeaveSessionMutation();
+
+  useState();
   if (!data && fetching) {
     return <span>Loading...</span>;
   }
 
   if (data?.session) {
     const {
+      id,
       title,
       start,
       end,
@@ -30,10 +41,6 @@ export function SessionDetails() {
       timeStatus,
       creator,
     } = data.session;
-
-    function joinSession() {}
-
-    function leaveSession() {}
 
     return (
       <article>
@@ -65,14 +72,24 @@ export function SessionDetails() {
               </div>
               {actorIsPartOfSession ? (
                 <button
-                  onClick={leaveSession}
+                  onClick={async () => {
+                    const response = await leaveSession({ id });
+                    if (response.data?.leaveSession) {
+                      navigate(0);
+                    }
+                  }}
                   className="bg-red-500 hover:bg-red-400"
                 >
                   Leave Session
                 </button>
               ) : (
                 <button
-                  onClick={joinSession}
+                  onClick={async () => {
+                    const response = await joinSession({ id });
+                    if (response.data?.joinSession) {
+                      navigate(0);
+                    }
+                  }}
                   className="bg-green-500 hover:bg-green-400"
                 >
                   Join Session
@@ -87,5 +104,3 @@ export function SessionDetails() {
 
   return <p>Failed loading data.</p>;
 }
-
-// Button to leave if part of session already and not creator

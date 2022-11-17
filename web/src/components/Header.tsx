@@ -2,12 +2,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 
 export function Header() {
-  const [{ data, fetching }] = useMeQuery();
+  const [{ data, fetching: meFetching }] = useMeQuery();
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const { pathname } = useLocation();
 
   let authenticationJsx;
-  if (fetching) {
+  if (meFetching) {
     authenticationJsx = <></>;
   } else if (!data?.me) {
     authenticationJsx = (
