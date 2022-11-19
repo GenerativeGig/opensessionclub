@@ -15,7 +15,7 @@ export function SessionCard({
 }: Session) {
   return (
     <article className="flex flex-col ml-1">
-      <h1 className="text-2xl break-words">{title}</h1>
+      <h2 className="text-2xl break-words">{title}</h2>
       <SessionDateTime start={start} end={end} />
       <p className="my-3 mx-1 break-words">
         {textSnippet}

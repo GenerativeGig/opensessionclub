@@ -83,7 +83,7 @@ export function SessionDetails() {
       <article className="flex flex-col">
         <RouteTitle>{title}</RouteTitle>
         <SessionDateTime start={start} end={end} />
-        <p className="my-3 mx-1 break-words">{text}</p>
+        <div className="my-3 mx-1 break-words">{text}</div>
         <div className="flex justify-between">
           <div>
             <Link

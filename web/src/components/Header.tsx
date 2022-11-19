@@ -45,7 +45,7 @@ export function Header() {
     <header className="bg-slate-700 p-4 sticky top-0 flex justify-between w-full">
       <div>
         <Link to="/">
-          <h1 className="text-4xl">Open Session Club</h1>
+          <span className="text-4xl">Open Session Club</span>
         </Link>
       </div>
       <div className="flex items-center">
