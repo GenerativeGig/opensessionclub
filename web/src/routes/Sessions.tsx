@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { RouteTitle } from "../components/RouteTitle";
 import { SessionCard } from "../components/SessionCard";
 import { useSessionsQuery } from "../generated/graphql";
 
@@ -15,6 +16,7 @@ export function Sessions() {
 
   return (
     <>
+      <RouteTitle>Sessions</RouteTitle>
       {!data && fetching ? (
         <span>Loading...</span>
       ) : (

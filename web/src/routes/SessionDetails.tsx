@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { RouteTitle } from "../components/RouteTitle";
 import { SessionDateTime } from "../components/SessionDateTime";
 import {
   useDeleteSessionMutation,
@@ -79,8 +80,8 @@ export function SessionDetails() {
     }
 
     return (
-      <article>
-        <h1 className="text-2xl break-words">{title}</h1>
+      <article className="flex flex-col">
+        <RouteTitle>{title}</RouteTitle>
         <SessionDateTime start={start} end={end} />
         <p className="my-3 mx-1 break-words">{text}</p>
         <div className="flex justify-between">

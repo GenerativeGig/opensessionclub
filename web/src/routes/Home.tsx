@@ -1,7 +1,12 @@
+import { RouteTitle } from "../components/RouteTitle";
+
 export function Home() {
   return (
     <article>
-      <h1>Welcome</h1>
+      <RouteTitle>Welcome!</RouteTitle>
     </article>
   );
 }
+/**
+  Add information about what this club is about, rules and other important information
+ */

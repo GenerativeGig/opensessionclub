@@ -8,7 +8,7 @@ export function Wrapper() {
     <div className="flex flex-col h-screen">
       <Header />
       <main className="bg-slate-900 flex-grow overflow-visible">
-        <div className="max-w-[768px] mr-auto ml-auto flex flex-col place-items-center">
+        <div className="max-w-[768px] mr-auto ml-auto flex flex-col place-items-center pb-16">
           <Outlet />
         </div>
       </main>

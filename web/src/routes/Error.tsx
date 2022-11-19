@@ -1,7 +1,9 @@
+import { RouteTitle } from "../components/RouteTitle";
+
 export function Error() {
   return (
     <article>
-      <h1>Page not found</h1>
+      <RouteTitle>Page not found.</RouteTitle>
     </article>
   );
 }
