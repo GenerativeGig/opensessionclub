@@ -11,14 +11,12 @@ export function FormContent({
   submitButtonText,
 }: FormProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center">
       {inputFieldChildren}
-      <div className="place-self-end mr-2">{extraChildren}</div>
-      <div className="place-self-end mr-1">
-        <button className={`bg-green-500 hover:bg-green-400`} type="submit">
-          {submitButtonText}
-        </button>
-      </div>
+      <div className="self-end">{extraChildren}</div>
+      <button className={`bg-green-500 hover:bg-green-400`} type="submit">
+        {submitButtonText}
+      </button>
     </div>
   );
 }
