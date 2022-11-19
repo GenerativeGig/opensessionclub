@@ -162,7 +162,7 @@ export class SessionResolver {
       creatorId: req.session.actorId,
     }).save();
 
-    ActorSession.create({
+    await ActorSession.create({
       sessionId: session.id,
       actorId: req.session.actorId,
       actorIsPartOfSession: true,
