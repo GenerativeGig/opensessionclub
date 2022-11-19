@@ -47,12 +47,20 @@ export function Login() {
                 </>
               }
               extraChildren={
-                <Link
-                  className="hover:text-slate-400 hover:underline"
-                  to="/forgot-password"
-                >
-                  Forgot password?
-                </Link>
+                <>
+                  <Link
+                    className="hover:text-slate-400 hover:underline block text-right"
+                    to="/forgot-password"
+                  >
+                    Forgot password?
+                  </Link>
+                  <Link
+                    className="hover:text-slate-400 hover:underline block text-right"
+                    to="/signup"
+                  >
+                    Don't have an account yet?
+                  </Link>
+                </>
               }
               submitButtonText="Login"
             />

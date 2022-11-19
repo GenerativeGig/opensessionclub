@@ -15,7 +15,9 @@ export function FormContent({
       {inputFieldChildren}
       <div className="place-self-end mr-2">{extraChildren}</div>
       <div className="place-self-end mr-1">
-        <button type="submit">{submitButtonText}</button>
+        <button className={`bg-green-500 hover:bg-green-400`} type="submit">
+          {submitButtonText}
+        </button>
       </div>
     </div>
   );

@@ -13,10 +13,10 @@ export function Header() {
     authenticationJsx = (
       <>
         <Link to="/login">
-          <button className="bg-cyan-600 hover:bg-cyan-500">Login</button>
+          <button className="hover:text-slate-200">Login</button>
         </Link>
         <Link to="/signup">
-          <button className="bg-yellow-600 hover:bg-yellow-500">Signup</button>
+          <button className="bg-slate-500  hover:bg-slate-400">Signup</button>
         </Link>
       </>
     );
@@ -30,6 +30,7 @@ export function Header() {
           {data.me.name}
         </Link>
         <button
+          className="hover:text-slate-200"
           onClick={() => {
             logout({});
           }}
