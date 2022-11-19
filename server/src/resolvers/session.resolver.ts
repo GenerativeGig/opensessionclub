@@ -197,7 +197,13 @@ export class SessionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: ApolloContext
   ) {
-    await Session.delete({ id, creatorId: req.session.actorId });
+    await ActorSession.delete({
+      sessionId: id,
+    });
+    await Session.delete({
+      id,
+      creatorId: req.session.actorId,
+    });
     return true;
   }
 

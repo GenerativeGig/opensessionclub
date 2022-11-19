@@ -18,7 +18,7 @@ export function SessionDateTime({ start, end }: SessionDateTimeProps) {
   if (startDate.getHours().toString().length) {
   }
   return (
-    <div className="text-sm">
+    <div className="text-sm self-end mr-1">
       <span>{weekday[startDate.getDay()]}</span>
       <span> </span>
       <span>{startDate.toLocaleDateString()}</span>

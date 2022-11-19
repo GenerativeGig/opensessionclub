@@ -173,6 +173,13 @@ export type CreateSessionMutationVariables = Exact<{
 
 export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, title: string, text: string, start: string, end: string, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string } };
 
+export type DeleteSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteSessionMutation = { __typename?: 'Mutation', deleteSession: boolean };
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -288,6 +295,15 @@ export const CreateSessionDocument = gql`
 
 export function useCreateSessionMutation() {
   return Urql.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument);
+};
+export const DeleteSessionDocument = gql`
+    mutation DeleteSession($id: Int!) {
+  deleteSession(id: $id)
+}
+    `;
+
+export function useDeleteSessionMutation() {
+  return Urql.useMutation<DeleteSessionMutation, DeleteSessionMutationVariables>(DeleteSessionDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {

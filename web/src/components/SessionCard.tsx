@@ -15,15 +15,9 @@ export function SessionCard({
 }: Session) {
   return (
     <article className="flex flex-col ml-1">
-      <div className="flex justify-between">
-        <div>
-          <h1 className="text-2xl">{title}</h1>
-        </div>
-        <div className="flex flex-col items-end mr-1">
-          <SessionDateTime start={start} end={end} />
-        </div>
-      </div>
-      <p className="my-3 mx-1">
+      <h1 className="text-2xl break-words">{title}</h1>
+      <SessionDateTime start={start} end={end} />
+      <p className="my-3 mx-1 break-words">
         {textSnippet}
         {hasMoreText && (
           <Link
