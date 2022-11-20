@@ -4,6 +4,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -19,7 +20,7 @@ import { sendEmail } from "../utils/sendEmail";
 import { validateSignup } from "../validation/signup.validation";
 
 @ObjectType()
-class FieldError {
+class ActorFieldError {
   @Field(() => String)
   field: string;
 
@@ -28,9 +29,9 @@ class FieldError {
 }
 
 @ObjectType()
-class ActorResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+export class ActorResponse {
+  @Field(() => [ActorFieldError], { nullable: true })
+  errors?: ActorFieldError[];
 
   @Field(() => Actor, { nullable: true })
   actor?: Actor;
@@ -47,6 +48,10 @@ export class ActorResolver {
   }
 
   @Query(() => Actor, { nullable: true })
+  async actor(@Arg("id", () => Int) id: number) {
+    return Actor.findOne({ where: { id } });
+  }
+  @Query(() => Actor, { nullable: true })
   me(@Ctx() { req }: ApolloContext) {
     if (!req.session.actorId) {
       return null;
@@ -61,6 +66,23 @@ export class ActorResolver {
     @Arg("password", () => String) password: string,
     @Ctx() { req }: ApolloContext
   ): Promise<ActorResponse> {
+    const actor = await Actor.findOne({
+      where: [
+        { lowerCaseName: name.toLowerCase() },
+        { lowerCaseEmail: email.toLowerCase() },
+      ],
+    });
+
+    if (actor?.lowerCaseName === name.toLowerCase()) {
+      return { errors: [{ field: "name", message: "name is already taken" }] };
+    }
+
+    if (actor?.lowerCaseEmail === email.toLowerCase()) {
+      return {
+        errors: [{ field: "email", message: "email is already taken" }],
+      };
+    }
+
     const errors = validateSignup(name, email, password);
     if (errors) {
       return { errors };
@@ -68,32 +90,26 @@ export class ActorResolver {
 
     const hashedPassword = await argon2.hash(password);
 
-    let actor;
-    try {
-      const result = await dataSource
-        .createQueryBuilder()
-        .insert()
-        .into(Actor)
-        .values({
-          name,
-          lowerCaseName: name.toLowerCase(),
-          email,
-          password: hashedPassword,
-        })
-        .returning("*")
-        .execute();
-      actor = result.raw[0];
-    } catch (error) {
-      if (error.code === "23505") {
-        return {
-          errors: [{ field: "name", message: "name is already taken" }],
-        };
-      }
-    }
+    const result = await dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(Actor)
+      .values({
+        name,
+        lowerCaseName: name.toLowerCase(),
+        email,
+        lowerCaseEmail: email.toLowerCase(),
+        password: hashedPassword,
+      })
+      .returning("*")
+      .execute();
 
-    req.session.actorId = actor.id;
+    const newActor = result.raw[0];
 
-    return { actor };
+    // Log in actor
+    req.session.actorId = newActor.id;
+
+    return { actor: newActor };
   }
 
   @Mutation(() => ActorResponse)
@@ -104,7 +120,7 @@ export class ActorResolver {
   ): Promise<ActorResponse> {
     const actor = await Actor.findOne(
       nameOrEmail.includes("@")
-        ? { where: { email: nameOrEmail } }
+        ? { where: { lowerCaseEmail: nameOrEmail.toLowerCase() } }
         : { where: { lowerCaseName: nameOrEmail.toLowerCase() } }
     );
     if (!actor) {
@@ -121,6 +137,7 @@ export class ActorResolver {
       };
     }
 
+    // Log in actor
     req.session.actorId = actor.id;
 
     return {
@@ -224,9 +241,11 @@ export class ActorResolver {
 
     await redis.del(key);
 
-    // Log in actor after changing password
+    // Log in actor
     req.session.actorId = actor.id;
 
     return { actor };
   }
 }
+
+// Trim name and email of spaces (end and beginning before saving them)

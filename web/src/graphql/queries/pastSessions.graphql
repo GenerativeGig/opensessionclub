@@ -1,5 +1,5 @@
-query Sessions($limit: Int!, $cursor: String) {
-  sessions(limit: $limit, cursor: $cursor) {
+query PastSessions($limit: Int!, $cursor: String) {
+  pastSessions(limit: $limit, cursor: $cursor) {
     hasMore
     sessions {
       id
@@ -8,7 +8,7 @@ query Sessions($limit: Int!, $cursor: String) {
       hasMoreText
       text
       start
-      end
+      stop
       numberOfAttendees
       attendeeLimit
       actorIsPartOfSession

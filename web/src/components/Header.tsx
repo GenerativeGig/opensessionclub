@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { ActorLink } from "./ActorLink";
 
 export function Header() {
   const [{ data, fetching: meFetching }] = useMeQuery();
@@ -23,12 +24,7 @@ export function Header() {
   } else {
     authenticationJsx = (
       <>
-        <Link
-          to={`/actor/${data.me.id}`}
-          className="m-2 text-blue-500 hover:text-blue-400"
-        >
-          {data.me.name}
-        </Link>
+        <ActorLink name={data.me.name} id={data.me.id} />
         <button
           className="hover:text-slate-200"
           onClick={() => {
@@ -49,14 +45,14 @@ export function Header() {
         </Link>
       </div>
       <div className="flex items-center">
-        {pathname === "/sessions" ? (
-          <Link to="/session/create">
+        {pathname.includes("/sessions") ? (
+          <Link to="/create-session">
             <button className="bg-pink-600 hover:bg-pink-500">
               Create Session
             </button>
           </Link>
         ) : (
-          <Link to="/sessions">
+          <Link to="/sessions/upcoming">
             <button className="bg-slate-50 text-slate-900 hover:bg-slate-100">
               Sessions
             </button>

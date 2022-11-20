@@ -17,10 +17,12 @@ import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
 import { ApolloContext } from "./types";
 // import { Session } from "./entities/session.entity";
+// import { ActorSession } from "./entities/actorSession.entity";
 
 const main = async () => {
   await dataSource.initialize();
   await dataSource.runMigrations();
+  // await ActorSession.delete({});
   // await Session.delete({});
   const app = express();
 
@@ -84,4 +86,6 @@ main().catch((error) => {
  TODOs:
   - Add spinner for loading synchronous server requests
   - Styling
+  - Add client side caching -> only update the data when needed, right now I am loading anew for each
+    request, even for the same data "navigate(0)"
 */

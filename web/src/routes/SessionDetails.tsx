@@ -1,20 +1,21 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { ActorLink } from "../components/ActorLink";
+import { FailedLoadingData } from "../components/FailedLoadingData";
+import { JoinOrLeaveSession } from "../components/JoinOrLeaveSession";
+import { Loading } from "../components/Loading";
 import { RouteTitle } from "../components/RouteTitle";
 import { SessionDateTime } from "../components/SessionDateTime";
+import { TimeStatusTag } from "../components/TimeStatus";
 import {
   useDeleteSessionMutation,
-  useJoinSessionMutation,
-  useLeaveSessionMutation,
   useMeQuery,
   useSessionQuery,
 } from "../generated/graphql";
-import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function SessionDetails() {
-  useIsAuthenticated();
   const { id } = useParams();
   if (!id) {
-    useIsAuthenticated();
+    return <FailedLoadingData />;
   }
 
   const [{ data: sessionData, fetching: sessionFetching }] = useSessionQuery({
@@ -24,21 +25,23 @@ export function SessionDetails() {
   const [{ data: meData, fetching: meFetching }] = useMeQuery();
 
   const navigate = useNavigate();
-  const [, joinSession] = useJoinSessionMutation();
-  const [, leaveSession] = useLeaveSessionMutation();
 
   const [, deleteSession] = useDeleteSessionMutation();
 
   if ((!sessionData && sessionFetching) || (!meData && meFetching)) {
-    return <span>Loading...</span>;
+    return <Loading />;
   }
 
-  if (sessionData?.session && meData?.me) {
+  if ((!sessionData && !sessionFetching) || (!meData && !meFetching)) {
+    return <FailedLoadingData />;
+  }
+
+  if (sessionData?.session) {
     const {
       id,
       title,
       start,
-      end,
+      stop,
       text,
       numberOfAttendees,
       attendeeLimit,
@@ -47,60 +50,23 @@ export function SessionDetails() {
       creator,
     } = sessionData.session;
 
-    function JoinOrLeaveButton() {
-      return (
-        <>
-          {actorIsPartOfSession ? (
-            <button
-              onClick={async () => {
-                const response = await leaveSession({ id });
-                if (response.data?.leaveSession) {
-                  navigate(0);
-                }
-              }}
-              className="bg-red-500 hover:bg-red-400"
-            >
-              Leave
-            </button>
-          ) : (
-            <button
-              onClick={async () => {
-                const response = await joinSession({ id });
-                if (response.data?.joinSession) {
-                  navigate(0);
-                }
-              }}
-              className="bg-green-500 hover:bg-green-400"
-            >
-              Join
-            </button>
-          )}
-        </>
-      );
-    }
-
     return (
       <article className="flex flex-col">
         <RouteTitle>{title}</RouteTitle>
-        <SessionDateTime start={start} end={end} />
-        <div className="my-3 mx-1 break-words">{text}</div>
         <div className="flex justify-between">
-          <div>
-            <Link
-              className="text-blue-500 hover:text-blue-400"
-              to={`/actor/${creator.id}`}
-            >
-              {creator.name}
-            </Link>
-            <span>{timeStatus}</span>
-          </div>
+          <TimeStatusTag timeStatus={timeStatus} />
+          <SessionDateTime start={start} stop={stop} />
+        </div>
+        <div className="my-3 mx-1 break-words">{text}</div>
+        <div className="flex justify-between items-center">
+          <ActorLink id={creator.id} name={creator.name} />
           <div className="self-end flex items-center">
             <div>
               <span>{numberOfAttendees}</span>
               <span>/</span>
               <span>{attendeeLimit}</span>
             </div>
-            {creator.id === meData.me.id ? (
+            {creator.id === meData?.me?.id && (
               <div>
                 <button
                   className="bg-red-500 hover-red-400"
@@ -113,12 +79,18 @@ export function SessionDetails() {
                 >
                   Delete
                 </button>
-                <button className="bg-yellow-500 hover:bg-yellow-400">
-                  <Link to={`/sessions/${id}/edit`}>Edit</Link>
-                </button>
+                <Link to={`/session/${id}/edit`}>
+                  <button className="bg-yellow-500 hover:bg-yellow-400">
+                    Edit
+                  </button>
+                </Link>
               </div>
-            ) : (
-              <JoinOrLeaveButton />
+            )}
+            {meData?.me && creator.id !== meData?.me?.id && (
+              <JoinOrLeaveSession
+                sessionId={id}
+                actorIsPartOfSession={actorIsPartOfSession}
+              />
             )}
           </div>
         </div>
@@ -128,3 +100,8 @@ export function SessionDetails() {
 
   return <p>Failed loading data.</p>;
 }
+
+// comments are only returned from server if logged in and has joined session
+// this is where contact information is usually added
+// integrate discord into website -> meaning you can create a session
+// with a corresponding discord chat room

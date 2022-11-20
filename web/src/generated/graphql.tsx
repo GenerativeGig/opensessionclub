@@ -25,16 +25,16 @@ export type Actor = {
   updatedAt: Scalars['String'];
 };
 
+export type ActorFieldError = {
+  __typename?: 'ActorFieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type ActorResponse = {
   __typename?: 'ActorResponse';
   actor?: Maybe<Actor>;
-  errors?: Maybe<Array<FieldError>>;
-};
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
+  errors?: Maybe<Array<ActorFieldError>>;
 };
 
 export type Mutation = {
@@ -101,17 +101,49 @@ export type MutationUpdateSessionArgs = {
   input: SessionInput;
 };
 
-export type PaginatedSessions = {
-  __typename?: 'PaginatedSessions';
+export type PaginatedOngoingSessions = {
+  __typename?: 'PaginatedOngoingSessions';
+  hasMore: Scalars['Boolean'];
+  sessions: Array<Session>;
+};
+
+export type PaginatedPastSessions = {
+  __typename?: 'PaginatedPastSessions';
+  hasMore: Scalars['Boolean'];
+  sessions: Array<Session>;
+};
+
+export type PaginatedUpcomingSessions = {
+  __typename?: 'PaginatedUpcomingSessions';
   hasMore: Scalars['Boolean'];
   sessions: Array<Session>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  actor?: Maybe<Actor>;
   me?: Maybe<Actor>;
+  ongoingSessions: PaginatedOngoingSessions;
+  pastSessions: PaginatedPastSessions;
   session?: Maybe<Session>;
-  sessions: PaginatedSessions;
+  upcomingSessions: PaginatedUpcomingSessions;
+};
+
+
+export type QueryActorArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryOngoingSessionsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPastSessionsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -120,7 +152,7 @@ export type QuerySessionArgs = {
 };
 
 
-export type QuerySessionsArgs = {
+export type QueryUpcomingSessionsArgs = {
   cursor?: InputMaybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
@@ -132,11 +164,11 @@ export type Session = {
   createdAt: Scalars['String'];
   creator: Actor;
   creatorId: Scalars['Int'];
-  end: Scalars['String'];
   hasMoreText: Scalars['Boolean'];
   id: Scalars['Int'];
   numberOfAttendees: Scalars['Int'];
   start: Scalars['String'];
+  stop: Scalars['String'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
   timeStatus: Scalars['String'];
@@ -146,17 +178,17 @@ export type Session = {
 
 export type SessionInput = {
   attendeeLimit: Scalars['Float'];
-  end: Scalars['DateTime'];
   start: Scalars['DateTime'];
+  stop: Scalars['DateTime'];
   text: Scalars['String'];
   title: Scalars['String'];
 };
 
 export type BasicActorFragment = { __typename?: 'Actor', id: number, name: string };
 
-export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null };
+export type BasicActorErrorFragment = { __typename?: 'ActorFieldError', field: string, message: string };
 
-export type BasicErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -164,14 +196,14 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
 
 export type CreateSessionMutationVariables = Exact<{
   input: SessionInput;
 }>;
 
 
-export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, title: string, text: string, start: string, end: string, attendeeLimit: number, creatorId: number, createdAt: string, updatedAt: string } };
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number } };
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -207,7 +239,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -221,30 +253,61 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+
+export type UpdateSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: SessionInput;
+}>;
+
+
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number } };
+
+export type ActorQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ActorQuery = { __typename?: 'Query', actor?: { __typename?: 'Actor', id: number, name: string, email: string, updatedAt: string, createdAt: string } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string } | null };
 
-export type SessionQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, text: string, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, updatedAt: string, createdAt: string } } | null };
-
-export type SessionsQueryVariables = Exact<{
+export type OngoingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type SessionsQuery = { __typename?: 'Query', sessions: { __typename?: 'PaginatedSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, end: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
-export const BasicErrorFragmentDoc = gql`
-    fragment BasicError on FieldError {
+export type PastSessionsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+
+export type SessionQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, updatedAt: string, createdAt: string } } | null };
+
+export type UpcomingSessionsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+
+export const BasicActorErrorFragmentDoc = gql`
+    fragment BasicActorError on ActorFieldError {
   field
   message
 }
@@ -258,13 +321,13 @@ export const BasicActorFragmentDoc = gql`
 export const BasicActorResponseFragmentDoc = gql`
     fragment BasicActorResponse on ActorResponse {
   errors {
-    ...BasicError
+    ...BasicActorError
   }
   actor {
     ...BasicActor
   }
 }
-    ${BasicErrorFragmentDoc}
+    ${BasicActorErrorFragmentDoc}
 ${BasicActorFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
@@ -281,14 +344,6 @@ export const CreateSessionDocument = gql`
     mutation CreateSession($input: SessionInput!) {
   createSession(input: $input) {
     id
-    title
-    text
-    start
-    end
-    attendeeLimit
-    creatorId
-    createdAt
-    updatedAt
   }
 }
     `;
@@ -363,6 +418,32 @@ export const SignupDocument = gql`
 export function useSignupMutation() {
   return Urql.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument);
 };
+export const UpdateSessionDocument = gql`
+    mutation UpdateSession($id: Int!, $input: SessionInput!) {
+  updateSession(id: $id, input: $input) {
+    id
+  }
+}
+    `;
+
+export function useUpdateSessionMutation() {
+  return Urql.useMutation<UpdateSessionMutation, UpdateSessionMutationVariables>(UpdateSessionDocument);
+};
+export const ActorDocument = gql`
+    query Actor($id: Int!) {
+  actor(id: $id) {
+    id
+    name
+    email
+    updatedAt
+    createdAt
+  }
+}
+    `;
+
+export function useActorQuery(options: Omit<Urql.UseQueryArgs<ActorQueryVariables>, 'query'>) {
+  return Urql.useQuery<ActorQuery, ActorQueryVariables>({ query: ActorDocument, ...options });
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -374,6 +455,74 @@ export const MeDocument = gql`
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
+export const OngoingSessionsDocument = gql`
+    query OngoingSessions($limit: Int!, $cursor: String) {
+  ongoingSessions(limit: $limit, cursor: $cursor) {
+    hasMore
+    sessions {
+      id
+      title
+      textSnippet
+      hasMoreText
+      text
+      start
+      stop
+      numberOfAttendees
+      attendeeLimit
+      actorIsPartOfSession
+      creatorId
+      timeStatus
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        email
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+    `;
+
+export function useOngoingSessionsQuery(options: Omit<Urql.UseQueryArgs<OngoingSessionsQueryVariables>, 'query'>) {
+  return Urql.useQuery<OngoingSessionsQuery, OngoingSessionsQueryVariables>({ query: OngoingSessionsDocument, ...options });
+};
+export const PastSessionsDocument = gql`
+    query PastSessions($limit: Int!, $cursor: String) {
+  pastSessions(limit: $limit, cursor: $cursor) {
+    hasMore
+    sessions {
+      id
+      title
+      textSnippet
+      hasMoreText
+      text
+      start
+      stop
+      numberOfAttendees
+      attendeeLimit
+      actorIsPartOfSession
+      creatorId
+      timeStatus
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        email
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+    `;
+
+export function usePastSessionsQuery(options: Omit<Urql.UseQueryArgs<PastSessionsQueryVariables>, 'query'>) {
+  return Urql.useQuery<PastSessionsQuery, PastSessionsQueryVariables>({ query: PastSessionsDocument, ...options });
+};
 export const SessionDocument = gql`
     query Session($id: Int!) {
   session(id: $id) {
@@ -381,7 +530,7 @@ export const SessionDocument = gql`
     title
     text
     start
-    end
+    stop
     numberOfAttendees
     attendeeLimit
     actorIsPartOfSession
@@ -403,9 +552,9 @@ export const SessionDocument = gql`
 export function useSessionQuery(options: Omit<Urql.UseQueryArgs<SessionQueryVariables>, 'query'>) {
   return Urql.useQuery<SessionQuery, SessionQueryVariables>({ query: SessionDocument, ...options });
 };
-export const SessionsDocument = gql`
-    query Sessions($limit: Int!, $cursor: String) {
-  sessions(limit: $limit, cursor: $cursor) {
+export const UpcomingSessionsDocument = gql`
+    query UpcomingSessions($limit: Int!, $cursor: String) {
+  upcomingSessions(limit: $limit, cursor: $cursor) {
     hasMore
     sessions {
       id
@@ -414,7 +563,7 @@ export const SessionsDocument = gql`
       hasMoreText
       text
       start
-      end
+      stop
       numberOfAttendees
       attendeeLimit
       actorIsPartOfSession
@@ -434,6 +583,6 @@ export const SessionsDocument = gql`
 }
     `;
 
-export function useSessionsQuery(options: Omit<Urql.UseQueryArgs<SessionsQueryVariables>, 'query'>) {
-  return Urql.useQuery<SessionsQuery, SessionsQueryVariables>({ query: SessionsDocument, ...options });
+export function useUpcomingSessionsQuery(options: Omit<Urql.UseQueryArgs<UpcomingSessionsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UpcomingSessionsQuery, UpcomingSessionsQueryVariables>({ query: UpcomingSessionsDocument, ...options });
 };

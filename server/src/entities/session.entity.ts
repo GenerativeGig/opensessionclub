@@ -34,7 +34,7 @@ export class Session extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  end: Date;
+  stop: Date;
 
   @Field(() => Int)
   @Column({ type: "int" })

@@ -22,26 +22,26 @@ export function CreateSession() {
           text: "",
           date: "",
           startTime: "",
-          endTime: "",
+          stopTime: "",
           attendeeLimit: 5,
         }}
         onSubmit={async (
-          { title, text, date, startTime, endTime, attendeeLimit },
+          { title, text, date, startTime, stopTime, attendeeLimit },
           { setErrors }
         ) => {
           const start = new Date(date + ", " + startTime);
-          const end = new Date(date + ", " + endTime);
+          const stop = new Date(date + ", " + stopTime);
           const { error } = await createSession({
-            input: { title, text, attendeeLimit, start, end },
+            input: { title, text, attendeeLimit, start, stop },
           });
           if (!error) {
-            navigate("/sessions");
+            navigate("/sessions/upcoming");
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form className="h-full w-full flex flex-col items-center">
-            <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800">
+            <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-pink-500">
               <div className="p-2 flex flex-col items-start">
                 <InputField name="title" label="Title" placeholder="title" />
                 <InputTextArea name="text" label="Text" placeholder="text" />
@@ -50,14 +50,14 @@ export function CreateSession() {
                   <div>
                     <InputTimePeriod
                       startTimeName="startTime"
-                      endTimeName="endTime"
+                      stopTimeName="stopTime"
                     />
                     <InputField
                       className="w-16"
                       name="attendeeLimit"
                       label="Attendee limit"
                       type="number"
-                      min={0}
+                      min={1}
                       defaultValue={5}
                       required
                     />

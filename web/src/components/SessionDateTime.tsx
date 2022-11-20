@@ -1,8 +1,10 @@
+import { addMissingZeros } from "../utils/addMissingZeros";
+
 export interface SessionDateTimeProps {
   start: string;
-  end: string;
+  stop: string;
 }
-export function SessionDateTime({ start, end }: SessionDateTimeProps) {
+export function SessionDateTime({ start, stop }: SessionDateTimeProps) {
   const weekday = [
     "Sunday",
     "Monday",
@@ -13,7 +15,7 @@ export function SessionDateTime({ start, end }: SessionDateTimeProps) {
     "Saturday",
   ];
   const startDate = new Date(parseInt(start));
-  const endDate = new Date(parseInt(end));
+  const stopDate = new Date(parseInt(stop));
 
   if (startDate.getHours().toString().length) {
   }
@@ -29,16 +31,9 @@ export function SessionDateTime({ start, end }: SessionDateTimeProps) {
       </span>
       <span> - </span>
       <span>
-        {addMissingZeros(endDate.getHours())}:
-        {addMissingZeros(endDate.getMinutes())}
+        {addMissingZeros(stopDate.getHours())}:
+        {addMissingZeros(stopDate.getMinutes())}
       </span>
     </div>
   );
-}
-
-function addMissingZeros(time: number) {
-  if (time < 10) {
-    return "0" + time;
-  }
-  return time;
 }

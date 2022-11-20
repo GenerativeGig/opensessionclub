@@ -29,7 +29,12 @@ export function Signup() {
               inputFieldChildren={
                 <>
                   <InputField name="name" label="Name" placeholder="name" />
-                  <InputField name="email" label="Email" placeholder="email" />
+                  <InputField
+                    name="email"
+                    label="Email"
+                    placeholder="email"
+                    type="email"
+                  />
                   <InputField
                     name="password"
                     label="Password"

@@ -30,6 +30,9 @@ export class Actor extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
+  @Column({ unique: true })
+  lowerCaseEmail: string;
+
   @Column()
   password: string;
 

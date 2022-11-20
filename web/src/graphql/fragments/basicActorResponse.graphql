@@ -1,6 +1,6 @@
 fragment BasicActorResponse on ActorResponse {
   errors {
-    ...BasicError
+    ...BasicActorError
   }
   actor {
     ...BasicActor

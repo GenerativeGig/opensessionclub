@@ -1,52 +1,46 @@
-import { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { RouteTitle } from "../components/RouteTitle";
-import { SessionCard } from "../components/SessionCard";
-import { useSessionsQuery } from "../generated/graphql";
+import { TimeStatusText } from "../components/TimeStatus";
 
 export function Sessions() {
-  const [variables, setVariables] = useState({
-    limit: 25,
-    cursor: null as null | string,
-  });
-  const [{ data, fetching }] = useSessionsQuery({ variables });
-
-  if (!data && !fetching) {
-    return <p>Failed loading data.</p>;
-  }
+  const navigate = useNavigate();
 
   return (
     <>
       <RouteTitle>Sessions</RouteTitle>
-      {!data && fetching ? (
-        <span>Loading...</span>
-      ) : (
-        <ol className="flex flex-col w-full">
-          {data!.sessions.sessions.map((session) => (
-            <li
-              key={session.id}
-              className="m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800"
-            >
-              <SessionCard {...session} />
-            </li>
-          ))}
-        </ol>
-      )}
-      {data && data.sessions.hasMore && (
-        <button
-          onClick={() =>
-            setVariables({
-              limit: variables.limit,
-              cursor:
-                data.sessions.sessions[data.sessions.sessions.length - 1].start,
-            })
-          }
-        >
-          Load more
-        </button>
-      )}
+      <ol className="flex justify-center">
+        <li>
+          <button
+            className="bg-green-500 hover:bg-green-400"
+            onClick={() => {
+              navigate("ongoing");
+            }}
+          >
+            {TimeStatusText.ONGOING}
+          </button>
+        </li>
+        <li>
+          <button
+            className="bg-purple-500 hover:bg-purple-400"
+            onClick={() => {
+              navigate("upcoming");
+            }}
+          >
+            {TimeStatusText.UPCOMING}
+          </button>
+        </li>
+        <li>
+          <button
+            className="bg-gray-500 hover:bg-gray-400"
+            onClick={() => {
+              navigate("archived");
+            }}
+          >
+            {TimeStatusText.PAST}
+          </button>
+        </li>
+      </ol>
+      <Outlet />
     </>
   );
 }
-
-// ongoing, upcoming & past tabs
-// need new queries that add a where for checking for the

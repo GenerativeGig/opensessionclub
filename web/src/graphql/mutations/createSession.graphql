@@ -1,13 +1,5 @@
 mutation CreateSession($input: SessionInput!) {
   createSession(input: $input) {
     id
-    title
-    text
-    start
-    end
-    attendeeLimit
-    creatorId
-    createdAt
-    updatedAt
   }
 }

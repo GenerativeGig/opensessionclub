@@ -1,0 +1,4 @@
+fragment BasicActorError on ActorFieldError {
+  field
+  message
+}

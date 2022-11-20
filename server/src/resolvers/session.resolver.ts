@@ -33,13 +33,29 @@ class SessionInput {
   @Field()
   start: Date;
   @Field()
-  end: Date;
+  stop: Date;
   @Field()
   attendeeLimit: number;
 }
 
 @ObjectType()
-class PaginatedSessions {
+class PaginatedOngoingSessions {
+  @Field(() => [Session])
+  sessions: Session[];
+  @Field()
+  hasMore: boolean;
+}
+
+@ObjectType()
+class PaginatedUpcomingSessions {
+  @Field(() => [Session])
+  sessions: Session[];
+  @Field()
+  hasMore: boolean;
+}
+
+@ObjectType()
+class PaginatedPastSessions {
   @Field(() => [Session])
   sessions: Session[];
   @Field()
@@ -50,7 +66,7 @@ class PaginatedSessions {
 export class SessionResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() { text }: Session) {
-    return text.slice(0, 250);
+    return text.slice(0, 250).trim();
   }
 
   @FieldResolver(() => Boolean)
@@ -86,10 +102,10 @@ export class SessionResolver {
   }
 
   @FieldResolver(() => String)
-  timeStatus(@Root() { start: startDate, end: endDate }: Session) {
+  timeStatus(@Root() { start: startDate, stop: stopDate }: Session) {
     const currentDate = new Date();
 
-    if (currentDate > endDate) {
+    if (currentDate > stopDate) {
       return TimeStatus.PAST;
     }
 
@@ -99,17 +115,19 @@ export class SessionResolver {
     return TimeStatus.ONGOING;
   }
 
-  // might rename sessions to paginatedSessions to make the frontend code a bit more readable
-  // i.e. data.paginatedSessions.sessions instead of sessions.sessions
-  @Query(() => PaginatedSessions)
-  async sessions(
+  @Query(() => PaginatedOngoingSessions)
+  async ongoingSessions(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null
-  ): Promise<PaginatedSessions> {
-    const realLimit = Math.min(50, limit);
+  ): Promise<PaginatedOngoingSessions> {
+    const replacements: (number | Date)[] = [];
+
+    replacements.push(new Date());
+
+    const realLimit = Math.min(25, limit);
     const realLimitPlusOne = realLimit + 1;
 
-    const replacements: (number | Date)[] = [realLimitPlusOne];
+    replacements.push(realLimitPlusOne);
 
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
@@ -127,13 +145,105 @@ export class SessionResolver {
         ) creator
       from session s
       inner join public.actor a on a.id = s."creatorId"
-      ${cursor ? `where s."start" < $2` : ""}
-      order by s."start" ASC
-      limit $1
+      where s."stop" > $1 and s."start" < $1
+      ${cursor ? `and s."start" < $3` : ``}
+      order by s."start" DESC
+      limit $2
       `,
       replacements
     );
+    // fix edge case where I am requesting more with cursor and the last
+    // and next session both have the same starting time (I don't get the next session)
+    return {
+      sessions: sessions.slice(0, realLimit),
+      hasMore: sessions.length === realLimitPlusOne,
+    };
+  }
 
+  @Query(() => PaginatedUpcomingSessions)
+  async upcomingSessions(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<PaginatedUpcomingSessions> {
+    const replacements: (number | Date)[] = [];
+
+    replacements.push(new Date());
+
+    const realLimit = Math.min(25, limit);
+    const realLimitPlusOne = realLimit + 1;
+
+    replacements.push(realLimitPlusOne);
+
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+
+    const sessions = await dataSource.query(
+      `
+      select s.*,
+      json_build_object(
+        'id', a.id,
+        'name', a.name,
+        'email', a.email,
+        'createdAt', a."createdAt",
+        'updatedAt', a."updatedAt"
+        ) creator
+      from session s
+      inner join public.actor a on a.id = s."creatorId"
+      where s."start" > $1
+      ${cursor ? `and s."start" > $3` : ``}
+      order by s."start" ASC
+      limit $2
+      `,
+      replacements
+    );
+    // fix edge case where I am requesting more with cursor and the last
+    // and next session both have the same starting time (I don't get the next session)
+    return {
+      sessions: sessions.slice(0, realLimit),
+      hasMore: sessions.length === realLimitPlusOne,
+    };
+  }
+
+  @Query(() => PaginatedPastSessions)
+  async pastSessions(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<PaginatedPastSessions> {
+    const replacements: (number | Date)[] = [];
+
+    replacements.push(new Date());
+
+    const realLimit = Math.min(25, limit);
+    const realLimitPlusOne = realLimit + 1;
+
+    replacements.push(realLimitPlusOne);
+
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+
+    const sessions = await dataSource.query(
+      `
+      select s.*,
+      json_build_object(
+        'id', a.id,
+        'name', a.name,
+        'email', a.email,
+        'createdAt', a."createdAt",
+        'updatedAt', a."updatedAt"
+        ) creator
+      from session s
+      inner join public.actor a on a.id = s."creatorId"
+      where s."stop" < $1
+      ${cursor ? `and s."start" < $3` : ""}
+      order by s."start" DESC
+      limit $2
+      `,
+      replacements
+    );
+    // fix edge case where I am requesting more with cursor and the last
+    // and next session both have the same starting time (I don't get the next session)
     return {
       sessions: sessions.slice(0, realLimit),
       hasMore: sessions.length === realLimitPlusOne,

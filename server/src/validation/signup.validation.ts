@@ -7,6 +7,7 @@ export function validateSignup(name: string, email: string, password: string) {
       },
     ];
   }
+
   if (name.length <= 2) {
     return [
       {
@@ -15,6 +16,7 @@ export function validateSignup(name: string, email: string, password: string) {
       },
     ];
   }
+
   if (name.includes("@")) {
     return [
       {

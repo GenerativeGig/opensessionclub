@@ -4,7 +4,7 @@ query Session($id: Int!) {
     title
     text
     start
-    end
+    stop
     numberOfAttendees
     attendeeLimit
     actorIsPartOfSession

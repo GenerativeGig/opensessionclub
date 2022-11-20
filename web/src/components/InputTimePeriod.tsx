@@ -4,15 +4,15 @@ import { InputHTMLAttributes } from "react";
 export interface InputTimePeriodProps
   extends InputHTMLAttributes<HTMLInputElement> {
   startTimeName: string;
-  endTimeName: string;
+  stopTimeName: string;
 }
 export function InputTimePeriod({
   startTimeName,
-  endTimeName,
+  stopTimeName,
   ...props
 }: InputTimePeriodProps) {
   const [startField] = useField({ name: startTimeName, ...props });
-  const [endField] = useField({ name: endTimeName, ...props });
+  const [stopField] = useField({ name: stopTimeName, ...props });
   return (
     <fieldset>
       <legend className="float-left my-3 mr-2 ml-[102px]">Time</legend>
@@ -26,11 +26,11 @@ export function InputTimePeriod({
       />
       <span> - </span>
       <input
-        {...endField}
+        {...stopField}
         {...props}
         required
-        name={endField.name}
-        id={endField.name}
+        name={stopField.name}
+        id={stopField.name}
         type="time"
       />
     </fieldset>

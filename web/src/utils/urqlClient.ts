@@ -30,7 +30,7 @@ const errorExchange: Exchange =
     );
   };
 
-const cursorPagination = (): Resolver => {
+const cursorPagination = (typename: string): Resolver => {
   return (_parent, fieldArgs, cache, info) => {
     const { parentKey: entityKey, fieldName } = info;
     const allFields = cache.inspectFields(entityKey);
@@ -59,7 +59,7 @@ const cursorPagination = (): Resolver => {
     });
 
     return {
-      __typename: "PaginatedSessions",
+      __typename: typename,
       hasMore,
       sessions: results,
     };
@@ -72,9 +72,17 @@ export const urqlClient = createClient({
   exchanges: [
     dedupExchange,
     cacheExchange({
-      keys: { PaginatedSessions: () => null },
+      keys: {
+        PaginatedOngoingSessions: () => null,
+        PaginatedUpcomingSessions: () => null,
+        PaginatedPastSessions: () => null,
+      },
       resolvers: {
-        Query: { sessions: cursorPagination() },
+        Query: {
+          ongoingSessions: cursorPagination("PaginatedOngoingSessions"),
+          upcomingSessions: cursorPagination("PaginatedUpcomingSessions"),
+          pastSessions: cursorPagination("PaginatedPastSessions"),
+        },
       },
       updates: {
         Mutation: {
