@@ -37,7 +37,6 @@ export function Login() {
                     name="nameOrEmail"
                     label="Name or email"
                     placeholder="name or email"
-                    type="email"
                   />
                   <InputField
                     name="password"

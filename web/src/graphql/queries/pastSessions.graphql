@@ -2,27 +2,7 @@ query PastSessions($limit: Int!, $cursor: String) {
   pastSessions(limit: $limit, cursor: $cursor) {
     hasMore
     sessions {
-      id
-      title
-      textSnippet
-      hasMoreText
-      text
-      start
-      stop
-      numberOfAttendees
-      attendeeLimit
-      actorIsPartOfSession
-      creatorId
-      timeStatus
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-        email
-        createdAt
-        updatedAt
-      }
+      ...FullSession
     }
   }
 }

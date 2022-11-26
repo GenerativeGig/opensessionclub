@@ -1,23 +1,5 @@
 query Session($id: Int!) {
   session(id: $id) {
-    id
-    title
-    text
-    start
-    stop
-    numberOfAttendees
-    attendeeLimit
-    actorIsPartOfSession
-    creatorId
-    timeStatus
-    createdAt
-    updatedAt
-    creator {
-      id
-      name
-      email
-      updatedAt
-      createdAt
-    }
+    ...FullSession
   }
 }

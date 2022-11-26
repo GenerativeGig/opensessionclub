@@ -21,7 +21,7 @@ import { ApolloContext } from "./types";
 
 const main = async () => {
   await dataSource.initialize();
-  await dataSource.runMigrations();
+  // await dataSource.runMigrations();
   // await ActorSession.delete({});
   // await Session.delete({});
   const app = express();

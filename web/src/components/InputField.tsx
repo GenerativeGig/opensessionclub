@@ -14,7 +14,7 @@ export function InputField({ label, textarea, ...props }: InputFieldProps) {
     <div className="flex flex-col">
       <div>
         <label htmlFor={field.name}>{label}</label>
-        <input {...field} {...props} required id={field.name} />
+        <input id={field.name} required {...field} {...props} />
       </div>
       <div className="place-self-end mr-2 text-red-600">
         <ErrorMessage name={field.name} />

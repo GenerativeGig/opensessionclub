@@ -3,8 +3,15 @@ import { addMissingZeros } from "../utils/addMissingZeros";
 export interface SessionDateTimeProps {
   start: string;
   stop: string;
+  ongoing?: boolean;
+  full?: boolean;
 }
-export function SessionDateTime({ start, stop }: SessionDateTimeProps) {
+export function SessionDateTime({
+  start,
+  stop,
+  ongoing = false,
+  full = false,
+}: SessionDateTimeProps) {
   const weekday = [
     "Sunday",
     "Monday",
@@ -17,23 +24,76 @@ export function SessionDateTime({ start, stop }: SessionDateTimeProps) {
   const startDate = new Date(parseInt(start));
   const stopDate = new Date(parseInt(stop));
 
-  if (startDate.getHours().toString().length) {
+  if (ongoing) {
+    return (
+      <div className="self-end mr-1">
+        <span>Now</span>
+        <span> - </span>
+        <span>{weekday[stopDate.getDay()]}</span>
+        <span> </span>
+        <span>{stopDate.toLocaleDateString()}</span>
+        <span>, </span>
+        <span>
+          {addMissingZeros(stopDate.getHours())}:
+          {addMissingZeros(stopDate.getMinutes())}
+        </span>
+      </div>
+    );
   }
+
   return (
-    <div className="text-sm self-end mr-1">
-      <span>{weekday[startDate.getDay()]}</span>
-      <span> </span>
-      <span>{startDate.toLocaleDateString()}</span>
-      <span>, </span>
-      <span>
-        {addMissingZeros(startDate.getHours())}:
-        {addMissingZeros(startDate.getMinutes())}
-      </span>
-      <span> - </span>
-      <span>
-        {addMissingZeros(stopDate.getHours())}:
-        {addMissingZeros(stopDate.getMinutes())}
-      </span>
-    </div>
+    <>
+      {full ? (
+        <div className="self-end flex flex-col">
+          <div className="self-end mr-1">
+            <span>{weekday[startDate.getDay()]}</span>
+            <span> </span>
+            <span>{startDate.toLocaleDateString()}</span>
+            <span>, </span>
+            <span>
+              {addMissingZeros(startDate.getHours())}:
+              {addMissingZeros(startDate.getMinutes())}
+            </span>
+            <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
+              Start
+            </span>
+          </div>
+          <div className="self-end mr-1">
+            <span>{weekday[stopDate.getDay()]}</span>
+            <span> </span>
+            <span>{stopDate.toLocaleDateString()}</span>
+            <span>, </span>
+            <span>
+              {addMissingZeros(stopDate.getHours())}:
+              {addMissingZeros(stopDate.getMinutes())}
+            </span>
+            <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
+              Stop
+            </span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="self-end mr-1">
+            <span>{weekday[startDate.getDay()]}</span>
+            <span> </span>
+            <span>{startDate.toLocaleDateString()}</span>
+            <span>, </span>
+            <span>
+              {addMissingZeros(startDate.getHours())}:
+              {addMissingZeros(startDate.getMinutes())}
+            </span>
+          </div>
+        </>
+      )}
+    </>
   );
 }
+
+// TODO incorporate endDate
+// simple version for card, just showing start
+// detailed for SessionDetails
+
+// Card version:
+// ongoing show when its ending "NOW - stop"
+// upcoming / archived show when its starting / started

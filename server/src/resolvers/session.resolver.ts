@@ -36,6 +36,10 @@ class SessionInput {
   stop: Date;
   @Field()
   attendeeLimit: number;
+  @Field()
+  isRemote: boolean;
+  @Field()
+  location: string;
 }
 
 @ObjectType()
@@ -152,7 +156,7 @@ export class SessionResolver {
       `,
       replacements
     );
-    // fix edge case where I am requesting more with cursor and the last
+    // TODO: fix edge case where I am requesting more with cursor and the last
     // and next session both have the same starting time (I don't get the next session)
     return {
       sessions: sessions.slice(0, realLimit),
@@ -197,7 +201,7 @@ export class SessionResolver {
       `,
       replacements
     );
-    // fix edge case where I am requesting more with cursor and the last
+    // TODO: fix edge case where I am requesting more with cursor and the last
     // and next session both have the same starting time (I don't get the next session)
     return {
       sessions: sessions.slice(0, realLimit),
@@ -242,7 +246,7 @@ export class SessionResolver {
       `,
       replacements
     );
-    // fix edge case where I am requesting more with cursor and the last
+    // TODO: fix edge case where I am requesting more with cursor and the last
     // and next session both have the same starting time (I don't get the next session)
     return {
       sessions: sessions.slice(0, realLimit),

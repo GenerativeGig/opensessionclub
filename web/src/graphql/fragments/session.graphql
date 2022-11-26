@@ -1,0 +1,25 @@
+fragment FullSession on Session {
+  id
+  title
+  textSnippet
+  hasMoreText
+  text
+  start
+  stop
+  numberOfAttendees
+  attendeeLimit
+  isRemote
+  location
+  actorIsPartOfSession
+  creatorId
+  timeStatus
+  createdAt
+  updatedAt
+  creator {
+    id
+    name
+    email
+    createdAt
+    updatedAt
+  }
+}

@@ -40,6 +40,14 @@ export class Session extends BaseEntity {
   @Column({ type: "int" })
   attendeeLimit: number;
 
+  @Field(() => Boolean)
+  @Column()
+  isRemote: boolean;
+
+  @Field(() => String)
+  @Column()
+  location: string;
+
   @Field(() => Int)
   @Column()
   creatorId: number;

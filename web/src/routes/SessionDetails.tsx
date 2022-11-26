@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActorLink } from "../components/ActorLink";
+import { CommentSection } from "../components/CommentSection";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { JoinOrLeaveSession } from "../components/JoinOrLeaveSession";
 import { Loading } from "../components/Loading";
@@ -55,7 +56,7 @@ export function SessionDetails() {
         <RouteTitle>{title}</RouteTitle>
         <div className="flex justify-between">
           <TimeStatusTag timeStatus={timeStatus} />
-          <SessionDateTime start={start} stop={stop} />
+          <SessionDateTime start={start} stop={stop} full />
         </div>
         <div className="my-3 mx-1 break-words">{text}</div>
         <div className="flex justify-between items-center">
@@ -90,18 +91,22 @@ export function SessionDetails() {
               <JoinOrLeaveSession
                 sessionId={id}
                 actorIsPartOfSession={actorIsPartOfSession}
+                timeStatus={timeStatus}
               />
             )}
           </div>
         </div>
+        {actorIsPartOfSession && <CommentSection />}
       </article>
     );
   }
 
-  return <p>Failed loading data.</p>;
+  return <></>;
 }
 
-// comments are only returned from server if logged in and has joined session
+// TODO: Add location and isRemote (create a common component for both of these to reuse in card and details)
+
+// TODO: comments are only returned from server if logged in and has joined session
 // this is where contact information is usually added
 // integrate discord into website -> meaning you can create a session
 // with a corresponding discord chat room

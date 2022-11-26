@@ -18,7 +18,6 @@ export function InputTextArea({ label, ...props }: InputFieldProps) {
         </label>
         <textarea
           {...field}
-          required
           className="self-start w-[500px] h-[200px]"
           placeholder={props.placeholder}
           id={field.name}
