@@ -68,5 +68,3 @@ export function SessionsBasedOnTimeStatus({
     </>
   );
 }
-
-// TODO: Fix bug -> Only part of the session last created "0/5"

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Session } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
+import { Location } from "./Location";
+import { Remote } from "./Remote";
 import { SessionDateTime } from "./SessionDateTime";
 import { TimeStatus } from "./TimeStatus";
 
@@ -43,10 +45,8 @@ export function SessionCard({
       <div className="flex justify-between items-center">
         <ActorLink id={creator.id} name={creator.name} />
         <div className="self-end flex items-center">
-          <div className="mr-2">{isRemote ? "Remote" : ""}</div>
-          <div className="mr-2">
-            {location === "" ? "" : `Location: ${location}`}
-          </div>
+          {isRemote && <Remote />}
+          {location !== "" && <Location location={location} />}
           <div>
             <span>{numberOfAttendees}</span>
             <span>/</span>
@@ -57,5 +57,3 @@ export function SessionCard({
     </article>
   );
 }
-
-// TODO: Use icons to represent information like "Remote" and "Location:"

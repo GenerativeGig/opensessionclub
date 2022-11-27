@@ -4,6 +4,8 @@ import { CommentSection } from "../components/CommentSection";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { JoinOrLeaveSession } from "../components/JoinOrLeaveSession";
 import { Loading } from "../components/Loading";
+import { Remote } from "../components/Remote";
+import { Location } from "../components/Location";
 import { RouteTitle } from "../components/RouteTitle";
 import { SessionDateTime } from "../components/SessionDateTime";
 import { TimeStatusTag } from "../components/TimeStatus";
@@ -46,6 +48,8 @@ export function SessionDetails() {
       text,
       numberOfAttendees,
       attendeeLimit,
+      isRemote,
+      location,
       actorIsPartOfSession,
       timeStatus,
       creator,
@@ -62,6 +66,8 @@ export function SessionDetails() {
         <div className="flex justify-between items-center">
           <ActorLink id={creator.id} name={creator.name} />
           <div className="self-end flex items-center">
+            {isRemote && <Remote />}
+            {location !== "" && <Location location={location} />}
             <div>
               <span>{numberOfAttendees}</span>
               <span>/</span>
@@ -103,8 +109,6 @@ export function SessionDetails() {
 
   return <></>;
 }
-
-// TODO: Add location and isRemote (create a common component for both of these to reuse in card and details)
 
 // TODO: comments are only returned from server if logged in and has joined session
 // this is where contact information is usually added

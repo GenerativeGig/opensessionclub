@@ -98,7 +98,6 @@ export class SessionResolver {
     const actorSession = await ActorSession.findOne({
       where: { sessionId: id, actorId: req.session.actorId },
     });
-
     if (!actorSession) {
       return false;
     }

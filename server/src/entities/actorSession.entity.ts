@@ -1,10 +1,9 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, Int } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
@@ -12,7 +11,6 @@ import {
 import { Actor } from "./actor.entity";
 import { Session } from "./session.entity";
 
-@ObjectType()
 @Entity()
 export class ActorSession extends BaseEntity {
   @Field(() => Int)
@@ -20,15 +18,13 @@ export class ActorSession extends BaseEntity {
   actorId: number;
 
   @ManyToOne(() => Actor, (actor) => actor.sessionConnection)
-  @JoinColumn({ name: "actorId" })
   actor: Actor;
 
+  @Field(() => Int)
   @PrimaryColumn()
-  @Column()
   sessionId: number;
 
   @ManyToOne(() => Session, (session) => session.actorConnection)
-  @JoinColumn({ name: "sessionId" })
   session: Session;
 
   @Field(() => Boolean)
