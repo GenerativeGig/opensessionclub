@@ -96,6 +96,8 @@ export function SessionDetails() {
             {meData?.me && creator.id !== meData?.me?.id && (
               <JoinOrLeaveSession
                 sessionId={id}
+                attendeeLimit={attendeeLimit}
+                numberOfAttendees={numberOfAttendees}
                 actorIsPartOfSession={actorIsPartOfSession}
                 timeStatus={timeStatus}
               />

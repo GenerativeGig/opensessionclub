@@ -83,7 +83,7 @@ main().catch((error) => {
 /*
  https://youtu.be/I6ypD7qv3Z8?t=24610
  Skipping SSR for now
- TODOs:
+ TODO:
   - Add spinner for loading synchronous server requests
   - Styling
   - Add client side caching -> only update the data when needed, right now I am loading anew for each

@@ -6,4 +6,4 @@ export function Location({ location }: LocationProps) {
 }
 
 // TODO: Move components that only display, no logic into folder in components
-// TODO: Use icons to represent information like "Remote" and "Location:"
+// TODO: Use icons to represent information like "Remote", "Location:", Ongoing, DateTime

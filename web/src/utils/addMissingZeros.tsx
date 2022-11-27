@@ -1,6 +1,6 @@
-export function addMissingZeros(time: number) {
-  if (time < 10) {
-    return "0" + time;
+export function addMissingZeros(number: number) {
+  if (number < 10) {
+    return "0" + number;
   }
-  return time;
+  return number;
 }

@@ -52,28 +52,28 @@ export function CreateSession() {
 
           if (startWithoutTime < currentWithoutTime) {
             setErrors({
-              startDate: `Date has be or come after ${current.toLocaleDateString()}`,
+              startDate: "Date has to be today or in the future",
             });
             return;
           }
 
           if (start < current) {
             setErrors({
-              startTime: `Start time has to be in the future`,
+              startTime: "Time has to be in the future",
             });
             return;
           }
 
           if (stopWithoutTime < startWithoutTime) {
             setErrors({
-              stopDate: `Date has be or come after ${start.toLocaleDateString()}`,
+              stopDate: "Date has to be or come after start date",
             });
             return;
           }
 
           if (stop <= start) {
             setErrors({
-              stopTime: `Stop time has to come after start time`,
+              stopTime: "Time has to come after start time",
             });
             return;
           }

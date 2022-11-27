@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { InputField } from "../components/InputField";
 import { InputTextArea } from "../components/InputTextArea";
-import { InputTimePeriod } from "../components/InputTimePeriod";
 import { Loading } from "../components/Loading";
 import { RouteTitle } from "../components/RouteTitle";
 import {
@@ -33,24 +32,31 @@ export function EditSession() {
   }
 
   if (sessionData?.session) {
-    const { title, text, start, stop, attendeeLimit } = sessionData.session;
+    const { title, text, start, stop, attendeeLimit, isRemote, location } =
+      sessionData.session;
 
     const startDate = new Date(parseInt(start));
     const stopDate = new Date(parseInt(stop));
-
-    const date =
-      addMissingZeros(startDate.getFullYear()) +
+    const formattedStartDate =
+      startDate.getFullYear() +
       "-" +
-      addMissingZeros(startDate.getMonth()) +
+      addMissingZeros(startDate.getMonth() + 1) +
       "-" +
       addMissingZeros(startDate.getDate());
 
-    const startTime =
+    const formattedStopDate =
+      stopDate.getFullYear() +
+      "-" +
+      addMissingZeros(stopDate.getMonth() + 1) +
+      "-" +
+      addMissingZeros(stopDate.getDate());
+
+    const formattedStartTime =
       addMissingZeros(startDate.getHours()) +
       ":" +
       addMissingZeros(startDate.getMinutes());
 
-    const stopTime =
+    const formattedStopTime =
       addMissingZeros(stopDate.getHours()) +
       ":" +
       addMissingZeros(stopDate.getMinutes());
@@ -62,57 +68,136 @@ export function EditSession() {
           initialValues={{
             title,
             text,
-            date,
-            startTime,
-            stopTime,
+            startDate: formattedStartDate,
+            startTime: formattedStartTime,
+            stopDate: formattedStopDate,
+            stopTime: formattedStopTime,
             attendeeLimit,
+            isRemote,
+            location,
           }}
           onSubmit={async (
-            { title, text, date, startTime, stopTime, attendeeLimit },
+            {
+              title,
+              text,
+              startDate,
+              startTime,
+              stopDate,
+              stopTime,
+              attendeeLimit,
+              isRemote,
+              location,
+            },
             { setErrors }
           ) => {
-            const start = new Date(date + ", " + startTime);
-            const stop = new Date(date + ", " + stopTime);
+            const start = new Date(startDate + ", " + startTime);
+            const stop = new Date(stopDate + ", " + stopTime);
+
+            const current = new Date();
+            const currentWithoutTime = new Date(current.toLocaleDateString());
+
+            const startWithoutTime = new Date(startDate);
+            const stopWithoutTime = new Date(stopDate);
+
+            if (startWithoutTime < currentWithoutTime) {
+              setErrors({
+                startDate: "Date has to be today or in the future",
+              });
+              return;
+            }
+
+            if (start < current) {
+              setErrors({
+                startTime: "Time has to be in the future",
+              });
+              return;
+            }
+
+            if (stopWithoutTime < startWithoutTime) {
+              setErrors({
+                stopDate: "Date has to be or come after start date",
+              });
+              return;
+            }
+
+            if (stop <= start) {
+              setErrors({
+                stopTime: "Time has to come after start time",
+              });
+              return;
+            }
+
             const { error } = await updateSession({
               id: parseInt(id),
-              input: { title, text, attendeeLimit, start, stop },
+              input: {
+                title,
+                text,
+                attendeeLimit,
+                start,
+                stop,
+                isRemote,
+                location,
+              },
             });
+
             if (!error) {
-              navigate(`/session/${id}`);
-              navigate(0);
+              navigate("/sessions/upcoming");
             }
           }}
         >
           {({ isSubmitting }) => (
             <Form className="h-full w-full flex flex-col items-center">
-              <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 border-solid border-2 border-green-500">
+              <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-green-500">
                 <div className="p-2 flex flex-col items-start">
                   <InputField name="title" label="Title" placeholder="title" />
-                  <InputTextArea name="text" label="Text" placeholder="text" />
-                  <InputField name="date" label="Date" type="date" />
-                  <div className="w-full flex justify-between">
-                    <div>
-                      <InputTimePeriod
-                        startTimeName="startTime"
-                        stopTimeName="stopTime"
-                      />
-                      <InputField
-                        className="w-16"
-                        name="attendeeLimit"
-                        label="Attendee limit"
-                        type="number"
-                        min={1}
-                        defaultValue={5}
-                        required
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="self-end bg-green-500 hover:bg-green-400"
-                    >
-                      Save Changes
-                    </button>
+                  <InputTextArea
+                    name="text"
+                    label="Text"
+                    placeholder="text (optional)"
+                  />
+                  <div className="flex justify-between">
+                    <InputField
+                      name="startDate"
+                      label="Start date"
+                      type="date"
+                    />
+                    <InputField
+                      name="startTime"
+                      label="Start time"
+                      type="time"
+                    />
                   </div>
+                  <div className="flex justify-between">
+                    <InputField name="stopDate" label="Stop date" type="date" />
+                    <InputField name="stopTime" label="Stop time" type="time" />
+                  </div>
+                  <InputField
+                    className="w-16"
+                    name="attendeeLimit"
+                    label="Attendee limit"
+                    type="number"
+                    min={1}
+                    defaultValue={5}
+                  />
+                  <InputField
+                    name="isRemote"
+                    label="Remote"
+                    type="checkbox"
+                    required={false}
+                  />
+                  <InputField
+                    name="location"
+                    label="Location"
+                    type="text"
+                    placeholder="location (optional)"
+                    required={false}
+                  />
+                  <button
+                    type="submit"
+                    className="self-end bg-green-600 hover:bg-green-500"
+                  >
+                    Edit Session
+                  </button>
                 </div>
               </div>
             </Form>
@@ -124,4 +209,4 @@ export function EditSession() {
   return <FailedLoadingData />;
 }
 
-// TODO: Update form with new fields from CreateSession
+// TODO: Combine parts of redundant code in edit and create into functions / components / as hook?
