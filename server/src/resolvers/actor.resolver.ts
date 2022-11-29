@@ -66,26 +66,26 @@ export class ActorResolver {
     @Arg("password", () => String) password: string,
     @Ctx() { req }: ApolloContext
   ): Promise<ActorResponse> {
-    const actor = await Actor.findOne({
-      where: [
-        { lowerCaseName: name.toLowerCase() },
-        { lowerCaseEmail: email.toLowerCase() },
-      ],
-    });
-
-    if (actor?.lowerCaseName === name.toLowerCase()) {
-      return { errors: [{ field: "name", message: "name is already taken" }] };
-    }
-
-    if (actor?.lowerCaseEmail === email.toLowerCase()) {
-      return {
-        errors: [{ field: "email", message: "email is already taken" }],
-      };
-    }
-
     const errors = validateSignup(name, email, password);
     if (errors) {
       return { errors };
+    }
+
+    const lowerCaseName = name.toLowerCase();
+    const lowerCaseEmail = email.toLowerCase();
+
+    const actor = await Actor.findOne({
+      where: [{ lowerCaseName }, { lowerCaseEmail }],
+    });
+
+    if (actor?.lowerCaseName === lowerCaseName) {
+      return { errors: [{ field: "name", message: "name is already taken" }] };
+    }
+
+    if (actor?.lowerCaseEmail === lowerCaseEmail) {
+      return {
+        errors: [{ field: "email", message: "email is already taken" }],
+      };
     }
 
     const hashedPassword = await argon2.hash(password);
@@ -96,9 +96,9 @@ export class ActorResolver {
       .into(Actor)
       .values({
         name,
-        lowerCaseName: name.toLowerCase(),
+        lowerCaseName,
         email,
-        lowerCaseEmail: email.toLowerCase(),
+        lowerCaseEmail,
         password: hashedPassword,
       })
       .returning("*")
@@ -248,4 +248,4 @@ export class ActorResolver {
   }
 }
 
-// Trim name and email of spaces (end and beginning before saving them)
+// TODO: Add forget me end point -> delete all data related to the user
