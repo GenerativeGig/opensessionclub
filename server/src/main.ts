@@ -16,6 +16,7 @@ import { dataSource } from "./dataSource";
 import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
 import { ApolloContext } from "./types";
+import { SessionCommentResolver } from "./resolvers/sessionComment.resolver";
 // import { Session } from "./entities/session.entity";
 // import { ActorSession } from "./entities/actorSession.entity";
 
@@ -59,7 +60,7 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     schema: await buildSchema({
-      resolvers: [ActorResolver, SessionResolver],
+      resolvers: [ActorResolver, SessionResolver, SessionCommentResolver],
       validate: false,
     }),
     context: ({ req, res }): ApolloContext => ({ req, res, redis }),

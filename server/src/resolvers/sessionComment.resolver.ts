@@ -1,7 +1,7 @@
-import { ActorSession } from "src/entities/actorSession.entity";
-import { SessionComment } from "src/entities/sessionComment.entity";
-import { isAuthenticated } from "src/middleware/isAuthenticated";
-import { ApolloContext } from "src/types";
+import { ActorSession } from "../entities/actorSession.entity";
+import { SessionComment } from "../entities/sessionComment.entity";
+import { isAuthenticated } from "../middleware/isAuthenticated";
+import { ApolloContext } from "../types";
 import {
   Arg,
   Ctx,
@@ -14,7 +14,7 @@ import {
 
 @Resolver(SessionComment)
 export class SessionCommentResolver {
-  @Query(() => [SessionComment])
+  @Query(() => [SessionComment], { nullable: true })
   @UseMiddleware(isAuthenticated)
   async sessionComments(
     @Arg("sessionId", () => Int) sessionId: number,
@@ -35,8 +35,8 @@ export class SessionCommentResolver {
   @Mutation(() => SessionComment)
   @UseMiddleware(isAuthenticated)
   async createSessionComment(
-    @Arg("text") text: string,
-    @Arg("sessionId") sessionId: number,
+    @Arg("text", () => String) text: string,
+    @Arg("sessionId", () => Int) sessionId: number,
     @Ctx() { req }: ApolloContext
   ) {
     // TODO: Make this a middleware or something similar
@@ -58,8 +58,8 @@ export class SessionCommentResolver {
   @Mutation(() => SessionComment)
   @UseMiddleware(isAuthenticated)
   async updateSessionComment(
-    @Arg("id") id: number,
-    @Arg("text") text: string,
+    @Arg("id", () => Int) id: number,
+    @Arg("text", () => String) text: string,
     @Ctx() { req }: ApolloContext
   ) {
     const sessionComment = await SessionComment.findOne({

@@ -1,0 +1,5 @@
+mutation CreateSessionComment($text: String!, $sessionId: Int!) {
+  createSessionComment(text: $text, sessionId: $sessionId) {
+    id
+  }
+}

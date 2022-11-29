@@ -1,0 +1,13 @@
+query SessionComments($sessionId: Int!) {
+  sessionComments(sessionId: $sessionId) {
+    id
+    text
+    sessionId
+    creatorId
+    creator {
+      ...BasicActor
+    }
+    createdAt
+    updatedAt
+  }
+}

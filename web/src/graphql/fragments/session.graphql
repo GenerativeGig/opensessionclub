@@ -13,13 +13,10 @@ fragment FullSession on Session {
   actorIsPartOfSession
   creatorId
   timeStatus
-  createdAt
-  updatedAt
   creator {
     id
     name
-    email
-    createdAt
-    updatedAt
   }
+  createdAt
+  updatedAt
 }
