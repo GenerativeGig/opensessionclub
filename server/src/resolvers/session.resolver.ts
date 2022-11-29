@@ -91,13 +91,10 @@ export class SessionResolver {
     @Root() { id }: Session,
     @Ctx() { req }: ApolloContext
   ) {
-    if (!req.session.actorId) {
-      return false;
-    }
-
     const actorSession = await ActorSession.findOne({
       where: { sessionId: id, actorId: req.session.actorId },
     });
+
     if (!actorSession) {
       return false;
     }
@@ -299,9 +296,9 @@ export class SessionResolver {
       return null;
     }
 
-    await Session.update({ id }, { ...input });
+    const { raw } = await Session.update({ id }, { ...input });
 
-    return session;
+    return raw[0];
   }
 
   @Mutation(() => Boolean)
@@ -312,7 +309,9 @@ export class SessionResolver {
   ) {
     await ActorSession.delete({
       sessionId: id,
+      actorId: req.session.actorId,
     });
+
     await Session.delete({
       id,
       creatorId: req.session.actorId,
