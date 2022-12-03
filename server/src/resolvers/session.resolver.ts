@@ -12,11 +12,14 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
+import { DISCORD_URL } from "../constants";
 import { dataSource } from "../dataSource";
+import { createVoiceChannel } from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
+// import schedule from "node-schedule";
 
 enum TimeStatus {
   PAST = "PAST",
@@ -261,7 +264,7 @@ export class SessionResolver {
       .getOne();
   }
 
-  @Mutation(() => Session)
+  @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
   async createSession(
     @Arg("input") input: SessionInput,
@@ -278,7 +281,40 @@ export class SessionResolver {
       actorIsPartOfSession: true,
     }).save();
 
-    return session;
+    if (session.isRemote) {
+      // const minutes = 15;
+      // const date = new Date(session.start.getTime() - minutes * 60000);
+      // const job = schedule.scheduleJob(date, async function () {
+      // Create a job that sends a notification in discord (later also email) if the user has it on
+      // 15 minutes before, exactly when it starts as well
+      // save job somewhere to do clean up if
+      // - session is deleted -> do nothing except cancel
+      // - start time is changed -> create new job
+      // - Remote is toggled -> also delete discord chat? (maybe people posted stuff there)
+      // TODO: Add Session state CANCELLED -> Then no notifications, except that it is cancelled
+      // The creator can write a message to the attendees in this cancel notification
+      // });
+      const voiceChannel = await createVoiceChannel({
+        id: session.id,
+        title: session.title,
+      });
+
+      if (voiceChannel === undefined) {
+        console.error(
+          "channel is undefined, session is created without a voice channel"
+        );
+        return;
+      }
+
+      await Session.update(
+        { id: session.id },
+        { voiceChannelURL: `${DISCORD_URL}${voiceChannel.code}` }
+      );
+      // Use jobs not for creating the discord channel, too much overhead.
+      // Use it for notifications to being with
+    }
+
+    return true;
   }
 
   @Mutation(() => Boolean)

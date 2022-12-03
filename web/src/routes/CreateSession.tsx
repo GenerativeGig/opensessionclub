@@ -95,7 +95,7 @@ export function CreateSession() {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values: { isRemote } }) => (
           <Form className="h-full w-full flex flex-col items-center">
             <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-pink-500">
               <div className="p-2 flex flex-col items-start">
@@ -124,6 +124,7 @@ export function CreateSession() {
                 <InputField
                   name="isRemote"
                   label="Remote"
+                  info={isRemote ? "Creates a voice channel" : ""}
                   type="checkbox"
                   required={false}
                 />

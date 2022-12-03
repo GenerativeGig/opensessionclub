@@ -40,7 +40,7 @@ export type ActorResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: ActorResponse;
-  createSession: Session;
+  createSession: Scalars['Boolean'];
   createSessionComment: SessionComment;
   deleteSession: Scalars['Boolean'];
   deleteSessionComment: Scalars['Boolean'];
@@ -201,6 +201,7 @@ export type Session = {
   timeStatus: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
+  voiceChannelURL?: Maybe<Scalars['String']>;
 };
 
 export type SessionComment = {
@@ -246,7 +247,7 @@ export type CreateSessionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number } };
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: boolean };
 
 export type CreateSessionCommentMutationVariables = Exact<{
   text: Scalars['String'];
@@ -446,9 +447,7 @@ export function useChangePasswordMutation() {
 };
 export const CreateSessionDocument = gql`
     mutation CreateSession($input: SessionInput!) {
-  createSession(input: $input) {
-    id
-  }
+  createSession(input: $input)
 }
     `;
 

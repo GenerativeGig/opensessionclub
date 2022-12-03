@@ -17,6 +17,7 @@ import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
 import { ApolloContext } from "./types";
 import { SessionCommentResolver } from "./resolvers/sessionComment.resolver";
+import { loginDiscordClient } from "./discord/discordClient";
 // import { Session } from "./entities/session.entity";
 // import { ActorSession } from "./entities/actorSession.entity";
 
@@ -71,6 +72,8 @@ const main = async () => {
     app,
     cors: false,
   });
+
+  await loginDiscordClient();
 
   app.listen(4000, () => {
     console.log("Server started on localhost:4000");

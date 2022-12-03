@@ -1,13 +1,13 @@
 import { InputHTMLAttributes } from "react";
-import { useField, ErrorMessage, FieldInputProps } from "formik";
+import { useField, ErrorMessage } from "formik";
 
 export interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
-  textarea?: boolean;
+  info?: string;
 }
 
-export function InputField({ label, textarea, ...props }: InputFieldProps) {
+export function InputField({ label, info, ...props }: InputFieldProps) {
   const [field] = useField(props);
 
   return (
@@ -15,6 +15,7 @@ export function InputField({ label, textarea, ...props }: InputFieldProps) {
       <div>
         <label htmlFor={field.name}>{label}</label>
         <input id={field.name} required {...field} {...props} />
+        {info && <span>{info}</span>}
       </div>
       <div className="place-self-end mr-2 text-red-600">
         <ErrorMessage name={field.name} />

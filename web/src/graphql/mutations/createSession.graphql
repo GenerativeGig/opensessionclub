@@ -1,5 +1,3 @@
 mutation CreateSession($input: SessionInput!) {
-  createSession(input: $input) {
-    id
-  }
+  createSession(input: $input)
 }

@@ -211,3 +211,10 @@ export function UpdateSession() {
 }
 
 // TODO: Combine parts of redundant code in edit and create into functions / components / as hook?
+
+// TODO: On your profile be able to delete and edit your comments / go to corresponding session
+
+// Discord integration
+// Use yarn add discord.js (+ types?)
+
+// TODO: Email notifications / Discord notifications

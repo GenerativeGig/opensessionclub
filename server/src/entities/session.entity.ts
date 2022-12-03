@@ -44,6 +44,10 @@ export class Session extends BaseEntity {
   @Column()
   isRemote: boolean;
 
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  voiceChannelURL: string;
+
   @Field(() => String)
   @Column()
   location: string;
