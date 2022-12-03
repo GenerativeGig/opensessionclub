@@ -1,5 +1,3 @@
 mutation UpdateSession($id: Int!, $input: SessionInput!) {
-  updateSession(id: $id, input: $input) {
-    id
-  }
+  updateSession(id: $id, input: $input)
 }

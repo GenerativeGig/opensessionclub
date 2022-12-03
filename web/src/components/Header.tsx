@@ -25,7 +25,7 @@ export function Header() {
     authenticationJsx = (
       <>
         <div className="px-3">
-          <ActorLink name={data.me.name} id={data.me.id} />
+          <ActorLink actor={data.me} />
         </div>
         <button
           className="hover:text-slate-200"

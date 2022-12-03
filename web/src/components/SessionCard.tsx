@@ -3,7 +3,7 @@ import { Session } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
 import { Location } from "./Location";
 import { Remote } from "./Remote";
-import { SessionDateTime } from "./SessionDateTime";
+import { SessionDateTime, SessionDateTimeKind } from "./SessionDateTime";
 import { TimeStatus } from "./TimeStatus";
 
 export function SessionCard({
@@ -26,7 +26,11 @@ export function SessionCard({
       <SessionDateTime
         start={start}
         stop={stop}
-        ongoing={timeStatus === TimeStatus.ONGOING}
+        kind={
+          timeStatus === TimeStatus.ONGOING
+            ? SessionDateTimeKind.Ongoing
+            : SessionDateTimeKind.Compact
+        }
       />
       <p className="m-3 break-words">
         {textSnippet}
@@ -43,7 +47,7 @@ export function SessionCard({
         )}
       </p>
       <div className="flex justify-between items-center">
-        <ActorLink id={creator.id} name={creator.name} />
+        <ActorLink actor={creator} />
         <div className="self-end flex items-center">
           {isRemote && <Remote />}
           {location !== "" && <Location location={location} />}

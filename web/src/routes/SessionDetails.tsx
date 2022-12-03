@@ -1,19 +1,19 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { ssrExchange } from "urql";
 import { ActorLink } from "../components/ActorLink";
-import { CommentSection } from "../components/CommentSection";
 import { FailedLoadingData } from "../components/FailedLoadingData";
-import { JoinOrLeaveSession } from "../components/JoinOrLeaveSession";
 import { Loading } from "../components/Loading";
-import { Remote } from "../components/Remote";
 import { Location } from "../components/Location";
+import { Remote } from "../components/Remote";
 import { RouteTitle } from "../components/RouteTitle";
-import { SessionDateTime } from "../components/SessionDateTime";
-import { TimeStatusTag } from "../components/TimeStatus";
+import { SessionCommentSection } from "../components/SessionCommentSection";
 import {
-  useDeleteSessionMutation,
-  useMeQuery,
-  useSessionQuery,
-} from "../generated/graphql";
+  SessionDateTime,
+  SessionDateTimeKind,
+} from "../components/SessionDateTime";
+import { SessionDetailsButtons } from "../components/SessionDetailsButtons";
+import { TimeStatusTag } from "../components/TimeStatus";
+import { useMeQuery, useSessionQuery } from "../generated/graphql";
 
 export function SessionDetails() {
   const { id } = useParams();
@@ -27,10 +27,6 @@ export function SessionDetails() {
 
   const [{ data: meData, fetching: meFetching }] = useMeQuery();
 
-  const navigate = useNavigate();
-
-  const [, deleteSession] = useDeleteSessionMutation();
-
   if ((!sessionData && sessionFetching) || (!meData && meFetching)) {
     return <Loading />;
   }
@@ -39,7 +35,17 @@ export function SessionDetails() {
     return <FailedLoadingData />;
   }
 
-  if (sessionData?.session) {
+  if (sessionData && !sessionFetching && meData && !meFetching) {
+    if (!sessionData.session) {
+      console.log("session is undefined");
+      return <></>;
+    }
+
+    if (!meData.me) {
+      console.log("me is undefined");
+      return <></>;
+    }
+
     const {
       id,
       title,
@@ -55,16 +61,22 @@ export function SessionDetails() {
       creator,
     } = sessionData.session;
 
+    const isCreator = meData?.me?.id === creator.id;
+
     return (
       <article className="flex flex-col">
         <RouteTitle>{title}</RouteTitle>
         <div className="flex justify-between">
           <TimeStatusTag timeStatus={timeStatus} />
-          <SessionDateTime start={start} stop={stop} full />
+          <SessionDateTime
+            start={start}
+            stop={stop}
+            kind={SessionDateTimeKind.Full}
+          />
         </div>
         <div className="my-3 mx-1 break-words">{text}</div>
         <div className="flex justify-between items-center">
-          <ActorLink id={creator.id} name={creator.name} />
+          <ActorLink actor={creator} />
           <div className="self-end flex items-center">
             {isRemote && <Remote />}
             {location !== "" && <Location location={location} />}
@@ -73,42 +85,18 @@ export function SessionDetails() {
               <span>/</span>
               <span>{attendeeLimit}</span>
             </div>
-            {creator.id === meData?.me?.id && (
-              <div>
-                <button
-                  className="bg-red-500 hover-red-400"
-                  onClick={async () => {
-                    const response = await deleteSession({ id });
-                    if (response.data?.deleteSession) {
-                      navigate("/sessions");
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-                <Link to={`/session/${id}/edit`}>
-                  <button className="bg-yellow-500 hover:bg-yellow-400">
-                    Edit
-                  </button>
-                </Link>
-              </div>
-            )}
-            {meData?.me && creator.id !== meData?.me?.id && (
-              <JoinOrLeaveSession
-                sessionId={id}
-                attendeeLimit={attendeeLimit}
-                numberOfAttendees={numberOfAttendees}
-                actorIsPartOfSession={actorIsPartOfSession}
-                timeStatus={timeStatus}
-              />
-            )}
+            <SessionDetailsButtons
+              session={sessionData.session}
+              isCreator={isCreator}
+            />
           </div>
         </div>
-        {actorIsPartOfSession && <CommentSection />}
+        {actorIsPartOfSession && (
+          <SessionCommentSection sessionId={id} me={meData.me} />
+        )}
       </article>
     );
   }
-
   return <></>;
 }
 

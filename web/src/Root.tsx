@@ -8,7 +8,7 @@ import { Provider as UrqlProvider } from "urql";
 import { ActorDetails } from "./routes/ActorDetails";
 import { ChangePassword } from "./routes/ChangePassword";
 import { CreateSession } from "./routes/CreateSession";
-import { EditSession } from "./routes/EditSession";
+import { UpdateSession } from "./routes/UpdateSession";
 import { Error } from "./routes/Error";
 import { ForgotPassword } from "./routes/ForgotPassword";
 import { Home } from "./routes/Home";
@@ -34,7 +34,7 @@ const router = createBrowserRouter(
       <Route path="session" element={<SessionDetails />}>
         <Route path=":id" element={<SessionDetails />} />
       </Route>
-      <Route path="session/:id/edit" element={<EditSession />} />
+      <Route path="session/:id/edit" element={<UpdateSession />} />
       <Route path="create-session" element={<CreateSession />} />
       <Route path="actor/:id" element={<ActorDetails />} />
       <Route path="login" element={<Login />} />

@@ -3,7 +3,7 @@ import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { TimeStatus } from "../components/TimeStatus";
 import { usePastSessionsQuery } from "../generated/graphql";
-import { SessionsBasedOnTimeStatus } from "./SessionsBasedOnTimeStatus";
+import { SessionsBasedOnTimeStatus } from "../components/SessionsBasedOnTimeStatus";
 
 export function PastSessions() {
   const limit = 25;
@@ -20,7 +20,8 @@ export function PastSessions() {
   if (!data && !fetching) {
     <FailedLoadingData />;
   }
-  if (data?.pastSessions) {
+
+  if (data && !fetching) {
     const { sessions, hasMore } = data?.pastSessions;
 
     return (

@@ -3,7 +3,7 @@ import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { TimeStatus } from "../components/TimeStatus";
 import { useOngoingSessionsQuery } from "../generated/graphql";
-import { SessionsBasedOnTimeStatus } from "./SessionsBasedOnTimeStatus";
+import { SessionsBasedOnTimeStatus } from "../components/SessionsBasedOnTimeStatus";
 
 export function OngoingSessions() {
   const limit = 25;
@@ -20,7 +20,8 @@ export function OngoingSessions() {
   if (!data && !fetching) {
     <FailedLoadingData />;
   }
-  if (data?.ongoingSessions) {
+
+  if (data && !fetching) {
     const { sessions, hasMore } = data?.ongoingSessions;
 
     return (

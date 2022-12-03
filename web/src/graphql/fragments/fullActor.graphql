@@ -1,0 +1,7 @@
+fragment FullActor on Actor {
+  id
+  name
+  email
+  createdAt
+  updatedAt
+}

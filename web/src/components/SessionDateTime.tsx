@@ -1,17 +1,18 @@
 import { addMissingZeros } from "../utils/addMissingZeros";
 
+export enum SessionDateTimeKind {
+  Ongoing,
+  Compact,
+  Full,
+}
+
 export interface SessionDateTimeProps {
   start: string;
   stop: string;
-  ongoing?: boolean;
-  full?: boolean;
+  kind: SessionDateTimeKind;
 }
-export function SessionDateTime({
-  start,
-  stop,
-  ongoing = false,
-  full = false,
-}: SessionDateTimeProps) {
+
+export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
   const weekday = [
     "Sunday",
     "Monday",
@@ -24,20 +25,41 @@ export function SessionDateTime({
   const startDate = new Date(parseInt(start));
   const stopDate = new Date(parseInt(stop));
 
-  if (ongoing) {
-    return <div className="self-end mr-1">Ongoing</div>;
-  }
-
-  return (
-    <>
-      {full ? (
+  switch (kind) {
+    case SessionDateTimeKind.Ongoing:
+      return <div className="self-end mr-1">Ongoing</div>;
+    case SessionDateTimeKind.Compact:
+      return (
+        <>
+          <div className="self-end mr-1">
+            <span className="text-slate-300">
+              {weekday[startDate.getDay()]}
+            </span>
+            <span> </span>
+            <span className="text-slate-300">
+              {startDate.toLocaleDateString()}
+            </span>
+            <span className="text-slate-300">, </span>
+            <span className="text-slate-300">
+              {addMissingZeros(startDate.getHours())}:
+              {addMissingZeros(startDate.getMinutes())}
+            </span>
+          </div>
+        </>
+      );
+    case SessionDateTimeKind.Full:
+      return (
         <div className="self-end flex flex-col">
           <div className="self-end mr-1">
-            <span>{weekday[startDate.getDay()]}</span>
+            <span className="text-slate-300">
+              {weekday[startDate.getDay()]}
+            </span>
             <span> </span>
-            <span>{startDate.toLocaleDateString()}</span>
-            <span>, </span>
-            <span>
+            <span className="text-slate-300">
+              {startDate.toLocaleDateString()}
+            </span>
+            <span className="text-slate-300">, </span>
+            <span className="text-slate-300">
               {addMissingZeros(startDate.getHours())}:
               {addMissingZeros(startDate.getMinutes())}
             </span>
@@ -45,12 +67,14 @@ export function SessionDateTime({
               Start
             </span>
           </div>
-          <div className="self-end mr-1">
-            <span>{weekday[stopDate.getDay()]}</span>
+          <div className="self-end mr-1 text-slate-300">
+            <span className="text-slate-300">{weekday[stopDate.getDay()]}</span>
             <span> </span>
-            <span>{stopDate.toLocaleDateString()}</span>
-            <span>, </span>
-            <span>
+            <span className="text-slate-300">
+              {stopDate.toLocaleDateString()}
+            </span>
+            <span className="text-slate-300">, </span>
+            <span className="text-slate-300">
               {addMissingZeros(stopDate.getHours())}:
               {addMissingZeros(stopDate.getMinutes())}
             </span>
@@ -59,20 +83,6 @@ export function SessionDateTime({
             </span>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="self-end mr-1">
-            <span>{weekday[startDate.getDay()]}</span>
-            <span> </span>
-            <span>{startDate.toLocaleDateString()}</span>
-            <span>, </span>
-            <span>
-              {addMissingZeros(startDate.getHours())}:
-              {addMissingZeros(startDate.getMinutes())}
-            </span>
-          </div>
-        </>
-      )}
-    </>
-  );
+      );
+  }
 }

@@ -281,7 +281,7 @@ export class SessionResolver {
     return session;
   }
 
-  @Mutation(() => Session)
+  @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
   async updateSession(
     @Arg("id", () => Int) id: number,
@@ -296,9 +296,9 @@ export class SessionResolver {
       return null;
     }
 
-    const { raw } = await Session.update({ id }, { ...input });
+    await Session.update({ id }, { ...input });
 
-    return raw[0];
+    return true;
   }
 
   @Mutation(() => Boolean)

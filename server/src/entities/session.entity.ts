@@ -48,7 +48,6 @@ export class Session extends BaseEntity {
   @Column()
   location: string;
 
-  @Field(() => Int)
   @Column()
   creatorId: number;
 

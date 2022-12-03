@@ -3,9 +3,8 @@ query SessionComments($sessionId: Int!) {
     id
     text
     sessionId
-    creatorId
     creator {
-      ...BasicActor
+      ...FullActor
     }
     createdAt
     updatedAt

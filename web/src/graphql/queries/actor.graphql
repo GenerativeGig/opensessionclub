@@ -1,9 +1,5 @@
 query Actor($id: Int!) {
   actor(id: $id) {
-    id
-    name
-    email
-    updatedAt
-    createdAt
+    ...FullActor
   }
 }

@@ -12,7 +12,7 @@ import {
 import { addMissingZeros } from "../utils/addMissingZeros";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
-export function EditSession() {
+export function UpdateSession() {
   useIsAuthenticated();
   const { id } = useParams();
   if (!id) {
@@ -141,7 +141,8 @@ export function EditSession() {
             });
 
             if (!error) {
-              navigate("/sessions/upcoming");
+              navigate(`/session/${id}`);
+              navigate(0);
             }
           }}
         >
@@ -196,7 +197,7 @@ export function EditSession() {
                     type="submit"
                     className="self-end bg-green-600 hover:bg-green-500"
                   >
-                    Edit Session
+                    Save
                   </button>
                 </div>
               </div>

@@ -1,7 +1,3 @@
-import { ActorSession } from "../entities/actorSession.entity";
-import { SessionComment } from "../entities/sessionComment.entity";
-import { isAuthenticated } from "../middleware/isAuthenticated";
-import { ApolloContext } from "../types";
 import {
   Arg,
   Ctx,
@@ -11,6 +7,11 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { dataSource } from "../dataSource";
+import { ActorSession } from "../entities/actorSession.entity";
+import { SessionComment } from "../entities/sessionComment.entity";
+import { isAuthenticated } from "../middleware/isAuthenticated";
+import { ApolloContext } from "../types";
 
 @Resolver(SessionComment)
 export class SessionCommentResolver {
@@ -29,11 +30,17 @@ export class SessionCommentResolver {
       // TODO: return error not part of session
       return null;
     }
-    return await SessionComment.find({ where: { sessionId } });
+    return await dataSource
+      .createQueryBuilder()
+      .select("sessionComment")
+      .from(SessionComment, "sessionComment")
+      .leftJoinAndSelect("sessionComment.creator", "actor")
+      .where("sessionComment.sessionId = :sessionId", { sessionId })
+      .orderBy("sessionComment.createdAt", "DESC")
+      .getMany();
   }
 
   @Mutation(() => SessionComment)
-  @UseMiddleware(isAuthenticated)
   async createSessionComment(
     @Arg("text", () => String) text: string,
     @Arg("sessionId", () => Int) sessionId: number,
@@ -48,6 +55,7 @@ export class SessionCommentResolver {
       // TODO: return error not part of session
       return null;
     }
+
     return await SessionComment.create({
       text,
       sessionId,
@@ -55,7 +63,7 @@ export class SessionCommentResolver {
     }).save();
   }
 
-  @Mutation(() => SessionComment)
+  @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
   async updateSessionComment(
     @Arg("id", () => Int) id: number,
@@ -70,9 +78,9 @@ export class SessionCommentResolver {
       return null;
     }
 
-    const { raw } = await SessionComment.update({ id }, { text });
+    await SessionComment.update({ id }, { text });
 
-    return raw[0];
+    return true;
   }
 
   @Mutation(() => Boolean)
@@ -89,6 +97,6 @@ export class SessionCommentResolver {
 // TODO: If you had comments on session but left, can you still see your comments?
 // You get the chance to delete your comments on your profile, even comments of session you are not part of
 
-// TODO: text formatting: comments and session text
+// TODO: text formatting: sessionComment text and session text
 
 // TODO: Integrate Discord

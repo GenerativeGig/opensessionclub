@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
+import { Actor } from "../generated/graphql";
 
 export interface ActorLinkProps {
-  id: number;
-  name: string;
+  actor: Actor;
 }
 
-export function ActorLink({ id, name }: ActorLinkProps) {
+export function ActorLink({ actor }: ActorLinkProps) {
   return (
     <div className="max-w-64">
       <div className="text-blue-500 hover:text-blue-400 truncate ...">
-        <Link to={`/actor/${id}`}>{name}</Link>
+        <Link to={`/actor/${actor.id}`}>{actor.name}</Link>
       </div>
     </div>
   );

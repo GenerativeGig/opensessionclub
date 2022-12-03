@@ -26,11 +26,9 @@ export class SessionComment extends BaseEntity {
   @Column()
   sessionId: number;
 
-  @Field(() => Session)
   @ManyToOne(() => Session, (session) => session.comments)
   session: Session;
 
-  @Field(() => Int)
   @Column()
   creatorId: number;
 

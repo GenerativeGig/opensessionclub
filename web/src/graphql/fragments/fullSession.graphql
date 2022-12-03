@@ -11,11 +11,9 @@ fragment FullSession on Session {
   isRemote
   location
   actorIsPartOfSession
-  creatorId
   timeStatus
   creator {
-    id
-    name
+    ...FullActor
   }
   createdAt
   updatedAt

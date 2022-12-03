@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { SessionCard } from "../components/SessionCard";
-import { TimeStatus, TimeStatusText } from "../components/TimeStatus";
+import { SessionCard } from "./SessionCard";
+import { TimeStatus, TimeStatusText } from "./TimeStatus";
 import { Session } from "../generated/graphql";
 
 export interface SessionsBasedOnTimeStatusProps {

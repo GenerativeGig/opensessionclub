@@ -50,8 +50,8 @@ export type Mutation = {
   login: ActorResponse;
   logout: Scalars['Boolean'];
   signup: ActorResponse;
-  updateSession: Session;
-  updateSessionComment: SessionComment;
+  updateSession: Scalars['Boolean'];
+  updateSessionComment: Scalars['Boolean'];
 };
 
 
@@ -189,7 +189,6 @@ export type Session = {
   attendeeLimit: Scalars['Int'];
   createdAt: Scalars['String'];
   creator: Actor;
-  creatorId: Scalars['Int'];
   hasMoreText: Scalars['Boolean'];
   id: Scalars['Int'];
   isRemote: Scalars['Boolean'];
@@ -208,9 +207,7 @@ export type SessionComment = {
   __typename?: 'SessionComment';
   createdAt: Scalars['String'];
   creator: Actor;
-  creatorId: Scalars['Int'];
   id: Scalars['Int'];
-  session: Session;
   sessionId: Scalars['Int'];
   text: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -232,7 +229,9 @@ export type BasicActorErrorFragment = { __typename?: 'ActorFieldError', field: s
 
 export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null };
 
-export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } };
+export type FullActorFragment = { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string };
+
+export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -320,7 +319,7 @@ export type UpdateSessionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number } };
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: boolean };
 
 export type UpdateSessionCommentMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -328,19 +327,19 @@ export type UpdateSessionCommentMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSessionCommentMutation = { __typename?: 'Mutation', updateSessionComment: { __typename?: 'SessionComment', id: number } };
+export type UpdateSessionCommentMutation = { __typename?: 'Mutation', updateSessionComment: boolean };
 
 export type ActorQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type ActorQuery = { __typename?: 'Query', actor?: { __typename?: 'Actor', id: number, name: string, email: string, updatedAt: string, createdAt: string } | null };
+export type ActorQuery = { __typename?: 'Query', actor?: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } | null };
 
 export type OngoingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -348,7 +347,7 @@ export type OngoingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } }> } };
+export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export type PastSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -356,21 +355,21 @@ export type PastSessionsQueryVariables = Exact<{
 }>;
 
 
-export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } }> } };
+export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export type SessionQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } } | null };
+export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } } | null };
 
 export type SessionCommentsQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: string, sessionId: number, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } }> | null };
+export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: string, sessionId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> | null };
 
 export type UpcomingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -378,7 +377,7 @@ export type UpcomingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, creatorId: number, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string } }> } };
+export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export const BasicActorErrorFragmentDoc = gql`
     fragment BasicActorError on ActorFieldError {
@@ -403,6 +402,15 @@ export const BasicActorResponseFragmentDoc = gql`
 }
     ${BasicActorErrorFragmentDoc}
 ${BasicActorFragmentDoc}`;
+export const FullActorFragmentDoc = gql`
+    fragment FullActor on Actor {
+  id
+  name
+  email
+  createdAt
+  updatedAt
+}
+    `;
 export const FullSessionFragmentDoc = gql`
     fragment FullSession on Session {
   id
@@ -417,16 +425,14 @@ export const FullSessionFragmentDoc = gql`
   isRemote
   location
   actorIsPartOfSession
-  creatorId
   timeStatus
   creator {
-    id
-    name
+    ...FullActor
   }
   createdAt
   updatedAt
 }
-    `;
+    ${FullActorFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -538,9 +544,7 @@ export function useSignupMutation() {
 };
 export const UpdateSessionDocument = gql`
     mutation UpdateSession($id: Int!, $input: SessionInput!) {
-  updateSession(id: $id, input: $input) {
-    id
-  }
+  updateSession(id: $id, input: $input)
 }
     `;
 
@@ -549,9 +553,7 @@ export function useUpdateSessionMutation() {
 };
 export const UpdateSessionCommentDocument = gql`
     mutation UpdateSessionComment($id: Int!, $text: String!) {
-  updateSessionComment(id: $id, text: $text) {
-    id
-  }
+  updateSessionComment(id: $id, text: $text)
 }
     `;
 
@@ -561,14 +563,10 @@ export function useUpdateSessionCommentMutation() {
 export const ActorDocument = gql`
     query Actor($id: Int!) {
   actor(id: $id) {
-    id
-    name
-    email
-    updatedAt
-    createdAt
+    ...FullActor
   }
 }
-    `;
+    ${FullActorFragmentDoc}`;
 
 export function useActorQuery(options: Omit<Urql.UseQueryArgs<ActorQueryVariables>, 'query'>) {
   return Urql.useQuery<ActorQuery, ActorQueryVariables>({ query: ActorDocument, ...options });
@@ -576,10 +574,10 @@ export function useActorQuery(options: Omit<Urql.UseQueryArgs<ActorQueryVariable
 export const MeDocument = gql`
     query Me {
   me {
-    ...BasicActor
+    ...FullActor
   }
 }
-    ${BasicActorFragmentDoc}`;
+    ${FullActorFragmentDoc}`;
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
@@ -629,15 +627,14 @@ export const SessionCommentsDocument = gql`
     id
     text
     sessionId
-    creatorId
     creator {
-      ...BasicActor
+      ...FullActor
     }
     createdAt
     updatedAt
   }
 }
-    ${BasicActorFragmentDoc}`;
+    ${FullActorFragmentDoc}`;
 
 export function useSessionCommentsQuery(options: Omit<Urql.UseQueryArgs<SessionCommentsQueryVariables>, 'query'>) {
   return Urql.useQuery<SessionCommentsQuery, SessionCommentsQueryVariables>({ query: SessionCommentsDocument, ...options });

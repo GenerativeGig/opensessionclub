@@ -3,7 +3,7 @@ import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { TimeStatus } from "../components/TimeStatus";
 import { useUpcomingSessionsQuery } from "../generated/graphql";
-import { SessionsBasedOnTimeStatus } from "./SessionsBasedOnTimeStatus";
+import { SessionsBasedOnTimeStatus } from "../components/SessionsBasedOnTimeStatus";
 
 export function UpcomingSessions() {
   const limit = 25;
@@ -21,7 +21,7 @@ export function UpcomingSessions() {
     <FailedLoadingData />;
   }
 
-  if (data?.upcomingSessions) {
+  if (data && !fetching) {
     const { sessions, hasMore } = data?.upcomingSessions;
 
     return (
