@@ -1,3 +1,4 @@
+TODO: Update README
 # Open Session Club
 
 ## Purpose
