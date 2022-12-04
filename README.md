@@ -19,7 +19,7 @@ Main Features of the MVP:
 - Session Comments CRUD
 - Discord integration
 
-After the MVP is built and in production some code refactoring and restructuring will take place to make it more maintainable and extensibility.
+After the MVP is built and in production some code refactoring and restructuring will take place to make it more maintainable and improve extensibility.
 
 Other TODOs before production ready:
 
