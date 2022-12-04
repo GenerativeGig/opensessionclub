@@ -1,36 +1,61 @@
-TODO: Update README
 # Open Session Club
 
-## Purpose
+Learn, teach and open your mind.
 
-Create a space for learning about anything with others.
+## Project Status
 
-I have a burning need to learn and it is a lot more fun with others and with interesting topics.
+The MVP is being built.
 
-You can find any information on the internet but the real resource for learning is people.
-Only we humans learn so we know how to help our fellow humans do the same.
+Main Features of the MVP:
 
-There is something powerful about setting a date and time for having a serious session. You really should take learning at least as serious as work meetings.
+- Actor (user) Authentication, Authorization & Settings
+- Session CRUD & Sorting
+- Session Comments CRUD
+- Discord integration
 
-### Questions
+After the MVP is built and in production some code refactoring and restructuring will take place to make it more maintainable and extendable.
 
-- How to make the sessions live after they are done?
-  Maybe not, because it is meant to be something that is done actively in the moment.
-  An idea would be to allow the participants to leave a note on the session with the option of setting it to public
+Other TODOs before production ready:
 
-## How it works
+- Logo
+- UI Design
+- Welcome page
+- Legality
 
-0. Create an account
-1. Write down the topic title (ANY TOPIC! No matter how small or large)
-2. Write a short description (with a link (discord room) to connect before we have a chat)
-3. Pick a date and time (e.g. 12:00 - 12:47)
-4. Pick the max number of participants (1 - endless)
-5. Enjoy your session!
+Preview from 04.12.2022:
 
-## Bonus features
+![Gif of Open Session Club from 04.12.2022](./media/04-12-2022.gif)
 
-- Chat opens on website 15 minutes before the session starts so that everyone has time to get on the required ways of communication etc.
-  - integrate or create from scratch?
-- Button to add date to calendar automatically (or semi automatically)
-- Add note to session (public or private)
-- All communication happens on the website (audio and video as well)
+## Development
+
+### Server `(cd server)`
+
+#### 1. Databases
+
+&emsp;Make sure to have the databases PostgreSQL and Redis installed and running.
+
+#### 2. Discord bot
+
+&emsp;Create a discord server and bot.
+
+#### 3. Environment variables
+
+&emsp;See [constants.ts](./server/src/constants.ts) for variables that you need to define in a `.env` file in the `server` directory.
+
+#### 4. Run `yarn watch`
+
+&emsp;Starts the TypeScript compiler in watch mode.
+
+#### 5. Run `yarn dev` or `yarn dev-linux`
+
+- `yarn dev` starts a development server using nodemon.
+
+- `yarn dev-linux` also starts the PostgreSQL and Redis databases.
+
+> **_NOTE:_** Only works in Linux! Well at least in Ubuntu 20.04.5.
+
+### Web `(cd web)`
+
+#### 1. Run `yarn dev`
+
+&emsp;Starts a development server using Vite

@@ -44,3 +44,6 @@ export async function createVoiceChannel({
 // Link to the discord channel in general from the welcome page and
 // If the user has no related discord ID after creating or joining a session
 // -> Display dialog inviting the person to the discord channel
+
+// TODO: Make the voice channel created private, only users on a whitelist get in
+// Or if that doesn't work, everyone with the link can join

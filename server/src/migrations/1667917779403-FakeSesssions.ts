@@ -107,5 +107,8 @@ insert into session ("title", "text", "start", "stop", "attendeeLimit", "creator
 `);
   }
 
-  public async down(_: QueryRunner): Promise<void> {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async down(_: QueryRunner): Promise<void> {
+    // DO NOTHING
+  }
 }
