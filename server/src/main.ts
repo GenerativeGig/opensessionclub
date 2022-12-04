@@ -90,6 +90,6 @@ main().catch((error) => {
  TODO:
   - Add spinner for loading synchronous server requests
   - Styling
-  - Add client side caching -> only update the data when needed, right now I am loading anew for each
+  - Improve client side caching? -> only update the data when needed, right now I am loading anew for each
     request, even for the same data "navigate(0)"
 */

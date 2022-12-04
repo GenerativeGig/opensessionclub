@@ -47,3 +47,7 @@ export async function createVoiceChannel({
 
 // TODO: Make the voice channel created private, only users on a whitelist get in
 // Or if that doesn't work, everyone with the link can join
+
+// Use Graphql subscriptions with Server Sent Events (SSE) to send a notification to a user (session starting (in 15 min))
+// How to trigger the event? node-schedule? or is there a safer way. what happens if server goes down?
+// Use croner

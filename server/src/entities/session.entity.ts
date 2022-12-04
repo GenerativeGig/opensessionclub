@@ -73,3 +73,10 @@ export class Session extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+// TODO: Add field
+// isCancelled
+// Any other states?
+
+// if something changes to a session the attendees are also notified
+// cron jobs are cancelled and rescheduled

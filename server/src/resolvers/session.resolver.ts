@@ -1,3 +1,4 @@
+import Cron from "croner";
 import {
   Arg,
   Ctx,
@@ -19,7 +20,6 @@ import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
-// import schedule from "node-schedule";
 
 enum TimeStatus {
   PAST = "PAST",
@@ -282,18 +282,31 @@ export class SessionResolver {
     }).save();
 
     if (session.isRemote) {
-      // const minutes = 15;
-      // const date = new Date(session.start.getTime() - minutes * 60000);
-      // const job = schedule.scheduleJob(date, async function () {
       // Create a job that sends a notification in discord (later also email) if the user has it on
       // 15 minutes before, exactly when it starts as well
       // save job somewhere to do clean up if
       // - session is deleted -> do nothing except cancel
       // - start time is changed -> create new job
       // - Remote is toggled -> also delete discord chat? (maybe people posted stuff there)
+      // - attendee leaves session -> cancel job for the attendee (partial clean up)
       // TODO: Add Session state CANCELLED -> Then no notifications, except that it is cancelled
       // The creator can write a message to the attendees in this cancel notification
-      // });
+      const minutes = 15;
+      const date = new Date(session.start.getTime() - minutes * 60000);
+
+      // Instead of a cron job add field resolvers for notifications?
+      // If time is less than or equal to 15 minutes before a session
+      // however if I am sending an email, this has to be a cron job
+      // I have the data on the fronted, I can calculate there and just display a
+      // span that says: "Session starting soon!" -> click to go to session details
+      // when session is ongoing "Join Session now!" -> click to go to session details
+      // double booking sessions? Allow this? Sure, which Session to show then?
+      const job = new Cron(date, () => {
+        // send email to creator 15 min before session starts
+        // do same job when someone joins a session
+      });
+      console.log({ job });
+
       const voiceChannel = await createVoiceChannel({
         id: session.id,
         title: session.title,
