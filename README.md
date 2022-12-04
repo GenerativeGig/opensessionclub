@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://discord.gg/Wx8Bw77rwa">
+    <img alt="Discord" src="https://img.shields.io/discord/1045945194752782356?color=5865F2&logo=discord&logoColor=ffffff" />
+  </a>
+</div>
+
 # Open Session Club
 
 Learn, teach and open your mind.
