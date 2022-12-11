@@ -1,4 +1,5 @@
 import argon2 from "argon2";
+import { isAuthenticated } from "../middleware/isAuthenticated";
 import {
   Arg,
   Ctx,
@@ -10,6 +11,7 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGOT_PASSWORD_PREFIX } from "../constants";
@@ -51,11 +53,9 @@ export class ActorResolver {
   async actor(@Arg("id", () => Int) id: number) {
     return Actor.findOne({ where: { id } });
   }
-  @Query(() => Actor, { nullable: true })
+  @Query(() => Actor)
+  @UseMiddleware(isAuthenticated)
   me(@Ctx() { req }: ApolloContext) {
-    if (!req.session.actorId) {
-      return null;
-    }
     return Actor.findOne({ where: { id: req.session.actorId } });
   }
 
@@ -146,6 +146,7 @@ export class ActorResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
   logout(@Ctx() { req, res }: ApolloContext) {
     return new Promise((resolve) =>
       req.session.destroy((error) => {
@@ -248,4 +249,4 @@ export class ActorResolver {
   }
 }
 
-// TODO: Add forget me end point -> delete all data related to the user
+// TODO MUST: Add forget me end point -> delete all data related to the user

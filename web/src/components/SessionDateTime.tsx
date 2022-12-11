@@ -1,3 +1,4 @@
+import { ClockIcon } from "@heroicons/react/24/solid";
 import { addMissingZeros } from "../utils/addMissingZeros";
 
 export enum SessionDateTimeKind {
@@ -27,11 +28,16 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
 
   switch (kind) {
     case SessionDateTimeKind.Ongoing:
-      return <div className="self-end mr-1">Ongoing</div>;
+      return (
+        <div className="self-end">
+          Ongoing
+          <ClockIcon className="h-6 w-6 inline" />
+        </div>
+      );
     case SessionDateTimeKind.Compact:
       return (
         <>
-          <div className="self-end mr-1">
+          <div className="self-end">
             <span className="text-slate-300">
               {weekday[startDate.getDay()]}
             </span>
@@ -44,13 +50,14 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
               {addMissingZeros(startDate.getHours())}:
               {addMissingZeros(startDate.getMinutes())}
             </span>
+            <ClockIcon className="h-6 w-6 inline" />
           </div>
         </>
       );
     case SessionDateTimeKind.Full:
       return (
         <div className="self-end flex flex-col">
-          <div className="self-end mr-1">
+          <div className="self-end">
             <span className="text-slate-300">
               {weekday[startDate.getDay()]}
             </span>
@@ -66,8 +73,9 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
             <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
               Start
             </span>
+            <ClockIcon className="h-6 w-6 inline" />
           </div>
-          <div className="self-end mr-1 text-slate-300">
+          <div className="self-end text-slate-300">
             <span className="text-slate-300">{weekday[stopDate.getDay()]}</span>
             <span> </span>
             <span className="text-slate-300">
@@ -81,6 +89,7 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
             <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
               Stop
             </span>
+            <ClockIcon className="h-6 w-6 inline" />
           </div>
         </div>
       );

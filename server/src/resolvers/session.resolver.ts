@@ -1,4 +1,4 @@
-import Cron from "croner";
+import { Discord } from "../entities/discord.entity";
 import {
   Arg,
   Ctx,
@@ -13,9 +13,13 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { DISCORD_URL } from "../constants";
+import { DISCORD_CLIENT_ID, DISCORD_URL } from "../constants";
 import { dataSource } from "../dataSource";
-import { createVoiceChannel } from "../discord/discordVoiceChannel";
+import {
+  createVoiceChannel,
+  joinVoiceChannel,
+  leaveVoiceChannel,
+} from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
@@ -260,7 +264,7 @@ export class SessionResolver {
       .select("session")
       .from(Session, "session")
       .leftJoinAndSelect("session.creator", "actor")
-      .where("session.id = :id", { id: id })
+      .where("session.id = :id", { id })
       .getOne();
   }
 
@@ -291,8 +295,8 @@ export class SessionResolver {
       // - attendee leaves session -> cancel job for the attendee (partial clean up)
       // TODO: Add Session state CANCELLED -> Then no notifications, except that it is cancelled
       // The creator can write a message to the attendees in this cancel notification
-      const minutes = 15;
-      const date = new Date(session.start.getTime() - minutes * 60000);
+      /* const minutes = 15;
+      const date = new Date(session.start.getTime() - minutes * 60000); */
 
       // Instead of a cron job add field resolvers for notifications?
       // If time is less than or equal to 15 minutes before a session
@@ -301,29 +305,39 @@ export class SessionResolver {
       // span that says: "Session starting soon!" -> click to go to session details
       // when session is ongoing "Join Session now!" -> click to go to session details
       // double booking sessions? Allow this? Sure, which Session to show then?
-      const job = new Cron(date, () => {
+      /* const job = new Cron(date, () => {
         // send email to creator 15 min before session starts
         // do same job when someone joins a session
       });
-      console.log({ job });
+      console.log({ job }); */
 
       const voiceChannel = await createVoiceChannel({
-        id: session.id,
+        sessionId: session.id,
         title: session.title,
       });
 
       if (voiceChannel === undefined) {
         console.error(
-          "channel is undefined, session is created without a voice channel"
+          "voiceChannel is undefined, session is created without a voice channel"
         );
         return;
       }
 
-      await Session.update(
+      if (!voiceChannel.channelId) {
+        console.error(
+          "voiceChannelId is undefined / null, session is created without a voice channel"
+        );
+        return;
+      }
+      const { raw } = await Session.update(
         { id: session.id },
-        { voiceChannelURL: `${DISCORD_URL}${voiceChannel.code}` }
+        {
+          voiceChannelId: voiceChannel.channelId,
+          voiceChannelUrl: `${DISCORD_URL}${voiceChannel.code}`,
+        }
       );
-      // Use jobs not for creating the discord channel, too much overhead.
+      console.log({ raw });
+      // Don't use jobs for creating the discord channel, too much overhead.
       // Use it for notifications to being with
     }
 
@@ -365,6 +379,9 @@ export class SessionResolver {
       id,
       creatorId: req.session.actorId,
     });
+
+    // TODO: delete the discord voice channel
+
     return true;
   }
 
@@ -427,6 +444,58 @@ export class SessionResolver {
       { sessionId: id, actorId: req.session.actorId },
       { actorIsPartOfSession: false }
     );
+
+    // TODO: leave discord voice channel
+    // await leaveVoiceChannel();
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async joinSessionVoiceChannel(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: ApolloContext
+  ) {
+    // TODO: Make this a middleware or something similar
+    const actorSession = await ActorSession.findOne({
+      where: { sessionId: id, actorId: req.session.actorId },
+    });
+
+    if (!actorSession) {
+      // TODO: return error not part of session
+      return false;
+    }
+
+    const discord = await Discord.findOne({
+      where: { actorId: req.session.actorId },
+    });
+
+    if (!discord) {
+      console.log("redirect discord auth");
+      // TODO: Create exact return object
+      return false;
+    }
+
+    const session = await Session.findOneBy({ id });
+
+    if (!session) {
+      console.log("session null");
+      return false;
+    }
+
+    if (!session?.voiceChannelId) {
+      console.log("voiceChannelId null");
+      return false;
+    }
+
+    await joinVoiceChannel(discord.userId, session.voiceChannelId);
+
+    console.log("redirect voiceChannelUrl");
     return true;
   }
 }
+
+// TODO MUST: Try joining a voice channel with a actor not part of the discord guild
+// Make sure the voice channel created private, only users on a whitelist get in
+// Or if that doesn't work, everyone with the link can join

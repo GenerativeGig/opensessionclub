@@ -4,11 +4,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { ActorSession } from "./actorSession.entity";
+import { Discord } from "./discord.entity";
 import { Session } from "./session.entity";
 import { SessionComment } from "./sessionComment.entity";
 
@@ -35,6 +38,10 @@ export class Actor extends BaseEntity {
 
   @Column()
   password: string;
+
+  @OneToOne(() => Discord, { nullable: true })
+  @JoinColumn()
+  discord: Discord;
 
   @OneToMany(() => Session, (session) => session.creator)
   createdSessions: Session[];

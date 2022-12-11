@@ -1,3 +1,5 @@
+import { SignalIcon } from "@heroicons/react/24/solid";
+
 export function Remote() {
-  return <div className="pr-2">Remote</div>;
+  return <SignalIcon className="h-5 w-5" />;
 }

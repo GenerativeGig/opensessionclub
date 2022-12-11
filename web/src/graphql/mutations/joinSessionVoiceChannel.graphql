@@ -1,0 +1,3 @@
+mutation JoinSessionVoiceChannel($id: Int!) {
+  joinSessionVoiceChannel(id: $id)
+}

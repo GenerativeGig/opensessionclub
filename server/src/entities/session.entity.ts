@@ -44,9 +44,12 @@ export class Session extends BaseEntity {
   @Column()
   isRemote: boolean;
 
+  @Column({ nullable: true })
+  voiceChannelId: string;
+
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  voiceChannelURL: string;
+  voiceChannelUrl: string;
 
   @Field(() => String)
   @Column()
@@ -74,7 +77,7 @@ export class Session extends BaseEntity {
   updatedAt: Date;
 }
 
-// TODO: Add field
+// TODO MUST: Add field
 // isCancelled
 // Any other states?
 

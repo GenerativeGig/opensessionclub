@@ -1,3 +1,4 @@
+import { ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useCreateSessionCommentMutation } from "../generated/graphql";
@@ -37,6 +38,7 @@ export function CreateSessionComment({ sessionId }: CreateSessionCommentProps) {
             type="submit"
             className="self-end bg-pink-600 hover:bg-pink-500"
           >
+            <ChatBubbleLeftIcon className="h-5 w-5 inline" />
             Comment
           </button>
         </Form>

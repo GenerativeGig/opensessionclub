@@ -5,9 +5,9 @@ export enum TimeStatus {
 }
 
 export enum TimeStatusText {
-  PAST = "archived",
-  UPCOMING = "upcoming",
-  ONGOING = "ongoing",
+  PAST = "Archived",
+  UPCOMING = "Upcoming",
+  ONGOING = "Ongoing",
 }
 
 export interface TimeStatusProps {

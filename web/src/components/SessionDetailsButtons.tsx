@@ -1,5 +1,15 @@
+import {
+  PencilIcon,
+  SpeakerWaveIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { Session, useDeleteSessionMutation } from "../generated/graphql";
+import { DISCORD_CLIENT_ID } from "../constants";
+import {
+  Session,
+  useDeleteSessionMutation,
+  useJoinSessionVoiceChannelMutation,
+} from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 import { JoinOrLeaveSession } from "./JoinOrLeaveSession";
 
@@ -17,14 +27,9 @@ export function SessionDetailsButtons({
   const navigate = useNavigate();
 
   const [, deleteSession] = useDeleteSessionMutation();
+  const [, joinVoiceChannel] = useJoinSessionVoiceChannelMutation();
 
-  const {
-    id,
-    attendeeLimit,
-    numberOfAttendees,
-    actorIsPartOfSession,
-    timeStatus,
-  } = session;
+  const { id, isRemote, actorIsPartOfSession, voiceChannelUrl } = session;
 
   return (
     <>
@@ -39,20 +44,44 @@ export function SessionDetailsButtons({
               }
             }}
           >
+            <TrashIcon className="h-5 w-5 inline" />
             Delete
           </button>
           <Link to={`/session/${id}/edit`}>
-            <button className="bg-yellow-500 hover:bg-yellow-400">Edit</button>
+            <button className="bg-yellow-500 hover:bg-yellow-400">
+              <PencilIcon className="h-5 w-5 inline" />
+              Edit
+            </button>
           </Link>
         </div>
       ) : (
-        <JoinOrLeaveSession
-          sessionId={id}
-          attendeeLimit={attendeeLimit}
-          numberOfAttendees={numberOfAttendees}
-          actorIsPartOfSession={actorIsPartOfSession}
-          timeStatus={timeStatus}
-        />
+        <JoinOrLeaveSession session={session} />
+      )}
+      {actorIsPartOfSession && isRemote && (
+        <button
+          onClick={async () => {
+            const response = await joinVoiceChannel({ id });
+            if (!response.data?.joinSessionVoiceChannel) {
+              if (DISCORD_CLIENT_ID === "undefined") {
+                console.error("DISCORD_CLIENT_ID is undefined");
+                return;
+              }
+
+              window.location.replace(
+                `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fdiscord-authorization&response_type=code&scope=identify`
+              );
+            }
+            if (!voiceChannelUrl) {
+              console.error("voiceChannelUrl is undefined");
+              return;
+            }
+            window.location.replace(voiceChannelUrl);
+          }}
+          className="bg-[#5865F2] hover:bg-[#7983f2]"
+        >
+          <SpeakerWaveIcon className="w-6 h-6 inline" />
+          Join Voice Channel
+        </button>
       )}
     </>
   );

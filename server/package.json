@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "tsc --watch",
     "dev": "nodemon dist/main.js",
-    "dev-linux:": "yarn psql && yarn redis && nodemon dist/main.js",
+    "dev-linux": "yarn psql && yarn redis && yarn dev",
     "start": "tsc && node dist/main.js",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -51,6 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.3.10",
+    "undici": "^5.14.0",
     "uuid": "^9.0.0"
   }
 }

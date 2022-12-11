@@ -24,9 +24,7 @@ export function Header() {
   } else {
     authenticationJsx = (
       <>
-        <div className="px-3">
-          <ActorLink actor={data.me} />
-        </div>
+        <ActorLink actor={data.me} />
         <button
           className="hover:text-slate-200"
           onClick={() => {

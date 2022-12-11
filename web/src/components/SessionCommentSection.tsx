@@ -1,3 +1,4 @@
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 import { Actor, useSessionCommentsQuery } from "../generated/graphql";
 import { CreateSessionComment } from "./CreateSessionComment";
 import { FailedLoadingData } from "./FailedLoadingData";
@@ -28,7 +29,10 @@ export function SessionCommentSection({
   if (data && !fetching) {
     return (
       <div className="py-5">
-        <h2 className="text-xl text-center p-5">Comments</h2>
+        <h2 className="text-xl text-center p-5">
+          <ChatBubbleLeftRightIcon className="h-5 w-5 inline" />
+          Comments
+        </h2>
         <CreateSessionComment sessionId={sessionId} />
         <ol className="flex flex-col w-full">
           {data.sessionComments?.map((sessionComment) => (

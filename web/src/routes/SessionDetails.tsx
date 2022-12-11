@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { ssrExchange } from "urql";
 import { ActorLink } from "../components/ActorLink";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { Location } from "../components/Location";
+import { NumberOfAttendees } from "../components/NumberOfAttendees";
 import { Remote } from "../components/Remote";
 import { RouteTitle } from "../components/RouteTitle";
 import { SessionCommentSection } from "../components/SessionCommentSection";
@@ -65,7 +65,10 @@ export function SessionDetails() {
 
     return (
       <article className="flex flex-col">
-        <RouteTitle>{title}</RouteTitle>
+        <div className="flex justify-between items-center">
+          <RouteTitle>{title}</RouteTitle>
+          {isRemote && <Remote />}
+        </div>
         <div className="flex justify-between">
           <TimeStatusTag timeStatus={timeStatus} />
           <SessionDateTime
@@ -78,13 +81,11 @@ export function SessionDetails() {
         <div className="flex justify-between items-center">
           <ActorLink actor={creator} />
           <div className="self-end flex items-center">
-            {isRemote && <Remote />}
             {location !== "" && <Location location={location} />}
-            <div>
-              <span>{numberOfAttendees}</span>
-              <span>/</span>
-              <span>{attendeeLimit}</span>
-            </div>
+            <NumberOfAttendees
+              numberOfAttendees={numberOfAttendees}
+              attendeeLimit={attendeeLimit}
+            />
             <SessionDetailsButtons
               session={sessionData.session}
               isCreator={isCreator}
@@ -99,8 +100,3 @@ export function SessionDetails() {
   }
   return <></>;
 }
-
-// TODO: comments are only returned from server if logged in and has joined session
-// this is where contact information is usually added
-// integrate discord into website -> meaning you can create a session
-// with a corresponding discord chat room

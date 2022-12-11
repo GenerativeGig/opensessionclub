@@ -1,29 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import {
+  Session,
   useJoinSessionMutation,
   useLeaveSessionMutation,
 } from "../generated/graphql";
 import { TimeStatus } from "./TimeStatus";
 
 export interface JoinOrLeaveSessionProps {
-  sessionId: number;
-  attendeeLimit: number;
-  numberOfAttendees: number;
-  actorIsPartOfSession: boolean;
-  timeStatus: string;
+  session: Session;
 }
 
-export function JoinOrLeaveSession({
-  sessionId,
-  attendeeLimit,
-  numberOfAttendees,
-  actorIsPartOfSession,
-  timeStatus,
-}: JoinOrLeaveSessionProps) {
+export function JoinOrLeaveSession({ session }: JoinOrLeaveSessionProps) {
   const navigate = useNavigate();
 
   const [, joinSession] = useJoinSessionMutation();
   const [, leaveSession] = useLeaveSessionMutation();
+
+  const {
+    id,
+    numberOfAttendees,
+    attendeeLimit,
+    timeStatus,
+    actorIsPartOfSession,
+  } = session;
 
   const allowJoin = () => {
     const sessionHasSpots = numberOfAttendees < attendeeLimit;
@@ -35,7 +34,7 @@ export function JoinOrLeaveSession({
     return (
       <button
         onClick={async () => {
-          const response = await joinSession({ id: sessionId });
+          const response = await joinSession({ id });
           if (response.data?.joinSession) {
             navigate(0);
           }
@@ -55,7 +54,7 @@ export function JoinOrLeaveSession({
     return (
       <button
         onClick={async () => {
-          const response = await leaveSession({ id: sessionId });
+          const response = await leaveSession({ id });
           if (response.data?.leaveSession) {
             navigate(0);
           }
