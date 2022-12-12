@@ -1,4 +1,5 @@
 import {
+  NoSymbolIcon,
   PencilIcon,
   SpeakerWaveIcon,
   TrashIcon,
@@ -7,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { DISCORD_CLIENT_ID } from "../constants";
 import {
   Session,
+  useCancelSessionMutation,
   useDeleteSessionMutation,
   useJoinSessionVoiceChannelMutation,
 } from "../generated/graphql";
@@ -26,17 +28,33 @@ export function SessionDetailsButtons({
 
   const navigate = useNavigate();
 
+  const [, cancelSession] = useCancelSessionMutation();
   const [, deleteSession] = useDeleteSessionMutation();
   const [, joinVoiceChannel] = useJoinSessionVoiceChannelMutation();
 
-  const { id, isRemote, actorIsPartOfSession, voiceChannelUrl } = session;
+  const { id, isRemote, isCancelled, actorIsPartOfSession, voiceChannelUrl } =
+    session;
 
   return (
     <>
       {isCreator ? (
         <div>
+          {!isCancelled && (
+            <button
+              className="bg-rose-400 hover:bg-rose-300"
+              onClick={async () => {
+                const response = await cancelSession({ id });
+                if (response.data?.cancelSession) {
+                  navigate(0);
+                }
+              }}
+            >
+              <NoSymbolIcon className="h-6 w-6 inline" />
+              Cancel
+            </button>
+          )}
           <button
-            className="bg-red-500 hover-red-400"
+            className="bg-red-500 hover:bg-red-400"
             onClick={async () => {
               const response = await deleteSession({ id });
               if (response.data?.deleteSession) {
@@ -86,3 +104,8 @@ export function SessionDetailsButtons({
     </>
   );
 }
+
+// TODO: What does it mean when it is cancelled? What can still be done?
+// Can't join, edit or join voice channel (delete the voice channel) but the session lives on
+// Comments can be made
+// Add this logic to backend, how to not have to implement same logic in frontend and backend?

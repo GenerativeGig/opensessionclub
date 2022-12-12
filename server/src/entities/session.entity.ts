@@ -55,6 +55,10 @@ export class Session extends BaseEntity {
   @Column()
   location: string;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isCancelled: boolean;
+
   @Column()
   creatorId: number;
 

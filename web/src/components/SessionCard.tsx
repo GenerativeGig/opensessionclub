@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Session } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
+import { Cancelled } from "./Cancelled";
 import { Location } from "./Location";
 import { NumberOfAttendees } from "./NumberOfAttendees";
 import { Remote } from "./Remote";
@@ -17,6 +18,7 @@ export function SessionCard({
   numberOfAttendees,
   attendeeLimit,
   isRemote,
+  isCancelled,
   location,
   timeStatus,
   creator,
@@ -25,7 +27,15 @@ export function SessionCard({
     <article className="flex flex-col">
       <div className="flex justify-between">
         <h2 className="text-2xl truncate ...">{title}</h2>
-        {isRemote && <Remote />}
+        <div className="flex">
+          {isCancelled && (
+            <>
+              <Cancelled />
+              <div className="w-1"></div>
+            </>
+          )}
+          {isRemote && <Remote />}
+        </div>
       </div>
       <SessionDateTime
         start={start}

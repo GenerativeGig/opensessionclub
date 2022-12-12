@@ -24,29 +24,23 @@ export function TimeStatusTag({ timeStatus }: TimeStatusProps) {
   switch (timeStatus) {
     case TimeStatus.PAST:
       return (
-        <div>
-          <span className="bg-gray-500 px-2 py-1 rounded">
-            <ArchiveBoxIcon className="h-5 w-5 inline" />
-            {TimeStatusText.PAST}
-          </span>
+        <div className="bg-gray-500 px-2 rounded">
+          <ArchiveBoxIcon className="h-5 w-5 inline" />
+          {TimeStatusText.PAST}
         </div>
       );
     case TimeStatus.UPCOMING:
       return (
-        <div>
-          <span className="bg-purple-500 px-2 py-1 rounded">
-            <CalendarDaysIcon className="h-5 w-5 inline" />
-            {TimeStatusText.UPCOMING}
-          </span>
+        <div className="bg-purple-500 px-2 rounded">
+          <CalendarDaysIcon className="h-5 w-5 inline" />
+          {TimeStatusText.UPCOMING}
         </div>
       );
     case TimeStatus.ONGOING:
       return (
-        <div>
-          <span className="bg-green-500 px-2 py-1 rounded">
-            <BoltIcon className="h-5 w-5 inline" />
-            {TimeStatusText.ONGOING}
-          </span>
+        <div className="bg-green-500 px-2 rounded">
+          <BoltIcon className="h-5 w-5 inline" />
+          {TimeStatusText.ONGOING}
         </div>
       );
     default:

@@ -370,6 +370,13 @@ export class SessionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: ApolloContext
   ) {
+    // TODO: Auth (isCreator) as Middleware
+    const session = await Session.findOne({ where: { id } });
+
+    if (session?.creatorId !== req.session.actorId) {
+      return false;
+    }
+
     await SessionComment.delete({
       sessionId: id,
     });
@@ -385,6 +392,24 @@ export class SessionResolver {
     });
 
     // TODO: delete the discord voice channel
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async cancelSession(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: ApolloContext
+  ) {
+    // TODO: Auth (isCreator) as Middleware
+    const session = await Session.findOne({ where: { id } });
+
+    if (session?.creatorId !== req.session.actorId) {
+      return false;
+    }
+
+    await Session.update({ id }, { isCancelled: true });
 
     return true;
   }

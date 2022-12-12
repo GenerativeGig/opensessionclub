@@ -1,5 +1,7 @@
+import { NoSymbolIcon } from "@heroicons/react/24/solid";
 import { useParams } from "react-router-dom";
 import { ActorLink } from "../components/ActorLink";
+import { Cancelled } from "../components/Cancelled";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { Location } from "../components/Location";
@@ -58,6 +60,7 @@ export function SessionDetails() {
       numberOfAttendees,
       attendeeLimit,
       isRemote,
+      isCancelled,
       location,
       actorIsPartOfSession,
       timeStatus,
@@ -73,7 +76,15 @@ export function SessionDetails() {
           {isRemote && <Remote />}
         </div>
         <div className="flex justify-between items-center">
-          <TimeStatusTag timeStatus={timeStatus} />
+          <div>
+            {isCancelled && (
+              <>
+                <Cancelled />
+                <div className="h-1"></div>
+              </>
+            )}
+            <TimeStatusTag timeStatus={timeStatus} />
+          </div>
           <SessionDateTime
             start={start}
             stop={stop}

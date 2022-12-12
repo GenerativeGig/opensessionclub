@@ -39,6 +39,7 @@ export type ActorResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelSession: Scalars['Boolean'];
   changePassword: ActorResponse;
   createSession: Scalars['Boolean'];
   createSessionComment: SessionComment;
@@ -54,6 +55,11 @@ export type Mutation = {
   signup: ActorResponse;
   updateSession: Scalars['Boolean'];
   updateSessionComment: Scalars['Boolean'];
+};
+
+
+export type MutationCancelSessionArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -198,6 +204,7 @@ export type Session = {
   creator: Actor;
   hasMoreText: Scalars['Boolean'];
   id: Scalars['Int'];
+  isCancelled: Scalars['Boolean'];
   isRemote: Scalars['Boolean'];
   location: Scalars['String'];
   numberOfAttendees: Scalars['Int'];
@@ -239,7 +246,14 @@ export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?
 
 export type FullActorFragment = { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string };
 
-export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } };
+export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } };
+
+export type CancelSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CancelSessionMutation = { __typename?: 'Mutation', cancelSession: boolean };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -367,7 +381,7 @@ export type OngoingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export type PastSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -375,14 +389,14 @@ export type PastSessionsQueryVariables = Exact<{
 }>;
 
 
-export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export type SessionQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } } | null };
+export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } } | null };
 
 export type SessionCommentsQueryVariables = Exact<{
   sessionId: Scalars['Int'];
@@ -397,7 +411,7 @@ export type UpcomingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text: string, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location: string, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
 
 export const BasicActorErrorFragmentDoc = gql`
     fragment BasicActorError on ActorFieldError {
@@ -443,6 +457,7 @@ export const FullSessionFragmentDoc = gql`
   numberOfAttendees
   attendeeLimit
   isRemote
+  isCancelled
   voiceChannelUrl
   location
   actorIsPartOfSession
@@ -454,6 +469,15 @@ export const FullSessionFragmentDoc = gql`
   updatedAt
 }
     ${FullActorFragmentDoc}`;
+export const CancelSessionDocument = gql`
+    mutation CancelSession($id: Int!) {
+  cancelSession(id: $id)
+}
+    `;
+
+export function useCancelSessionMutation() {
+  return Urql.useMutation<CancelSessionMutation, CancelSessionMutationVariables>(CancelSessionDocument);
+};
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
