@@ -23,6 +23,7 @@ import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
+import { SessionComment } from "../entities/sessionComment.entity";
 
 enum TimeStatus {
   PAST = "PAST",
@@ -369,6 +370,10 @@ export class SessionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: ApolloContext
   ) {
+    await SessionComment.delete({
+      sessionId: id,
+    });
+
     await ActorSession.delete({
       sessionId: id,
       actorId: req.session.actorId,

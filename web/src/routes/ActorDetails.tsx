@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { FailedLoadingData } from "../components/FailedLoadingData";
+import { ForgetMe } from "../components/ForgetMe";
 import { Loading } from "../components/Loading";
 import { RouteTitle } from "../components/RouteTitle";
-import { useActorQuery } from "../generated/graphql";
+import { useActorQuery, useMeQuery } from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function ActorDetails() {
@@ -16,26 +17,38 @@ export function ActorDetails() {
     variables: { id: parseInt(id!) },
   });
 
-  if (!actorData && actorFetching) {
+  const [{ data: meData, fetching: meFetching }] = useMeQuery();
+
+  if ((!actorData && actorFetching) || (!meData && meFetching)) {
     return <Loading />;
   }
 
-  if (!actorData && !actorFetching) {
+  if ((!actorData && !actorFetching) || (!meData && !meFetching)) {
     return <FailedLoadingData />;
   }
 
-  if (actorData && !actorFetching) {
+  if (actorData && !actorFetching && meData && !meFetching) {
     if (!actorData.actor) {
       console.error("actor is undefined");
       return <></>;
     }
 
+    if (!meData.me) {
+      console.log("me is undefined");
+      return <></>;
+    }
+
     const { name, createdAt } = actorData.actor;
+
+    const isOwnDetails = meData?.me?.id === parseInt(id);
 
     return (
       <div>
         <RouteTitle>{name}</RouteTitle>
-        <div>{`Member since ${new Date(createdAt).toLocaleDateString()}.`}</div>
+        <div className="py-6">{`Member since ${new Date(
+          createdAt
+        ).toLocaleDateString()}.`}</div>
+        {isOwnDetails && <ForgetMe />}
       </div>
     );
   }

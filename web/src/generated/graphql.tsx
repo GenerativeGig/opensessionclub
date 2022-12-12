@@ -44,6 +44,7 @@ export type Mutation = {
   createSessionComment: SessionComment;
   deleteSession: Scalars['Boolean'];
   deleteSessionComment: Scalars['Boolean'];
+  forgetMe: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   joinSession: Scalars['Boolean'];
   joinSessionVoiceChannel: Scalars['Boolean'];
@@ -277,6 +278,11 @@ export type DeleteSessionCommentMutationVariables = Exact<{
 
 export type DeleteSessionCommentMutation = { __typename?: 'Mutation', deleteSessionComment: boolean };
 
+export type ForgetMeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ForgetMeMutation = { __typename?: 'Mutation', forgetMe: boolean };
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -496,6 +502,15 @@ export const DeleteSessionCommentDocument = gql`
 
 export function useDeleteSessionCommentMutation() {
   return Urql.useMutation<DeleteSessionCommentMutation, DeleteSessionCommentMutationVariables>(DeleteSessionCommentDocument);
+};
+export const ForgetMeDocument = gql`
+    mutation ForgetMe {
+  forgetMe
+}
+    `;
+
+export function useForgetMeMutation() {
+  return Urql.useMutation<ForgetMeMutation, ForgetMeMutationVariables>(ForgetMeDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {

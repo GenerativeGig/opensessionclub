@@ -24,6 +24,7 @@ import { SessionComment } from "../entities/sessionComment.entity";
 import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
 import { Discord } from "../entities/discord.entity";
+import { In } from "typeorm";
 
 @ObjectType()
 class ActorFieldError {
@@ -260,8 +261,13 @@ export class ActorResolver {
       return false;
     }
 
-    await SessionComment.delete({ creatorId: actorId });
+    // TODO: Optimize database requests
+    const createdSessions = await Session.findBy({ creatorId: actorId });
+    const createdSessionsIds = createdSessions.map((session) => session.id);
+    await ActorSession.delete({ sessionId: In(createdSessionsIds) });
     await ActorSession.delete({ actorId });
+    await SessionComment.delete({ sessionId: In(createdSessionsIds) });
+    await SessionComment.delete({ creatorId: actorId });
     await Session.delete({ creatorId: actorId });
     await Discord.delete({ actorId });
     await Actor.delete({ id: actorId });
@@ -271,5 +277,3 @@ export class ActorResolver {
     return true;
   }
 }
-
-// TODO MUST: Add forget me end point -> delete all data related to the user
