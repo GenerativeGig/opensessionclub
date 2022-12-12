@@ -20,6 +20,10 @@ import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 import { validateSignup } from "../validation/signup.validation";
+import { SessionComment } from "../entities/sessionComment.entity";
+import { ActorSession } from "../entities/actorSession.entity";
+import { Session } from "../entities/session.entity";
+import { Discord } from "../entities/discord.entity";
 
 @ObjectType()
 class ActorFieldError {
@@ -152,7 +156,7 @@ export class ActorResolver {
       req.session.destroy((error) => {
         res.clearCookie(COOKIE_NAME);
         if (error) {
-          console.log(error);
+          console.error(error);
           resolve(false);
           return;
         }
@@ -246,6 +250,25 @@ export class ActorResolver {
     req.session.actorId = actor.id;
 
     return { actor };
+  }
+
+  @Mutation(() => Boolean)
+  async forgetMe(@Ctx() ctx: ApolloContext) {
+    const actorId = ctx.req.session.actorId;
+    if (actorId === undefined) {
+      console.error("actorId is undefined");
+      return false;
+    }
+
+    await SessionComment.delete({ creatorId: actorId });
+    await ActorSession.delete({ actorId });
+    await Session.delete({ creatorId: actorId });
+    await Discord.delete({ actorId });
+    await Actor.delete({ id: actorId });
+
+    await this.logout(ctx);
+
+    return true;
   }
 }
 

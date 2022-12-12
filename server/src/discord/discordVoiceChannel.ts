@@ -1,4 +1,8 @@
-import { ChannelType, PermissionFlagsBits } from "discord.js";
+import {
+  ChannelType,
+  PermissionFlagsBits,
+  ThreadAutoArchiveDuration,
+} from "discord.js";
 import { DISCORD_CATEGORY_SESSIONS, DISCORD_GUILD_ID } from "../constants";
 import { discordClient } from "./discordClient";
 
@@ -44,6 +48,7 @@ export async function createVoiceChannel({
         ],
       },
     ],
+    defaultAutoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
   });
 
   return await guild.invites.create(channel, { maxAge: 0 });

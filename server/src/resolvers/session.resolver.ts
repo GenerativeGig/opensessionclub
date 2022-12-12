@@ -13,12 +13,11 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { DISCORD_CLIENT_ID, DISCORD_URL } from "../constants";
+import { DISCORD_URL } from "../constants";
 import { dataSource } from "../dataSource";
 import {
   createVoiceChannel,
   joinVoiceChannel,
-  leaveVoiceChannel,
 } from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
 import { Session } from "../entities/session.entity";
