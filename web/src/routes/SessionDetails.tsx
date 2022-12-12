@@ -14,8 +14,11 @@ import {
 import { SessionDetailsButtons } from "../components/SessionDetailsButtons";
 import { TimeStatusTag } from "../components/TimeStatus";
 import { useMeQuery, useSessionQuery } from "../generated/graphql";
+import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function SessionDetails() {
+  useIsAuthenticated();
+
   const { id } = useParams();
   if (!id) {
     return <FailedLoadingData />;
@@ -69,7 +72,7 @@ export function SessionDetails() {
           <RouteTitle>{title}</RouteTitle>
           {isRemote && <Remote />}
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <TimeStatusTag timeStatus={timeStatus} />
           <SessionDateTime
             start={start}
@@ -78,14 +81,16 @@ export function SessionDetails() {
           />
         </div>
         <div className="my-3 mx-1 break-words">{text}</div>
+        <div className="self-end flex">
+          {location !== "" && <Location location={location} />}
+          <NumberOfAttendees
+            numberOfAttendees={numberOfAttendees}
+            attendeeLimit={attendeeLimit}
+          />
+        </div>
         <div className="flex justify-between items-center">
           <ActorLink actor={creator} />
           <div className="self-end flex items-center">
-            {location !== "" && <Location location={location} />}
-            <NumberOfAttendees
-              numberOfAttendees={numberOfAttendees}
-              attendeeLimit={attendeeLimit}
-            />
             <SessionDetailsButtons
               session={sessionData.session}
               isCreator={isCreator}

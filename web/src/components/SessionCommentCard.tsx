@@ -1,3 +1,4 @@
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -85,6 +86,7 @@ export function SessionCommentCard({
                     }
                   }}
                 >
+                  <TrashIcon className="h-5 w-5 inline" />
                   Delete
                 </button>
                 <button
@@ -92,6 +94,7 @@ export function SessionCommentCard({
                   className="bg-yellow-500 hover:bg-yellow-400"
                   onClick={() => setIsEditing(true)}
                 >
+                  <PencilIcon className="h-5 w-5 inline" />
                   Edit
                 </button>
               </div>

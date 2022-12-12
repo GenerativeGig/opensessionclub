@@ -1,3 +1,8 @@
+import {
+  ArchiveBoxIcon,
+  BoltIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
 import { Outlet, useNavigate } from "react-router-dom";
 import { RouteTitle } from "../components/RouteTitle";
 import { TimeStatusText } from "../components/TimeStatus";
@@ -16,6 +21,7 @@ export function Sessions() {
               navigate("ongoing");
             }}
           >
+            <BoltIcon className="h-5 w-5 inline" />
             {TimeStatusText.ONGOING}
           </button>
         </li>
@@ -26,6 +32,7 @@ export function Sessions() {
               navigate("upcoming");
             }}
           >
+            <CalendarDaysIcon className="h-5 w-5 inline" />
             {TimeStatusText.UPCOMING}
           </button>
         </li>
@@ -36,6 +43,7 @@ export function Sessions() {
               navigate("archived");
             }}
           >
+            <ArchiveBoxIcon className="h-5 w-5 inline" />
             {TimeStatusText.PAST}
           </button>
         </li>

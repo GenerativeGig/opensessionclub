@@ -10,11 +10,11 @@ export function NumberOfAttendees({
   attendeeLimit,
 }: NumberOfAttendeesProps) {
   return (
-    <div className="flex">
-      <UserGroupIcon className="h-6 w-6" />
-      <span>{numberOfAttendees}</span>
-      <span>/</span>
-      <span>{attendeeLimit}</span>
+    <div>
+      <span className="text-slate-300">{numberOfAttendees}</span>
+      <span className="text-slate-300">/</span>
+      <span className="text-slate-300">{attendeeLimit}</span>
+      <UserGroupIcon className="h-6 w-6 inline" />
     </div>
   );
 }

@@ -1,3 +1,9 @@
+import {
+  ArchiveBoxIcon,
+  BoltIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
+
 export enum TimeStatus {
   PAST = "PAST",
   UPCOMING = "UPCOMING",
@@ -19,7 +25,8 @@ export function TimeStatusTag({ timeStatus }: TimeStatusProps) {
     case TimeStatus.PAST:
       return (
         <div>
-          <span className="bg-gray-500 px-2 rounded">
+          <span className="bg-gray-500 px-2 py-1 rounded">
+            <ArchiveBoxIcon className="h-5 w-5 inline" />
             {TimeStatusText.PAST}
           </span>
         </div>
@@ -27,7 +34,8 @@ export function TimeStatusTag({ timeStatus }: TimeStatusProps) {
     case TimeStatus.UPCOMING:
       return (
         <div>
-          <span className="bg-purple-500 px-2 rounded">
+          <span className="bg-purple-500 px-2 py-1 rounded">
+            <CalendarDaysIcon className="h-5 w-5 inline" />
             {TimeStatusText.UPCOMING}
           </span>
         </div>
@@ -35,7 +43,8 @@ export function TimeStatusTag({ timeStatus }: TimeStatusProps) {
     case TimeStatus.ONGOING:
       return (
         <div>
-          <span className="bg-green-500 px-2 rounded">
+          <span className="bg-green-500 px-2 py-1 rounded">
+            <BoltIcon className="h-5 w-5 inline" />
             {TimeStatusText.ONGOING}
           </span>
         </div>
