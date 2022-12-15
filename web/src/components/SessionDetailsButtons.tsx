@@ -32,8 +32,7 @@ export function SessionDetailsButtons({
   const [, deleteSession] = useDeleteSessionMutation();
   const [, joinVoiceChannel] = useJoinSessionVoiceChannelMutation();
 
-  const { id, isRemote, isCancelled, actorIsPartOfSession, voiceChannelUrl } =
-    session;
+  const { id, isCancelled, actorIsPartOfSession, voiceChannelUrl } = session;
 
   return (
     <>
@@ -75,7 +74,7 @@ export function SessionDetailsButtons({
       ) : (
         <JoinOrLeaveSession session={session} />
       )}
-      {actorIsPartOfSession && isRemote && (
+      {actorIsPartOfSession && voiceChannelUrl && (
         <button
           onClick={async () => {
             const response = await joinVoiceChannel({ id });
@@ -89,10 +88,7 @@ export function SessionDetailsButtons({
                 `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fdiscord-authorization&response_type=code&scope=identify`
               );
             }
-            if (!voiceChannelUrl) {
-              console.error("voiceChannelUrl is undefined");
-              return;
-            }
+
             window.location.replace(voiceChannelUrl);
           }}
           className="bg-[#5865F2] hover:bg-[#7983f2]"
@@ -108,4 +104,12 @@ export function SessionDetailsButtons({
 // TODO: What does it mean when it is cancelled? What can still be done?
 // Can't join, edit or join voice channel (delete the voice channel) but the session lives on
 // Comments can be made
-// Add this logic to backend, how to not have to implement same logic in frontend and backend?
+// TODO: Add this logic to backend, how to not have to implement same logic in frontend and backend?
+
+// Add field resolvers for permissions to Session/SessionComment
+// List of Action Permissions UPDATE DELETE CANCEL JoinVoice Join Leave Session
+// List of Action Permissions UPDATE DELETE SessionComment
+// if Permission is not o
+
+// On client only implement logic for when to show using one boolean
+// On server return extra booleans if needed to make it easier on the client

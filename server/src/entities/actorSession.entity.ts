@@ -32,10 +32,10 @@ export class ActorSession extends BaseEntity {
   actorIsPartOfSession: boolean;
 
   @Field(() => String)
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt: Date;
 }

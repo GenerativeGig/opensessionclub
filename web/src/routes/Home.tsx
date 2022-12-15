@@ -8,5 +8,5 @@ export function Home() {
   );
 }
 /**
-  Add information about what this club is about, rules and other important information
+  TODO MUST: Add information about what this club is about, rules and other important information
  */

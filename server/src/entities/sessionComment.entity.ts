@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
+import JSON from "graphql-type-json";
 import {
   BaseEntity,
   Column,
@@ -18,9 +19,9 @@ export class SessionComment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => String)
-  @Column()
-  text: string;
+  @Field(() => JSON)
+  @Column({ type: "json" })
+  text: JSON;
 
   @Field(() => Int)
   @Column()
@@ -37,10 +38,10 @@ export class SessionComment extends BaseEntity {
   creator: Actor;
 
   @Field(() => String)
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt: Date;
 }

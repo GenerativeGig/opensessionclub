@@ -1,6 +1,7 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import { Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Actor,
@@ -9,7 +10,7 @@ import {
   useUpdateSessionCommentMutation,
 } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
-import { InputTextArea } from "./InputTextArea";
+import StarterKit from "@tiptap/starter-kit";
 
 export interface SessionCommentCardProps {
   sessionComment: SessionComment;
@@ -23,25 +24,42 @@ export function SessionCommentCard({
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [textBeforeEdit, setTextBeforeEdit] = useState<
+    JSONContent | undefined
+  >();
 
   const [, deleteSessionComment] = useDeleteSessionCommentMutation();
   const [, updateSessionComment] = useUpdateSessionCommentMutation();
 
   const { id, creator, createdAt, text } = sessionComment;
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: text,
+    editable: isEditing,
+  });
+
+  useEffect(() => {
+    if (isEditing) {
+      setTextBeforeEdit(editor?.getJSON());
+    }
+
+    editor?.setEditable(isEditing);
+  }, [editor, isEditing]);
+
   const isCreator = me && me.id === sessionComment.creator.id;
 
   return (
     <>
       <Formik
-        initialValues={{ text }}
-        onSubmit={async ({ text }, { setErrors }) => {
-          const { error } = await updateSessionComment({ text, id });
+        initialValues={{}}
+        onSubmit={async ({}, { setErrors }) => {
+          setIsEditing(false);
+
+          const text = editor?.getJSON();
+
+          const { error } = await updateSessionComment({ id, text });
           console.log({ error });
-          if (!error) {
-            setIsEditing(false);
-            navigate(0);
-          }
         }}
       >
         {({ isSubmitting }) => (
@@ -52,33 +70,36 @@ export function SessionCommentCard({
                 {new Date(parseInt(createdAt)).toLocaleDateString()}
               </div>
             </div>
-            {isEditing ? (
-              <>
-                <InputTextArea
-                  name="text"
-                  label=""
-                  type="text"
-                  placeholder="Add a comment..."
-                  className="w-full"
-                  noLabel
-                />
-                <div className="self-end">
-                  <button
-                    type="submit"
-                    className="bg-green-600 hover:bg-green-500"
-                  >
-                    Save
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="p-5">{text}</div>
+            <div className="p-4">
+              <EditorContent editor={editor} />
+            </div>
+            {isEditing && (
+              <div className="self-end">
+                <button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-500 disabled:bg-gray-500"
+                  disabled={editor?.getText() === ""}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-slate-500 hover:bg-slate-400"
+                  onClick={() => {
+                    setIsEditing(false);
+                    editor?.commands.setContent(
+                      textBeforeEdit ? textBeforeEdit : {}
+                    );
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
             )}
             {isCreator && !isEditing && (
               <div className="self-end">
                 <button
                   type="button"
-                  className="bg-red-500 hover-red-400"
+                  className="bg-red-500 hover:bg-red-400"
                   onClick={async () => {
                     const { error } = await deleteSessionComment({ id });
                     if (!error) {
@@ -92,7 +113,10 @@ export function SessionCommentCard({
                 <button
                   type="button"
                   className="bg-yellow-500 hover:bg-yellow-400"
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    setIsEditing(true);
+                    setTextBeforeEdit(editor?.getJSON());
+                  }}
                 >
                   <PencilIcon className="h-5 w-5 inline" />
                   Edit

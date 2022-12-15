@@ -17,6 +17,7 @@ import { DISCORD_URL } from "../constants";
 import { dataSource } from "../dataSource";
 import {
   createVoiceChannel,
+  deleteVoiceChannel,
   joinVoiceChannel,
 } from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
@@ -35,7 +36,7 @@ enum TimeStatus {
 class SessionInput {
   @Field()
   title: string;
-  @Field()
+  @Field({ nullable: true })
   text: string;
   @Field()
   start: Date;
@@ -45,7 +46,7 @@ class SessionInput {
   attendeeLimit: number;
   @Field()
   isRemote: boolean;
-  @Field()
+  @Field({ nullable: true })
   location: string;
 }
 
@@ -77,11 +78,18 @@ class PaginatedPastSessions {
 export class SessionResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() { text }: Session) {
+    if (!text) {
+      return "";
+    }
     return text.slice(0, 250).trim();
   }
 
   @FieldResolver(() => Boolean)
   hasMoreText(@Root() { text }: Session) {
+    if (!text) {
+      return false;
+    }
+
     return text.length > 250 + 1;
   }
 
@@ -121,6 +129,46 @@ export class SessionResolver {
     }
     return TimeStatus.ONGOING;
   }
+
+  /* @FieldResolver(() => Boolean)
+  canCreate() {
+    return true;
+  }
+
+  @FieldResolver(() => Boolean)
+  canRead(@Ctx() { req }: ApolloContext) {
+    return req.session.actorId !== undefined;
+  }
+
+  @FieldResolver(() => Boolean)
+  canJoin(@Root() {creatorId}: Session, @Ctx() { req }: ApolloContext) {
+    return true;
+  }
+
+  @FieldResolver(() => Boolean)
+  canLeave(@Root() { creatorId }: Session, @Ctx() { req }: ApolloContext) {
+    return creatorId !== req.session.actorId;
+  }
+
+  @FieldResolver(() => Boolean)
+  canUpdate(@Root() {}: Session) {
+    return true;
+  }
+
+  @FieldResolver(() => Boolean)
+  canDelete(@Root() {}: Session) {
+    return true;
+  }
+
+  @FieldResolver(() => Boolean)
+  canCancel(@Root() {}: Session) {
+    return true;
+  }
+
+  @FieldResolver(() => Boolean)
+  canJoinVoiceChannel(@Root() {}: Session) {
+    return true;
+  } */
 
   @Query(() => PaginatedOngoingSessions)
   async ongoingSessions(
@@ -258,6 +306,7 @@ export class SessionResolver {
   }
 
   @Query(() => Session, { nullable: true })
+  @UseMiddleware(isAuthenticated)
   async session(@Arg("id", () => Int) id: number) {
     return await dataSource
       .createQueryBuilder()
@@ -323,12 +372,13 @@ export class SessionResolver {
         return;
       }
 
-      if (!voiceChannel.channelId) {
+      if (voiceChannel.channelId === null) {
         console.error(
-          "voiceChannelId is undefined / null, session is created without a voice channel"
+          "voiceChannel.channelId is undefined, session is created without a voice channel"
         );
         return;
       }
+
       const { raw } = await Session.update(
         { id: session.id },
         {
@@ -356,8 +406,17 @@ export class SessionResolver {
     });
 
     if (!session) {
-      return null;
+      return false;
     }
+
+    if (session.isCancelled) {
+      return false;
+    }
+
+    // TODO: if title changed -> change the discord voice channel title
+
+    // TODO: if no longer remote -> delete voice channel and
+    // if remote -> create voice channel
 
     await Session.update({ id }, { ...input });
 
@@ -372,6 +431,10 @@ export class SessionResolver {
   ) {
     // TODO: Auth (isCreator) as Middleware
     const session = await Session.findOne({ where: { id } });
+
+    if (!session) {
+      return false;
+    }
 
     if (session?.creatorId !== req.session.actorId) {
       return false;
@@ -391,7 +454,9 @@ export class SessionResolver {
       creatorId: req.session.actorId,
     });
 
-    // TODO: delete the discord voice channel
+    if (session.voiceChannelId) {
+      deleteVoiceChannel(session.voiceChannelId);
+    }
 
     return true;
   }
@@ -405,11 +470,30 @@ export class SessionResolver {
     // TODO: Auth (isCreator) as Middleware
     const session = await Session.findOne({ where: { id } });
 
+    if (!session) {
+      return false;
+    }
+
+    if (session?.isCancelled) {
+      return false;
+    }
+
     if (session?.creatorId !== req.session.actorId) {
       return false;
     }
 
-    await Session.update({ id }, { isCancelled: true });
+    await Session.update(
+      { id },
+      {
+        isCancelled: true,
+        voiceChannelId: null,
+        voiceChannelUrl: null,
+      }
+    );
+
+    if (session.voiceChannelId) {
+      deleteVoiceChannel(session.voiceChannelId);
+    }
 
     return true;
   }
@@ -423,6 +507,10 @@ export class SessionResolver {
     const session = await Session.findOne({ where: { id } });
 
     if (!session) {
+      return false;
+    }
+
+    if (session.isCancelled) {
       return false;
     }
 

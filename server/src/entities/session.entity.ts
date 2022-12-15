@@ -24,8 +24,8 @@ export class Session extends BaseEntity {
   @Column()
   title: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   text: string;
 
   @Field(() => String)
@@ -44,15 +44,15 @@ export class Session extends BaseEntity {
   @Column()
   isRemote: boolean;
 
-  @Column({ nullable: true })
-  voiceChannelId: string;
+  @Column({ type: "varchar", nullable: true })
+  voiceChannelId: string | null;
+
+  @Field(() => String, { nullable: true })
+  @Column({ type: "varchar", nullable: true })
+  voiceChannelUrl: string | null;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  voiceChannelUrl: string;
-
-  @Field(() => String)
-  @Column()
   location: string;
 
   @Field(() => Boolean)
@@ -73,17 +73,13 @@ export class Session extends BaseEntity {
   comments: SessionComment[];
 
   @Field(() => String)
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt: Date;
 
   @Field(() => String)
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt: Date;
 }
 
-// TODO MUST: Add field
-// isCancelled
-// Any other states?
-
-// if something changes to a session the attendees are also notified
+// TODO: if something changes to a session the attendees are also notified
 // cron jobs are cancelled and rescheduled

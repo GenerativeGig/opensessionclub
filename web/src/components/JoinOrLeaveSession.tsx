@@ -22,12 +22,13 @@ export function JoinOrLeaveSession({ session }: JoinOrLeaveSessionProps) {
     attendeeLimit,
     timeStatus,
     actorIsPartOfSession,
+    isCancelled,
   } = session;
 
   const allowJoin = () => {
     const sessionHasSpots = numberOfAttendees < attendeeLimit;
     const isPast = timeStatus === TimeStatus.PAST;
-    return !actorIsPartOfSession && sessionHasSpots && !isPast;
+    return !actorIsPartOfSession && sessionHasSpots && !isPast && !isCancelled;
   };
 
   if (allowJoin()) {

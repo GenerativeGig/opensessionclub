@@ -42,12 +42,24 @@ export function ActorDetails() {
 
     const isOwnDetails = meData?.me?.id === parseInt(id);
 
+    const weekday = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    const createdAtDate = new Date(parseInt(createdAt));
+
     return (
       <div>
         <RouteTitle>{name}</RouteTitle>
-        <div className="py-6">{`Member since ${new Date(
-          createdAt
-        ).toLocaleDateString()}.`}</div>
+        <div className="py-6">{`Member since ${
+          weekday[createdAtDate.getDay()]
+        } ${createdAtDate.toLocaleDateString()}.`}</div>
         {isOwnDetails && <ForgetMe />}
       </div>
     );

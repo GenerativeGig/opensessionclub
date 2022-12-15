@@ -26,14 +26,9 @@ import { SessionCommentResolver } from "./resolvers/sessionComment.resolver";
 import { loginDiscordClient } from "./discord/discordClient";
 import { request } from "undici";
 import { Discord } from "./entities/discord.entity";
-// import { Session } from "./entities/session.entity";
-// import { ActorSession } from "./entities/actorSession.entity";
 
 const main = async () => {
   await dataSource.initialize();
-  // await dataSource.runMigrations();
-  // await ActorSession.delete({});
-  // await Session.delete({});
   const app = express();
 
   app.use(

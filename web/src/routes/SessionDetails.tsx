@@ -1,4 +1,3 @@
-import { NoSymbolIcon } from "@heroicons/react/24/solid";
 import { useParams } from "react-router-dom";
 import { ActorLink } from "../components/ActorLink";
 import { Cancelled } from "../components/Cancelled";
@@ -93,7 +92,7 @@ export function SessionDetails() {
         </div>
         <div className="my-3 mx-1 break-words">{text}</div>
         <div className="self-end flex">
-          {location !== "" && <Location location={location} />}
+          {location && <Location location={location} />}
           <NumberOfAttendees
             numberOfAttendees={numberOfAttendees}
             attendeeLimit={attendeeLimit}

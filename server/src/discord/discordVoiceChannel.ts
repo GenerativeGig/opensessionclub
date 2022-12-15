@@ -11,25 +11,29 @@ export interface CreateVoiceChannelProps {
   title: string;
 }
 
-export async function createVoiceChannel({
-  sessionId,
-  title,
-}: CreateVoiceChannelProps) {
+function getGuild() {
   if (DISCORD_GUILD_ID === undefined) {
     console.error("DISCORD_GUILD_ID is undefined");
     return;
   }
-  const guild = discordClient.guilds.cache.get(DISCORD_GUILD_ID);
+
+  return discordClient.guilds.cache.get(DISCORD_GUILD_ID);
+}
+
+export async function createVoiceChannel({
+  sessionId,
+  title,
+}: CreateVoiceChannelProps) {
+  // get creators discord user id NO
+  // Only create the discord voice channel here with none being able to view it (except for admins DO LATER)
+  // Then link to the discord voice channel in the session
+  // If someone leaves the session, remove them from the allowed users
+  const guild = getGuild();
 
   if (guild === undefined) {
     console.error("guild is undefined");
     return;
   }
-
-  // get creators discord user id NO
-  // Only create the discord voice channel here with none being able to view it (except for admins DO LATER)
-  // Then link to the discord voice channel in the session
-  // If someone leaves the session, remove them from the allowed users
 
   const everyoneRole = guild.roles.everyone;
 
@@ -54,21 +58,33 @@ export async function createVoiceChannel({
   return await guild.invites.create(channel, { maxAge: 0 });
 }
 
-export async function joinVoiceChannel(
-  discordUserId: string,
-  voiceChannelId: string
-) {
-  if (DISCORD_GUILD_ID === undefined) {
-    console.error("DISCORD_GUILD_ID is undefined");
-    return;
-  }
-  const guild = discordClient.guilds.cache.get(DISCORD_GUILD_ID);
+export async function deleteVoiceChannel(voiceChannelId: string) {
+  const guild = getGuild();
 
   if (guild === undefined) {
     console.error("guild is undefined");
     return;
   }
 
+  // TODO: Return DiscordResult -> error / success
+
+  try {
+    await guild.channels.delete(voiceChannelId);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function joinVoiceChannel(
+  discordUserId: string,
+  voiceChannelId: string
+) {
+  const guild = getGuild();
+
+  if (guild === undefined) {
+    console.error("guild is undefined");
+    return;
+  }
   const voiceChannel = guild.channels.cache.get(voiceChannelId);
 
   if (voiceChannel === undefined) {
@@ -93,11 +109,7 @@ export async function leaveVoiceChannel(
   discordUserId: string,
   voiceChannelId: string
 ) {
-  if (DISCORD_GUILD_ID === undefined) {
-    console.error("DISCORD_GUILD_ID is undefined");
-    return;
-  }
-  const guild = discordClient.guilds.cache.get(DISCORD_GUILD_ID);
+  const guild = getGuild();
 
   if (guild === undefined) {
     console.error("guild is undefined");

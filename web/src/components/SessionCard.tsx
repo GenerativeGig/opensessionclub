@@ -63,7 +63,7 @@ export function SessionCard({
       <div className="flex justify-between items-center">
         <ActorLink actor={creator} />
         <div className="self-end flex items-center justify-around">
-          {location !== "" && <Location location={location} />}
+          {location && <Location location={location} />}
           <NumberOfAttendees
             numberOfAttendees={numberOfAttendees}
             attendeeLimit={attendeeLimit}

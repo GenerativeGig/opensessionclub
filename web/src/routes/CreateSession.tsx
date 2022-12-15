@@ -18,14 +18,14 @@ export function CreateSession() {
       <Formik
         initialValues={{
           title: "",
-          text: "",
+          text: null,
           startDate: "",
           startTime: "",
           stopDate: "",
           stopTime: "",
           attendeeLimit: 5,
           isRemote: true,
-          location: "",
+          location: null,
         }}
         onSubmit={async (
           {
