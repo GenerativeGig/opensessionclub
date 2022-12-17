@@ -1,4 +1,4 @@
-mutation CreateSessionComment($sessionId: Int!, $text: JSON!) {
+mutation CreateSessionComment($sessionId: Int!, $text: String!) {
   createSessionComment(sessionId: $sessionId, text: $text) {
     id
   }

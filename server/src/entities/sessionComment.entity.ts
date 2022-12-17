@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import JSON from "graphql-type-json";
 import {
   BaseEntity,
   Column,
@@ -19,9 +18,9 @@ export class SessionComment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => JSON)
-  @Column({ type: "json" })
-  text: JSON;
+  @Field(() => String)
+  @Column()
+  text: string;
 
   @Field(() => Int)
   @Column()

@@ -38,7 +38,7 @@ export function Header() {
   }
 
   return (
-    <header className="bg-slate-700 p-4 sticky top-0 flex justify-between w-full">
+    <header className="bg-slate-700 p-4 sticky top-0 flex justify-between w-full z-50">
       <div>
         <Link to="/">
           <span className="text-4xl">Open Session Club</span>

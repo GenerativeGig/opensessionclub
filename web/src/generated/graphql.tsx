@@ -14,7 +14,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  JSON: any;
 };
 
 export type Actor = {
@@ -77,7 +76,7 @@ export type MutationCreateSessionArgs = {
 
 export type MutationCreateSessionCommentArgs = {
   sessionId: Scalars['Int'];
-  text: Scalars['JSON'];
+  text: Scalars['String'];
 };
 
 
@@ -132,7 +131,7 @@ export type MutationUpdateSessionArgs = {
 
 export type MutationUpdateSessionCommentArgs = {
   id: Scalars['Int'];
-  text: Scalars['JSON'];
+  text: Scalars['String'];
 };
 
 export type PaginatedOngoingSessions = {
@@ -225,7 +224,7 @@ export type SessionComment = {
   creator: Actor;
   id: Scalars['Int'];
   sessionId: Scalars['Int'];
-  text: Scalars['JSON'];
+  text: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -273,7 +272,7 @@ export type CreateSessionMutation = { __typename?: 'Mutation', createSession: bo
 
 export type CreateSessionCommentMutationVariables = Exact<{
   sessionId: Scalars['Int'];
-  text: Scalars['JSON'];
+  text: Scalars['String'];
 }>;
 
 
@@ -358,7 +357,7 @@ export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: bo
 
 export type UpdateSessionCommentMutationVariables = Exact<{
   id: Scalars['Int'];
-  text: Scalars['JSON'];
+  text: Scalars['String'];
 }>;
 
 
@@ -404,7 +403,7 @@ export type SessionCommentsQueryVariables = Exact<{
 }>;
 
 
-export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: any, sessionId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> | null };
+export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: string, sessionId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> | null };
 
 export type UpcomingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -500,7 +499,7 @@ export function useCreateSessionMutation() {
   return Urql.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument);
 };
 export const CreateSessionCommentDocument = gql`
-    mutation CreateSessionComment($sessionId: Int!, $text: JSON!) {
+    mutation CreateSessionComment($sessionId: Int!, $text: String!) {
   createSessionComment(sessionId: $sessionId, text: $text) {
     id
   }
@@ -614,7 +613,7 @@ export function useUpdateSessionMutation() {
   return Urql.useMutation<UpdateSessionMutation, UpdateSessionMutationVariables>(UpdateSessionDocument);
 };
 export const UpdateSessionCommentDocument = gql`
-    mutation UpdateSessionComment($id: Int!, $text: JSON!) {
+    mutation UpdateSessionComment($id: Int!, $text: String!) {
   updateSessionComment(id: $id, text: $text)
 }
     `;

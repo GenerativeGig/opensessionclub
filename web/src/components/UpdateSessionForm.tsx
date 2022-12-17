@@ -1,49 +1,74 @@
-import Placeholder from "@tiptap/extension-placeholder";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Form, Formik } from "formik";
+import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { InputField } from "../components/InputField";
-import { RouteTitle } from "../components/RouteTitle";
-import { useCreateSessionMutation } from "../generated/graphql";
-import { useIsAuthenticated } from "../utils/useIsAuthenticated";
+import { Session, useUpdateSessionMutation } from "../generated/graphql";
+import { addMissingZeros } from "../utils/addMissingZeros";
+import { InputField } from "./InputField";
+import { RouteTitle } from "./RouteTitle";
 
-export function CreateSession() {
-  useIsAuthenticated();
+export interface UpdateSessionFormProps {
+  session: Session;
+}
 
-  const [, createSession] = useCreateSessionMutation();
-
+export function UpdateSessionForm({ session }: UpdateSessionFormProps) {
   const navigate = useNavigate();
 
+  const [, updateSession] = useUpdateSessionMutation();
+
+  const { id, title, text, start, stop, attendeeLimit, isRemote, location } =
+    session;
+
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "text (optional)",
-        emptyEditorClass:
-          "before:float-left before:h-0 before:content-[attr(data-placeholder)] before:pointer-events-none text-[#9ca3af]",
-      }),
-    ],
+    extensions: [StarterKit],
     editorProps: {
       attributes: {
         class: "border-solid border m-2 p-1",
       },
     },
+    content: text,
   });
+
+  const startDate = new Date(parseInt(start));
+  const stopDate = new Date(parseInt(stop));
+  const formattedStartDate =
+    startDate.getFullYear() +
+    "-" +
+    addMissingZeros(startDate.getMonth() + 1) +
+    "-" +
+    addMissingZeros(startDate.getDate());
+
+  const formattedStopDate =
+    stopDate.getFullYear() +
+    "-" +
+    addMissingZeros(stopDate.getMonth() + 1) +
+    "-" +
+    addMissingZeros(stopDate.getDate());
+
+  const formattedStartTime =
+    addMissingZeros(startDate.getHours()) +
+    ":" +
+    addMissingZeros(startDate.getMinutes());
+
+  const formattedStopTime =
+    addMissingZeros(stopDate.getHours()) +
+    ":" +
+    addMissingZeros(stopDate.getMinutes());
 
   return (
     <>
-      <RouteTitle>Create your Session</RouteTitle>
+      <RouteTitle>Edit your Session</RouteTitle>
       <Formik
         initialValues={{
-          title: "",
-          startDate: "",
-          startTime: "",
-          stopDate: "",
-          stopTime: "",
-          attendeeLimit: 5,
-          isRemote: true,
-          location: null,
+          title,
+          text,
+          startDate: formattedStartDate,
+          startTime: formattedStartTime,
+          stopDate: formattedStopDate,
+          stopTime: formattedStopTime,
+          attendeeLimit,
+          isRemote,
+          location,
         }}
         onSubmit={async (
           {
@@ -97,7 +122,8 @@ export function CreateSession() {
 
           const text = editor?.getHTML();
 
-          const { error } = await createSession({
+          const { error } = await updateSession({
+            id,
             input: {
               title,
               text: text || null,
@@ -110,15 +136,16 @@ export function CreateSession() {
           });
 
           if (!error) {
-            navigate("/sessions/upcoming");
+            navigate(`/session/${id}`);
+            navigate(0);
           }
         }}
       >
-        {({ isSubmitting, values: { isRemote } }) => (
+        {({ isSubmitting }) => (
           <Form className="h-full w-full flex flex-col items-center">
-            <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-pink-500">
+            <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-green-500">
               <div className="p-2 flex flex-col items-start">
-                <InputField name="title" label="Title" placeholder="title" />
+                <InputField name="title" label="Title" placeholder="title" />{" "}
                 <div className="flex items-center w-full">
                   <label htmlFor="text">Text</label>
                   <EditorContent
@@ -159,9 +186,9 @@ export function CreateSession() {
                 />
                 <button
                   type="submit"
-                  className="self-end bg-pink-600 hover:bg-pink-500"
+                  className="self-end bg-green-600 hover:bg-green-500"
                 >
-                  Create Session
+                  Save
                 </button>
               </div>
             </div>

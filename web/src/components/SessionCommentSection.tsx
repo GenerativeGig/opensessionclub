@@ -28,7 +28,7 @@ export function SessionCommentSection({
 
   if (data && !fetching) {
     return (
-      <div className="py-5">
+      <div className="p-16">
         <h2 className="text-xl text-center p-5">
           <ChatBubbleLeftRightIcon className="h-5 w-5 inline" />
           Comments
@@ -38,7 +38,7 @@ export function SessionCommentSection({
           {data.sessionComments?.map((sessionComment) => (
             <li
               key={sessionComment.id}
-              className={`m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800 border-solid border-2 border-slate-600`}
+              className={`m-1 py-5 first:mt-2 last:mb-2 w-full rounded-md`}
             >
               <SessionCommentCard sessionComment={sessionComment} me={me} />
             </li>

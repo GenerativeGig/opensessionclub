@@ -1,3 +1,5 @@
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { Link } from "react-router-dom";
 import { Session } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
@@ -23,6 +25,13 @@ export function SessionCard({
   timeStatus,
   creator,
 }: Session) {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: textSnippet,
+    editable: false,
+    editorProps: { attributes: { class: "p-4" } },
+  });
+
   return (
     <article className="flex flex-col">
       <div className="flex justify-between">
@@ -46,18 +55,15 @@ export function SessionCard({
             : SessionDateTimeKind.Compact
         }
       />
-      <p className="m-3 break-words">
-        {textSnippet}
+      <p className="flex flex-col">
+        <EditorContent editor={editor} />
         {hasMoreText && (
-          <>
-            ...
-            <Link
-              to={`/session/${id}`}
-              className="text-teal-500 hover:text-teal-400 ml-2"
-            >
-              read more
-            </Link>
-          </>
+          <Link
+            to={`/session/${id}`}
+            className="text-teal-500 hover:text-teal-400 ml-2 self-end"
+          >
+            read more
+          </Link>
         )}
       </p>
       <div className="flex justify-between items-center">

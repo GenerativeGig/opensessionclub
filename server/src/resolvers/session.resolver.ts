@@ -25,6 +25,7 @@ import { Session } from "../entities/session.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
 import { SessionComment } from "../entities/sessionComment.entity";
+import parse from "node-html-parser";
 
 enum TimeStatus {
   PAST = "PAST",
@@ -74,23 +75,58 @@ class PaginatedPastSessions {
   hasMore: boolean;
 }
 
+function textSnippetHelper(text: string) {
+  const textHTML = parse(text);
+
+  const maxCharacterCount = 250;
+
+  let textSnippet = "";
+  let characterCount = 0;
+
+  let hasMore = false;
+
+  textHTML.childNodes.forEach((node, index) => {
+    if (index >= 3) {
+      hasMore = true;
+      return;
+    }
+
+    if (node.text === "") {
+      return;
+    }
+
+    if (characterCount + node.text.length > maxCharacterCount) {
+      textSnippet += `<p>${node.text.slice(
+        0,
+        maxCharacterCount - characterCount
+      )}</p>`;
+
+      characterCount += node.text.slice(
+        0,
+        maxCharacterCount - characterCount
+      ).length;
+
+      hasMore = true;
+      return;
+    } else {
+      textSnippet += node.toString();
+
+      characterCount += node.text.length;
+    }
+  });
+  return { textSnippet, hasMore };
+}
+
 @Resolver(Session)
 export class SessionResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() { text }: Session) {
-    if (!text) {
-      return "";
-    }
-    return text.slice(0, 250).trim();
+    return textSnippetHelper(text).textSnippet;
   }
 
   @FieldResolver(() => Boolean)
   hasMoreText(@Root() { text }: Session) {
-    if (!text) {
-      return false;
-    }
-
-    return text.length > 250 + 1;
+    return textSnippetHelper(text).hasMore;
   }
 
   @FieldResolver(() => Int)
@@ -616,3 +652,5 @@ export class SessionResolver {
 // TODO MUST: Try joining a voice channel with a actor not part of the discord guild
 // Make sure the voice channel created private, only users on a whitelist get in
 // Or if that doesn't work, everyone with the link can join
+
+// TODO MUST: Sanitize user inputs -> sanitize-html

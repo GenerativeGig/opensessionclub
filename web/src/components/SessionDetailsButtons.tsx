@@ -14,6 +14,7 @@ import {
 } from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 import { JoinOrLeaveSession } from "./JoinOrLeaveSession";
+import { TimeStatus } from "./TimeStatus";
 
 export interface SessionDetailsButtonsProps {
   session: Session;
@@ -32,13 +33,16 @@ export function SessionDetailsButtons({
   const [, deleteSession] = useDeleteSessionMutation();
   const [, joinVoiceChannel] = useJoinSessionVoiceChannelMutation();
 
-  const { id, isCancelled, actorIsPartOfSession, voiceChannelUrl } = session;
+  const { id, isCancelled, actorIsPartOfSession, voiceChannelUrl, timeStatus } =
+    session;
+
+  const isPast = timeStatus === TimeStatus.PAST;
 
   return (
     <>
       {isCreator ? (
         <div>
-          {!isCancelled && (
+          {!isCancelled && !isPast && (
             <button
               className="bg-rose-400 hover:bg-rose-300"
               onClick={async () => {
@@ -64,17 +68,19 @@ export function SessionDetailsButtons({
             <TrashIcon className="h-5 w-5 inline" />
             Delete
           </button>
-          <Link to={`/session/${id}/edit`}>
-            <button className="bg-yellow-500 hover:bg-yellow-400">
-              <PencilIcon className="h-5 w-5 inline" />
-              Edit
-            </button>
-          </Link>
+          {!isCancelled && !isPast && (
+            <Link to={`/session/${id}/edit`}>
+              <button className="bg-yellow-500 hover:bg-yellow-400">
+                <PencilIcon className="h-5 w-5 inline" />
+                Edit
+              </button>
+            </Link>
+          )}
         </div>
       ) : (
         <JoinOrLeaveSession session={session} />
       )}
-      {actorIsPartOfSession && voiceChannelUrl && (
+      {actorIsPartOfSession && !isPast && voiceChannelUrl && (
         <button
           onClick={async () => {
             const response = await joinVoiceChannel({ id });

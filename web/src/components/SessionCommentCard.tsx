@@ -1,5 +1,5 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +24,7 @@ export function SessionCommentCard({
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [textBeforeEdit, setTextBeforeEdit] = useState<
-    JSONContent | undefined
-  >();
+  const [textBeforeEdit, setTextBeforeEdit] = useState<string | undefined>();
 
   const [, deleteSessionComment] = useDeleteSessionCommentMutation();
   const [, updateSessionComment] = useUpdateSessionCommentMutation();
@@ -37,17 +35,34 @@ export function SessionCommentCard({
     extensions: [StarterKit],
     content: text,
     editable: isEditing,
+    editorProps: {
+      attributes: {
+        class: "m-1 p-1",
+      },
+    },
   });
 
   useEffect(() => {
     if (isEditing) {
-      setTextBeforeEdit(editor?.getJSON());
+      setTextBeforeEdit(editor?.getHTML());
+      editor?.setOptions({
+        editorProps: { attributes: { class: "border-solid border m-1 p-1" } },
+      });
+    } else {
+      editor?.setOptions({
+        editorProps: { attributes: { class: "m-1 p-1" } },
+      });
     }
 
     editor?.setEditable(isEditing);
   }, [editor, isEditing]);
 
   const isCreator = me && me.id === sessionComment.creator.id;
+
+  if (!editor) {
+    console.error("editor is null");
+    return <></>;
+  }
 
   return (
     <>
@@ -56,7 +71,7 @@ export function SessionCommentCard({
         onSubmit={async ({}, { setErrors }) => {
           setIsEditing(false);
 
-          const text = editor?.getJSON();
+          const text = editor?.getHTML();
 
           const { error } = await updateSessionComment({ id, text });
           console.log({ error });
@@ -70,7 +85,7 @@ export function SessionCommentCard({
                 {new Date(parseInt(createdAt)).toLocaleDateString()}
               </div>
             </div>
-            <div className="p-4">
+            <div className="py-4">
               <EditorContent editor={editor} />
             </div>
             {isEditing && (
@@ -86,9 +101,7 @@ export function SessionCommentCard({
                   className="bg-slate-500 hover:bg-slate-400"
                   onClick={() => {
                     setIsEditing(false);
-                    editor?.commands.setContent(
-                      textBeforeEdit ? textBeforeEdit : {}
-                    );
+                    editor?.commands.setContent(textBeforeEdit || null);
                   }}
                 >
                   Cancel
@@ -115,7 +128,7 @@ export function SessionCommentCard({
                   className="bg-yellow-500 hover:bg-yellow-400"
                   onClick={() => {
                     setIsEditing(true);
-                    setTextBeforeEdit(editor?.getJSON());
+                    setTextBeforeEdit(editor?.getHTML());
                   }}
                 >
                   <PencilIcon className="h-5 w-5 inline" />

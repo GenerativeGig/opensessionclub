@@ -7,7 +7,6 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import JSON from "graphql-type-json";
 import { dataSource } from "../dataSource";
 import { ActorSession } from "../entities/actorSession.entity";
 import { SessionComment } from "../entities/sessionComment.entity";
@@ -45,7 +44,7 @@ export class SessionCommentResolver {
   @Mutation(() => SessionComment)
   async createSessionComment(
     @Arg("sessionId", () => Int) sessionId: number,
-    @Arg("text", () => JSON) text: JSON,
+    @Arg("text", () => String) text: string,
     @Ctx() { req }: ApolloContext
   ) {
     // TODO: Make this a middleware or something similar
@@ -69,7 +68,7 @@ export class SessionCommentResolver {
   @UseMiddleware(isAuthenticated)
   async updateSessionComment(
     @Arg("id", () => Int) id: number,
-    @Arg("text", () => JSON) text: JSON,
+    @Arg("text", () => String) text: string,
     @Ctx() { req }: ApolloContext
   ) {
     const sessionComment = await SessionComment.findOne({
@@ -101,5 +100,3 @@ export class SessionCommentResolver {
 // You get the chance to delete your comments on your profile, even comments of session you are not part of
 // On your profile be able to delete and edit your comments / go to corresponding session
 // on your profile show a list of all my sessions and session comments?
-
-// TODO MUST: text formatting: sessionComment text and session text

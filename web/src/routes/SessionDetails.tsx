@@ -1,3 +1,5 @@
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { useParams } from "react-router-dom";
 import { ActorLink } from "../components/ActorLink";
 import { Cancelled } from "../components/Cancelled";
@@ -30,6 +32,12 @@ export function SessionDetails() {
   });
 
   const [{ data: meData, fetching: meFetching }] = useMeQuery();
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    editable: false,
+    editorProps: { attributes: { class: "p-4" } },
+  });
 
   if ((!sessionData && sessionFetching) || (!meData && meFetching)) {
     return <Loading />;
@@ -68,6 +76,8 @@ export function SessionDetails() {
 
     const isCreator = meData?.me?.id === creator.id;
 
+    editor?.commands.setContent(text || null);
+
     return (
       <article className="flex flex-col">
         <div className="flex justify-between items-center">
@@ -90,7 +100,7 @@ export function SessionDetails() {
             kind={SessionDateTimeKind.Full}
           />
         </div>
-        <div className="my-3 mx-1 break-words">{text}</div>
+        <EditorContent editor={editor} />
         <div className="self-end flex">
           {location && <Location location={location} />}
           <NumberOfAttendees

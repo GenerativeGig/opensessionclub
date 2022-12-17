@@ -19,19 +19,27 @@ export function CreateSessionComment({ sessionId }: CreateSessionCommentProps) {
       StarterKit,
       Placeholder.configure({
         placeholder: "Add a comment...",
-        includeChildren: true,
+        emptyEditorClass:
+          "before:float-left before:h-0 before:content-[attr(data-placeholder)] before:pointer-events-none text-[#9ca3af]",
       }),
     ],
     editorProps: {
-      attributes: { class: "first:content-[attr(data-placeholder)]" },
+      attributes: {
+        class: "border-solid border m-1 p-1",
+      },
     },
   });
+
+  if (editor === null) {
+    console.error("editor is null");
+    return <></>;
+  }
 
   return (
     <Formik
       initialValues={{}}
       onSubmit={async ({}, { setErrors }) => {
-        const text = editor?.getJSON();
+        const text = editor?.getHTML();
 
         const { error } = await createSessionComment({
           sessionId,
@@ -44,15 +52,12 @@ export function CreateSessionComment({ sessionId }: CreateSessionCommentProps) {
         }
       }}
     >
-      <Form className="flex flex-col p-4">
-        <EditorContent
-          className="rounded border-solid border-2 my-4 p-1 focus:outline-none"
-          editor={editor}
-        />
+      <Form className="flex flex-col">
+        <EditorContent editor={editor} />
         <button
           type="submit"
           className="self-end bg-pink-600 hover:bg-pink-500 disabled:bg-gray-500"
-          disabled={editor?.getText() === ""}
+          disabled={editor?.isEmpty}
         >
           Comment
         </button>
@@ -69,5 +74,3 @@ export function CreateSessionComment({ sessionId }: CreateSessionCommentProps) {
 
 // TODO IDEA: allow the actor to write notes on the left and right side of the website,
 // like taking notes when reading a book
-
-// TODO: Placeholder
