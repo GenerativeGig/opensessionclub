@@ -208,4 +208,8 @@ main().catch((error) => {
   - Styling
   - Improve client side caching? -> only update the data when needed, right now I am loading anew for each
     request, even for the same data "navigate(0)"
+  
+  Change of tech:
+  - Use Nest.js
+  - Use pnpm
 */

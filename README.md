@@ -6,7 +6,7 @@
 
 # Open Session Club
 
-Learn, teach and open your mind.
+Learn, share and open your mind
 
 ## Project Status
 

@@ -21,11 +21,19 @@ import { Signup } from "./routes/Signup";
 import { UpcomingSessions } from "./routes/UpcomingSessions";
 import { Wrapper } from "./routes/Wrapper";
 import { urqlClient } from "./utils/urqlClient";
+import { About } from "./routes/About";
+import { Impressum } from "./routes/Impressum";
+import { TermsOfService } from "./routes/TermsOfService";
+import { PrivacyPolicy } from "./routes/PrivacyPolicy";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Wrapper />}>
       <Route path="" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/impressum" element={<Impressum />} />
+      <Route path="/terms-of-service" element={<TermsOfService />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="sessions" element={<Sessions />}>
         <Route path="ongoing" element={<OngoingSessions />} />
         <Route path="upcoming" element={<UpcomingSessions />} />

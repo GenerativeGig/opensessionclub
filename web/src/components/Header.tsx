@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import OpenSessionClubLogoWhite from "../assets/open-session-club-logo-white.png";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
 
@@ -24,9 +25,11 @@ export function Header() {
   } else {
     authenticationJsx = (
       <>
-        <ActorLink actor={data.me} />
+        <div className="m-3">
+          <ActorLink actor={data.me} />
+        </div>
         <button
-          className="hover:text-slate-200"
+          className="hover:text-slate-200 p-0"
           onClick={() => {
             logout({});
           }}
@@ -38,13 +41,14 @@ export function Header() {
   }
 
   return (
-    <header className="bg-slate-700 p-4 sticky top-0 flex justify-between w-full z-50">
-      <div>
-        <Link to="/">
-          <span className="text-4xl">Open Session Club</span>
+    <header className="transparent p-4 fixed top-0 flex justify-between w-full z-0 pointer-events-none bg-none">
+      <div className="flex items-center">
+        <Link to="/" className="pointer-events-auto">
+          <div></div>
+          <img className="h-16 w-16" src={OpenSessionClubLogoWhite} />
         </Link>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center pointer-events-auto">
         {pathname.includes("/sessions") ? (
           <Link to="/create-session">
             <button className="bg-pink-600 hover:bg-pink-500">

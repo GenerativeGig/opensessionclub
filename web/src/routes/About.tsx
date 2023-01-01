@@ -1,19 +1,19 @@
 import {
-  ArrowLongLeftIcon,
-  ArrowLongRightIcon,
-  ExclamationTriangleIcon,
   ListBulletIcon,
-  MapPinIcon,
-  RocketLaunchIcon,
   SpeakerWaveIcon,
+  MapPinIcon,
+  ExclamationTriangleIcon,
+  RocketLaunchIcon,
+  ArrowLongRightIcon,
+  ArrowLongLeftIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { RouteTitle } from "../components/RouteTitle";
 
-export function Home() {
+export function About() {
   return (
     <article className="flex flex-col">
-      <RouteTitle>Open Session Club</RouteTitle>
+      <RouteTitle>About</RouteTitle>
       <div className="p-4">
         Open Session Club is your platform for learning and sharing ideas in an
         open format. Create your own or join a session to get started.
@@ -68,6 +68,3 @@ export function Home() {
     </article>
   );
 }
-
-// TODO: Add animations to make it more artsy -> header could have a changing background (gif)
-// -> Welcome page: the arrows should move back and forward

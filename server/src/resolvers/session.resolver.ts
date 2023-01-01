@@ -1,4 +1,5 @@
-import { Discord } from "../entities/discord.entity";
+import parse from "node-html-parser";
+import sanitize from "sanitize-html";
 import {
   Arg,
   Ctx,
@@ -21,11 +22,11 @@ import {
   joinVoiceChannel,
 } from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
+import { Discord } from "../entities/discord.entity";
 import { Session } from "../entities/session.entity";
+import { SessionComment } from "../entities/sessionComment.entity";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
-import { SessionComment } from "../entities/sessionComment.entity";
-import parse from "node-html-parser";
 
 enum TimeStatus {
   PAST = "PAST",
@@ -361,6 +362,8 @@ export class SessionResolver {
   ) {
     const session = await Session.create({
       ...input,
+      text: sanitize(input.text),
+      start: "<>sd",
       creatorId: req.session.actorId,
     }).save();
 
@@ -437,6 +440,7 @@ export class SessionResolver {
     @Arg("input") input: SessionInput,
     @Ctx() { req }: ApolloContext
   ) {
+    // sanitize html
     const session = await Session.findOne({
       where: { id, creatorId: req.session.actorId },
     });
@@ -454,7 +458,7 @@ export class SessionResolver {
     // TODO: if no longer remote -> delete voice channel and
     // if remote -> create voice channel
 
-    await Session.update({ id }, { ...input });
+    await Session.update({ id }, { ...input, text: sanitize(input.text) });
 
     return true;
   }
@@ -652,5 +656,3 @@ export class SessionResolver {
 // TODO MUST: Try joining a voice channel with a actor not part of the discord guild
 // Make sure the voice channel created private, only users on a whitelist get in
 // Or if that doesn't work, everyone with the link can join
-
-// TODO MUST: Sanitize user inputs -> sanitize-html

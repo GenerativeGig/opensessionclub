@@ -125,3 +125,6 @@ export function SessionDetails() {
   }
   return <></>;
 }
+
+// TODO: Add button to add to calendar automatically if part of session
+// TODO: Move all permissions checks for buttons to the backend
