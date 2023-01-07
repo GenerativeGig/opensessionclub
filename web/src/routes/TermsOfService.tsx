@@ -1,8 +1,6 @@
-import { RouteTitle } from "../components/RouteTitle";
-
 export function TermsOfService() {
-  return <RouteTitle>Terms of Service</RouteTitle>;
+  return <>123</>;
 }
 
-// TODO MUST: Terms of service?
+// TODO MUST: Terms of service? === Nutzungsbedienungen
 // I am not responsible for content uploaded by users

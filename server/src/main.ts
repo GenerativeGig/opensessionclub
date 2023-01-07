@@ -90,8 +90,6 @@ const main = async () => {
       where: { actorId: req.session.actorId },
     });
 
-    console.log({ discord });
-
     if (discord) {
       /*
 
@@ -162,8 +160,6 @@ const main = async () => {
 
         const oauthData = await tokenResponseData.body.json();
 
-        console.log(oauthData);
-
         const userResult = await request("https://discord.com/api/users/@me", {
           headers: {
             authorization: `${oauthData.token_type} ${oauthData.access_token}`,
@@ -172,14 +168,11 @@ const main = async () => {
 
         const userData = await userResult.body.json();
 
-        console.log(userData);
-        // if does not exist
-        const created = await Discord.create({
+        await Discord.create({
           ...oauthData,
           actorId: req.session.actorId,
           userId: userData.id,
         }).save();
-        console.log({ created });
       } catch (error) {
         console.error(error);
         res.redirect(frontendUrl);
@@ -212,4 +205,8 @@ main().catch((error) => {
   Change of tech:
   - Use Nest.js
   - Use pnpm
+
+  Updates of major versions:
+  - React Router to v6
+  - Vite to v4
 */

@@ -92,8 +92,19 @@ export async function joinVoiceChannel(
     return;
   }
 
-  const result = await voiceChannel.edit({
+  const everyoneRole = guild.roles.everyone;
+
+  await voiceChannel.edit({
     permissionOverwrites: [
+      {
+        type: 0,
+        id: everyoneRole.id,
+        deny: [
+          PermissionFlagsBits.CreateInstantInvite,
+          PermissionFlagsBits.ViewChannel,
+          PermissionFlagsBits.Connect,
+        ],
+      },
       {
         type: 1,
         id: discordUserId,
@@ -101,8 +112,6 @@ export async function joinVoiceChannel(
       },
     ],
   });
-
-  console.log({ result });
 }
 
 export async function leaveVoiceChannel(

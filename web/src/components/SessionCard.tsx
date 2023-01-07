@@ -79,3 +79,5 @@ export function SessionCard({
     </article>
   );
 }
+
+// TODO: Make it obvious which sessions you are apart of (visually)

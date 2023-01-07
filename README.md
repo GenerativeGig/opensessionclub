@@ -1,5 +1,10 @@
+<p align="center">
+  <a href="https://opensession.club">
+    <img width="150" src="./media/open-session-club-logo-white.png" alt="Open Session Club logo" />
+  </a>
+</p>
 <div align="center">
-  <a href="https://discord.gg/Wx8Bw77rwa">
+  <a href="https://discord.gg/Ms3HUBSKXv">
     <img alt="Discord" src="https://img.shields.io/discord/1045945194752782356?color=5865F2&logo=discord&logoColor=ffffff" />
   </a>
 </div>

@@ -90,12 +90,18 @@ export function SessionDetailsButtons({
                 return;
               }
 
-              window.location.replace(
+              window.open(
                 `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fdiscord-authorization&response_type=code&scope=identify`
               );
             }
 
-            window.location.replace(voiceChannelUrl);
+            const response2 = await joinVoiceChannel({ id });
+
+            if (!response2.data?.joinSessionVoiceChannel) {
+              console.error("Unable to join voice channel");
+            }
+
+            window.open(voiceChannelUrl);
           }}
           className="bg-[#5865F2] hover:bg-[#7983f2]"
         >

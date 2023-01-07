@@ -8,16 +8,15 @@ import {
   SpeakerWaveIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { RouteTitle } from "../components/RouteTitle";
 
 export function Home() {
   return (
     <article className="flex flex-col">
-      <RouteTitle>Open Session Club</RouteTitle>
       <div className="p-4">
         Open Session Club is your platform for learning and sharing ideas in an
         open format. Create your own or join a session to get started.
       </div>
+
       <div className="p-4 flex justify-between">
         <div>
           <div className="flex items-center px-1">
@@ -36,6 +35,7 @@ export function Home() {
             <li className="list-decimal">Profit</li>
           </ol>
         </div>
+
         <div>
           <div className="flex items-center px-1">
             <ExclamationTriangleIcon className="h-8 w-8" />
@@ -64,7 +64,6 @@ export function Home() {
         </Link>
         <ArrowLongLeftIcon className="h-16 w-16 m-4" />
       </div>
-      <h2></h2>
     </article>
   );
 }

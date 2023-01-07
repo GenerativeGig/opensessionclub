@@ -1,5 +1,4 @@
 import parse from "node-html-parser";
-import sanitize from "sanitize-html";
 import {
   Arg,
   Ctx,
@@ -20,6 +19,7 @@ import {
   createVoiceChannel,
   deleteVoiceChannel,
   joinVoiceChannel,
+  leaveVoiceChannel,
 } from "../discord/discordVoiceChannel";
 import { ActorSession } from "../entities/actorSession.entity";
 import { Discord } from "../entities/discord.entity";
@@ -362,8 +362,6 @@ export class SessionResolver {
   ) {
     const session = await Session.create({
       ...input,
-      text: sanitize(input.text),
-      start: "<>sd",
       creatorId: req.session.actorId,
     }).save();
 
@@ -418,14 +416,13 @@ export class SessionResolver {
         return;
       }
 
-      const { raw } = await Session.update(
+      await Session.update(
         { id: session.id },
         {
           voiceChannelId: voiceChannel.channelId,
           voiceChannelUrl: `${DISCORD_URL}${voiceChannel.code}`,
         }
       );
-      console.log({ raw });
       // Don't use jobs for creating the discord channel, too much overhead.
       // Use it for notifications to being with
     }
@@ -440,7 +437,6 @@ export class SessionResolver {
     @Arg("input") input: SessionInput,
     @Ctx() { req }: ApolloContext
   ) {
-    // sanitize html
     const session = await Session.findOne({
       where: { id, creatorId: req.session.actorId },
     });
@@ -458,7 +454,7 @@ export class SessionResolver {
     // TODO: if no longer remote -> delete voice channel and
     // if remote -> create voice channel
 
-    await Session.update({ id }, { ...input, text: sanitize(input.text) });
+    await Session.update({ id }, { ...input });
 
     return true;
   }
@@ -486,7 +482,6 @@ export class SessionResolver {
 
     await ActorSession.delete({
       sessionId: id,
-      actorId: req.session.actorId,
     });
 
     await Session.delete({
@@ -530,10 +525,6 @@ export class SessionResolver {
         voiceChannelUrl: null,
       }
     );
-
-    if (session.voiceChannelId) {
-      deleteVoiceChannel(session.voiceChannelId);
-    }
 
     return true;
   }
@@ -585,6 +576,11 @@ export class SessionResolver {
   ) {
     const session = await Session.findOne({ where: { id } });
 
+    if (!session) {
+      console.error("Session does not exist");
+      return false;
+    }
+
     if (session?.creatorId === req.session.actorId) {
       return false;
     }
@@ -603,7 +599,15 @@ export class SessionResolver {
     );
 
     // TODO: leave discord voice channel
-    // await leaveVoiceChannel();
+    const discord = await Discord.findOne({
+      where: { actorId: req.session.actorId },
+    });
+
+    if (!discord || !session.voiceChannelId) {
+      return true;
+    }
+
+    await leaveVoiceChannel(discord.userId, session.voiceChannelId);
 
     return true;
   }
@@ -652,7 +656,3 @@ export class SessionResolver {
     return true;
   }
 }
-
-// TODO MUST: Try joining a voice channel with a actor not part of the discord guild
-// Make sure the voice channel created private, only users on a whitelist get in
-// Or if that doesn't work, everyone with the link can join

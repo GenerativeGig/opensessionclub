@@ -1,7 +1,5 @@
-import { RouteTitle } from "../components/RouteTitle";
-
 export function PrivacyPolicy() {
-  return <RouteTitle>Privacy Policy</RouteTitle>;
+  return <>123</>;
 }
 
-// TODO MUST: What data do I save and use?
+// TODO MUST: What data do I save and use? === Datenschutz

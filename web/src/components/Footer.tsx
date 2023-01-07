@@ -10,7 +10,7 @@ export function Footer() {
         </Link>
         <a
           className="hover:text-blue-400"
-          href="https://discord.gg/Wx8Bw77rwa"
+          href="https://discord.gg/Ms3HUBSKXv"
           target="_blank"
         >
           Contact
@@ -33,8 +33,3 @@ export function Footer() {
     </footer>
   );
 }
-
-// TODO MUST:
-// (with email address: info@opensession.club (/info@opensessionclub.com as redirect)),
-// Make contact be a mailto link -> info@opensession.club
-// Flesh out the pages

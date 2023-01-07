@@ -96,7 +96,7 @@ export class SessionCommentResolver {
   }
 }
 
-// TODO MUST: If you had comments on session but left, can you still see your comments?
+// TODO MUST LATER: If you had comments on session but left, can you still see your comments?
 // You get the chance to delete your comments on your profile, even comments of session you are not part of
 // On your profile be able to delete and edit your comments / go to corresponding session
 // on your profile show a list of all my sessions and session comments?

@@ -8,12 +8,10 @@ import {
   ArrowLongLeftIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { RouteTitle } from "../components/RouteTitle";
 
 export function About() {
   return (
     <article className="flex flex-col">
-      <RouteTitle>About</RouteTitle>
       <div className="p-4">
         Open Session Club is your platform for learning and sharing ideas in an
         open format. Create your own or join a session to get started.
@@ -68,3 +66,5 @@ export function About() {
     </article>
   );
 }
+
+// TODO: Don't use the same as root route. Instead give other info here
