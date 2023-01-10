@@ -11,8 +11,6 @@
 
 # Open Session Club
 
-Learn, share and open your mind
-
 ## Project Status
 
 The MVP is being built.
