@@ -1,0 +1,5 @@
+mutation updateActor($input: ActorInput!) {
+  updateActor(input: $input) {
+    ...BasicActorResponse
+  }
+}

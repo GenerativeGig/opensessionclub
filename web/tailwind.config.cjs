@@ -6,5 +6,8 @@ module.exports = {
     },
     extend: {},
   },
+  variants: {
+    fill: ["hover"],
+  },
   plugins: [],
 };

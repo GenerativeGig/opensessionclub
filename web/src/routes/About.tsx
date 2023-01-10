@@ -20,9 +20,9 @@ export function About() {
         <div>
           <div className="flex items-center px-1">
             <ListBulletIcon className="h-8 w-8" />
-            <h2 className="text-3xl px-2">Steps</h2>
+            <h2 className="px-2">Steps</h2>
           </div>
-          <ol className="p-4">
+          <ol>
             <li className="list-decimal">Join or create a session</li>
             <li className="list-decimal">Converse in the comments</li>
             <li className="list-decimal">
@@ -37,19 +37,19 @@ export function About() {
         <div>
           <div className="flex items-center px-1">
             <ExclamationTriangleIcon className="h-8 w-8" />
-            <h2 className="text-3xl px-2">Important</h2>
+            <h2 className="px-2">Important</h2>
           </div>
-          <ol className="p-4">
+          <ol>
             <li className="list-disc">Don't be an asshole</li>
             <li className="list-disc">It's OK to leave an ongoing session</li>
           </ol>
         </div>
       </div>
 
-      <h2 className="text-3xl p-4"></h2>
+      <h2 className="p-4"></h2>
       <div className="flex items-center self-center">
         <RocketLaunchIcon className="h-8 w-8" />
-        <h2 className="text-3xl py-4 px-2">Get started</h2>
+        <h2 className="py-4 px-2">Get started</h2>
       </div>
       <div className="flex items-center self-center">
         <ArrowLongRightIcon className="h-16 w-16 m-4" />
@@ -62,7 +62,6 @@ export function About() {
         </Link>
         <ArrowLongLeftIcon className="h-16 w-16 m-4" />
       </div>
-      <h2></h2>
     </article>
   );
 }

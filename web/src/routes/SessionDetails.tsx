@@ -18,6 +18,7 @@ import { SessionDetailsButtons } from "../components/SessionDetailsButtons";
 import { TimeStatusTag } from "../components/TimeStatus";
 import { useMeQuery, useSessionQuery } from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
+import { Error } from "./Error";
 
 export function SessionDetails() {
   useIsAuthenticated();
@@ -50,7 +51,7 @@ export function SessionDetails() {
   if (sessionData && !sessionFetching && meData && !meFetching) {
     if (!sessionData.session) {
       console.log("session is undefined");
-      return <></>;
+      return <Error />;
     }
 
     if (!meData.me) {
@@ -80,10 +81,12 @@ export function SessionDetails() {
 
     return (
       <article className="flex flex-col">
-        <div className="flex justify-between items-center">
-          <RouteTitle>{title}</RouteTitle>
-          {isRemote && <Remote />}
-        </div>
+        <RouteTitle>{title}</RouteTitle>
+        {isRemote && (
+          <div className="self-end">
+            <Remote />
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <div>
             {isCancelled && (

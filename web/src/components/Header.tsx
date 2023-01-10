@@ -3,13 +3,11 @@ import OpenSessionClubLogoWhite from "../assets/open-session-club-logo-white.png
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { ActorLink } from "./ActorLink";
 
-function getRouteName(pathname: string) {
+function getRouteTitle(pathname: string) {
   const firstPartAfterSlash = pathname.split("/")[1];
   switch (firstPartAfterSlash) {
     case "":
       return "Open Session Club";
-    case "about":
-      return "About";
     case "impressum":
       return "Impressum";
     case "terms-of-service":
@@ -19,7 +17,7 @@ function getRouteName(pathname: string) {
     case "sessions":
       return "Sessions";
     default:
-      return "";
+      return null;
   }
 }
 
@@ -60,11 +58,13 @@ export function Header() {
     );
   }
 
+  const routeTitle = getRouteTitle(pathname);
+
   return (
     <div>
-      <h1 className="text-4xl break-words ml-24 my-7">
-        {getRouteName(pathname)}
-      </h1>
+      {routeTitle && (
+        <h1 className="text-4xl break-words ml-24 my-7">{routeTitle}</h1>
+      )}
       <header className="transparent p-4 fixed top-0 flex justify-between w-full z-0 pointer-events-none bg-none">
         <div className="flex items-center">
           <Link to="/" className="pointer-events-auto">
@@ -92,3 +92,10 @@ export function Header() {
     </div>
   );
 }
+
+// TODO: Make header no longer sticky/fixed. This looks weird and broken when scrolling (since transparent).
+// Come up with a nice idea for having the h1
+// in the header though so that I save space
+
+// TODO: fetching checks for logoutMutation (are there others that I don't check)
+// Can the fetching check code be abstracted? Wrapped in my own hook

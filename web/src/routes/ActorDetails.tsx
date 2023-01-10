@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { FailedLoadingData } from "../components/FailedLoadingData";
-import { ForgetMe } from "../components/ForgetMe";
 import { Loading } from "../components/Loading";
 import { RouteTitle } from "../components/RouteTitle";
 import { useActorQuery, useMeQuery } from "../generated/graphql";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
+import { Error } from "./Error";
+import { ActorSettings } from "../components/ActorSettings";
 
 export function ActorDetails() {
   useIsAuthenticated();
@@ -30,7 +31,7 @@ export function ActorDetails() {
   if (actorData && !actorFetching && meData && !meFetching) {
     if (!actorData.actor) {
       console.error("actor is undefined");
-      return <></>;
+      return <Error />;
     }
 
     if (!meData.me) {
@@ -57,12 +58,15 @@ export function ActorDetails() {
     return (
       <div>
         <RouteTitle>{name}</RouteTitle>
-        <div className="py-6">{`Member since ${
-          weekday[createdAtDate.getDay()]
-        } ${createdAtDate.toLocaleDateString()}.`}</div>
-        {isOwnDetails && <ForgetMe />}
+        <div className="py-6">
+          {`Member since ${
+            weekday[createdAtDate.getDay()]
+          } ${createdAtDate.toLocaleDateString()}.`}
+        </div>
+        {isOwnDetails && <ActorSettings actor={actorData.actor} />}
       </div>
     );
   }
+
   return <></>;
 }

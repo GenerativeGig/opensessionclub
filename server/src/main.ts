@@ -26,6 +26,7 @@ import { SessionCommentResolver } from "./resolvers/sessionComment.resolver";
 import { loginDiscordClient } from "./discord/discordClient";
 import { request } from "undici";
 import { Discord } from "./entities/discord.entity";
+import { encrypt } from "./utils/Crypto";
 
 const main = async () => {
   await dataSource.initialize();
@@ -89,7 +90,10 @@ const main = async () => {
     const discord = await Discord.findOne({
       where: { actorId: req.session.actorId },
     });
-
+    // TODO: If discord is there but the token is expired? Then I have to use refresh_token
+    // if it is not yet expired
+    // TEST: What happens if I change the contents of token / refresh_token?
+    // SEEMS OK RIGHT NOW, KEEP AN EYE ON THIS
     if (discord) {
       /*
 
@@ -170,6 +174,8 @@ const main = async () => {
 
         await Discord.create({
           ...oauthData,
+          access_token: encrypt(oauthData.access_token),
+          refresh_token: encrypt(oauthData.refresh_token),
           actorId: req.session.actorId,
           userId: userData.id,
         }).save();

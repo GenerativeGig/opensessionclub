@@ -85,7 +85,7 @@ export function SessionCommentCard({
                 {new Date(parseInt(createdAt)).toLocaleDateString()}
               </div>
             </div>
-            <div className="py-4">
+            <div className="pt-4">
               <EditorContent editor={editor} />
             </div>
             {isEditing && (

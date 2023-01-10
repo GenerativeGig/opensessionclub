@@ -2,6 +2,7 @@ fragment FullActor on Actor {
   id
   name
   email
+  hasDiscordIntegration
   createdAt
   updatedAt
 }

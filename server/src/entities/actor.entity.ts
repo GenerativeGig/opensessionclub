@@ -29,7 +29,6 @@ export class Actor extends BaseEntity {
   @Column({ unique: true })
   lowerCaseName: string;
 
-  @Field(() => String)
   @Column({ unique: true })
   email: string;
 

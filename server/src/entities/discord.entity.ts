@@ -39,3 +39,5 @@ export class Discord extends BaseEntity {
   @UpdateDateColumn({ type: "timestamptz" })
   updatedAt: Date;
 }
+
+// TODO: Make Open Session Club a PWA

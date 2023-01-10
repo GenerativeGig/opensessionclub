@@ -20,6 +20,9 @@
   input {
     color-scheme: light;
   }
+  h2 {
+    font-size: xx-large;
+  }
 
   * {
     scrollbar-color: #cbd5e1 #334155;

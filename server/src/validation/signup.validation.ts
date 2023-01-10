@@ -1,4 +1,4 @@
-export function validateSignup(name: string, email: string, password: string) {
+export function validateSignup(name: string, email: string, password?: string) {
   const startWithWhitespace = /^\s+/;
   const endsWithWhitespace = /\s+$/;
   if (name.length <= 2) {
@@ -46,7 +46,7 @@ export function validateSignup(name: string, email: string, password: string) {
     ];
   }
 
-  if (password.length <= 7) {
+  if (password && password.length <= 7) {
     return [
       {
         field: "password",

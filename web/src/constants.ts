@@ -1,5 +1,5 @@
-export const DISCORD_CLIENT_ID: string | undefined = import.meta.env
-  .VITE_DISCORD_CLIENT_ID;
+export const DISCORD_AUTH_URL: string | undefined = import.meta.env
+  .VITE_DISCORD_AUTH_URL;
 
 export const IMPRESSUM_NAME: string | undefined = import.meta.env
   .VITE_IMPRESSUM_NAME;

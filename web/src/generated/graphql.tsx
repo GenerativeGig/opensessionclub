@@ -20,6 +20,7 @@ export type Actor = {
   __typename?: 'Actor';
   createdAt: Scalars['String'];
   email: Scalars['String'];
+  hasDiscordIntegration?: Maybe<Scalars['Boolean']>;
   id: Scalars['Int'];
   name: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -29,6 +30,11 @@ export type ActorFieldError = {
   __typename?: 'ActorFieldError';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type ActorInput = {
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type ActorResponse = {
@@ -41,8 +47,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   cancelSession: Scalars['Boolean'];
   changePassword: ActorResponse;
+  changePasswordLoggedIn: ActorResponse;
   createSession: Scalars['Boolean'];
   createSessionComment: SessionComment;
+  deleteDiscordIntegration: Scalars['Boolean'];
   deleteSession: Scalars['Boolean'];
   deleteSessionComment: Scalars['Boolean'];
   forgetMe: Scalars['Boolean'];
@@ -53,6 +61,7 @@ export type Mutation = {
   login: ActorResponse;
   logout: Scalars['Boolean'];
   signup: ActorResponse;
+  updateActor: ActorResponse;
   updateSession: Scalars['Boolean'];
   updateSessionComment: Scalars['Boolean'];
 };
@@ -66,6 +75,12 @@ export type MutationCancelSessionArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationChangePasswordLoggedInArgs = {
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
 };
 
 
@@ -120,6 +135,11 @@ export type MutationSignupArgs = {
   email: Scalars['String'];
   name: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateActorArgs = {
+  input: ActorInput;
 };
 
 
@@ -244,9 +264,9 @@ export type BasicActorErrorFragment = { __typename?: 'ActorFieldError', field: s
 
 export type BasicActorResponseFragment = { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null };
 
-export type FullActorFragment = { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string };
+export type FullActorFragment = { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string };
 
-export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } };
+export type FullSessionFragment = { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } };
 
 export type CancelSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -263,6 +283,14 @@ export type ChangePasswordMutationVariables = Exact<{
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
 
+export type ChangePasswordLoggedInMutationVariables = Exact<{
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ChangePasswordLoggedInMutation = { __typename?: 'Mutation', changePasswordLoggedIn: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+
 export type CreateSessionMutationVariables = Exact<{
   input: SessionInput;
 }>;
@@ -277,6 +305,11 @@ export type CreateSessionCommentMutationVariables = Exact<{
 
 
 export type CreateSessionCommentMutation = { __typename?: 'Mutation', createSessionComment: { __typename?: 'SessionComment', id: number } };
+
+export type DeleteDiscordIntegrationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteDiscordIntegrationMutation = { __typename?: 'Mutation', deleteDiscordIntegration: boolean };
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -347,6 +380,13 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
 
+export type UpdateActorMutationVariables = Exact<{
+  input: ActorInput;
+}>;
+
+
+export type UpdateActorMutation = { __typename?: 'Mutation', updateActor: { __typename?: 'ActorResponse', errors?: Array<{ __typename?: 'ActorFieldError', field: string, message: string }> | null, actor?: { __typename?: 'Actor', id: number, name: string } | null } };
+
 export type UpdateSessionMutationVariables = Exact<{
   id: Scalars['Int'];
   input: SessionInput;
@@ -368,12 +408,12 @@ export type ActorQueryVariables = Exact<{
 }>;
 
 
-export type ActorQuery = { __typename?: 'Query', actor?: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } | null };
+export type ActorQuery = { __typename?: 'Query', actor?: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } };
 
 export type OngoingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -381,7 +421,7 @@ export type OngoingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type OngoingSessionsQuery = { __typename?: 'Query', ongoingSessions: { __typename?: 'PaginatedOngoingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } }> } };
 
 export type PastSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -389,21 +429,21 @@ export type PastSessionsQueryVariables = Exact<{
 }>;
 
 
-export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type PastSessionsQuery = { __typename?: 'Query', pastSessions: { __typename?: 'PaginatedPastSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } }> } };
 
 export type SessionQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } } | null };
+export type SessionQuery = { __typename?: 'Query', session?: { __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } } | null };
 
 export type SessionCommentsQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: string, sessionId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> | null };
+export type SessionCommentsQuery = { __typename?: 'Query', sessionComments?: Array<{ __typename?: 'SessionComment', id: number, text: string, sessionId: number, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } }> | null };
 
 export type UpcomingSessionsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -411,7 +451,7 @@ export type UpcomingSessionsQueryVariables = Exact<{
 }>;
 
 
-export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, createdAt: string, updatedAt: string } }> } };
+export type UpcomingSessionsQuery = { __typename?: 'Query', upcomingSessions: { __typename?: 'PaginatedUpcomingSessions', hasMore: boolean, sessions: Array<{ __typename?: 'Session', id: number, title: string, textSnippet: string, hasMoreText: boolean, text?: string | null, start: string, stop: string, numberOfAttendees: number, attendeeLimit: number, isRemote: boolean, isCancelled: boolean, voiceChannelUrl?: string | null, location?: string | null, actorIsPartOfSession: boolean, timeStatus: string, createdAt: string, updatedAt: string, creator: { __typename?: 'Actor', id: number, name: string, email: string, hasDiscordIntegration?: boolean | null, createdAt: string, updatedAt: string } }> } };
 
 export const BasicActorErrorFragmentDoc = gql`
     fragment BasicActorError on ActorFieldError {
@@ -441,6 +481,7 @@ export const FullActorFragmentDoc = gql`
   id
   name
   email
+  hasDiscordIntegration
   createdAt
   updatedAt
 }
@@ -489,6 +530,17 @@ export const ChangePasswordDocument = gql`
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
 };
+export const ChangePasswordLoggedInDocument = gql`
+    mutation ChangePasswordLoggedIn($oldPassword: String!, $newPassword: String!) {
+  changePasswordLoggedIn(oldPassword: $oldPassword, newPassword: $newPassword) {
+    ...BasicActorResponse
+  }
+}
+    ${BasicActorResponseFragmentDoc}`;
+
+export function useChangePasswordLoggedInMutation() {
+  return Urql.useMutation<ChangePasswordLoggedInMutation, ChangePasswordLoggedInMutationVariables>(ChangePasswordLoggedInDocument);
+};
 export const CreateSessionDocument = gql`
     mutation CreateSession($input: SessionInput!) {
   createSession(input: $input)
@@ -508,6 +560,15 @@ export const CreateSessionCommentDocument = gql`
 
 export function useCreateSessionCommentMutation() {
   return Urql.useMutation<CreateSessionCommentMutation, CreateSessionCommentMutationVariables>(CreateSessionCommentDocument);
+};
+export const DeleteDiscordIntegrationDocument = gql`
+    mutation DeleteDiscordIntegration {
+  deleteDiscordIntegration
+}
+    `;
+
+export function useDeleteDiscordIntegrationMutation() {
+  return Urql.useMutation<DeleteDiscordIntegrationMutation, DeleteDiscordIntegrationMutationVariables>(DeleteDiscordIntegrationDocument);
 };
 export const DeleteSessionDocument = gql`
     mutation DeleteSession($id: Int!) {
@@ -602,6 +663,17 @@ export const SignupDocument = gql`
 
 export function useSignupMutation() {
   return Urql.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument);
+};
+export const UpdateActorDocument = gql`
+    mutation updateActor($input: ActorInput!) {
+  updateActor(input: $input) {
+    ...BasicActorResponse
+  }
+}
+    ${BasicActorResponseFragmentDoc}`;
+
+export function useUpdateActorMutation() {
+  return Urql.useMutation<UpdateActorMutation, UpdateActorMutationVariables>(UpdateActorDocument);
 };
 export const UpdateSessionDocument = gql`
     mutation UpdateSession($id: Int!, $input: SessionInput!) {

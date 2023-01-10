@@ -5,6 +5,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  InputType,
   Int,
   Mutation,
   ObjectType,
@@ -26,6 +27,14 @@ import { Session } from "../entities/session.entity";
 import { Discord } from "../entities/discord.entity";
 import { In } from "typeorm";
 
+@InputType()
+class ActorInput {
+  @Field({ nullable: true })
+  name: string;
+  @Field({ nullable: true })
+  email: string;
+}
+
 @ObjectType()
 class ActorFieldError {
   @Field(() => String)
@@ -46,18 +55,40 @@ export class ActorResponse {
 
 @Resolver(Actor)
 export class ActorResolver {
-  @FieldResolver(() => String)
+  @FieldResolver(() => String, { nullable: true })
   email(@Root() actor: Actor, @Ctx() { req }: ApolloContext) {
     if (req.session.actorId === actor.id) {
       return actor.email;
     }
-    return "";
+
+    return null;
+  }
+
+  @FieldResolver(() => Boolean, { nullable: true })
+  async hasDiscordIntegration(
+    @Root() actor: Actor,
+    @Ctx() { req }: ApolloContext
+  ) {
+    if (req.session.actorId !== actor.id) {
+      return null;
+    }
+
+    const discord = await Discord.findOne({
+      where: { actorId: req.session.actorId },
+    });
+
+    if (!discord) {
+      return null;
+    }
+
+    return true;
   }
 
   @Query(() => Actor, { nullable: true })
   async actor(@Arg("id", () => Int) id: number) {
     return Actor.findOne({ where: { id } });
   }
+
   @Query(() => Actor)
   @UseMiddleware(isAuthenticated)
   me(@Ctx() { req }: ApolloContext) {
@@ -253,14 +284,118 @@ export class ActorResolver {
     return { actor };
   }
 
-  @Mutation(() => Boolean)
-  async forgetMe(@Ctx() ctx: ApolloContext) {
-    const actorId = ctx.req.session.actorId;
-    if (actorId === undefined) {
-      console.error("actorId is undefined");
-      return false;
+  @Mutation(() => ActorResponse)
+  @UseMiddleware(isAuthenticated)
+  async changePasswordLoggedIn(
+    @Arg("oldPassword", () => String) oldPassword: string,
+    @Arg("newPassword", () => String) newPassword: string,
+    @Ctx() { req }: ApolloContext
+  ) {
+    const actor = await Actor.findOne({ where: { id: req.session.actorId } });
+
+    if (!actor) {
+      return {
+        errors: [{ field: "newPassword", message: "Internal server error" }],
+      };
     }
 
+    if (!(await argon2.verify(actor?.password, oldPassword))) {
+      return {
+        errors: [
+          {
+            field: "oldPassword",
+            message: "password is incorrect",
+          },
+        ],
+      };
+    }
+
+    if (newPassword.length <= 7) {
+      return {
+        errors: [
+          {
+            field: "newPassword",
+            message: "password has to be at least 8 characters long",
+          },
+        ],
+      };
+    }
+
+    await Actor.update(
+      { id: req.session.actorId },
+      { password: await argon2.hash(newPassword) }
+    );
+
+    return { actor };
+  }
+
+  @Mutation(() => ActorResponse)
+  @UseMiddleware(isAuthenticated)
+  async updateActor(
+    @Arg("input") { name, email }: ActorInput,
+    @Ctx() { req }: ApolloContext
+  ) {
+    const errors = validateSignup(name, email);
+    if (errors) {
+      return { errors };
+    }
+
+    const lowerCaseName = name.toLowerCase();
+    const lowerCaseEmail = email.toLowerCase();
+
+    const sessionActor = await Actor.findOne({
+      where: { id: req.session.actorId },
+    });
+
+    if (!sessionActor) {
+      return {};
+    }
+
+    const actor = await Actor.findOne({
+      where: [{ lowerCaseName }, { lowerCaseEmail }],
+    });
+
+    if (name !== sessionActor.name && actor?.lowerCaseName === lowerCaseName) {
+      return { errors: [{ field: "name", message: "name is already taken" }] };
+    }
+
+    if (
+      email !== sessionActor.email &&
+      actor?.lowerCaseEmail === lowerCaseEmail
+    ) {
+      return {
+        errors: [{ field: "email", message: "email is already taken" }],
+      };
+    }
+
+    if (email !== sessionActor.email && name !== sessionActor.name) {
+      await Actor.update(
+        { id: req.session.actorId },
+        { email, lowerCaseEmail, name, lowerCaseName }
+      );
+      return { actor: { ...sessionActor, email, name } };
+    }
+
+    if (email !== sessionActor.email) {
+      await Actor.update(
+        { id: req.session.actorId },
+        { email, lowerCaseEmail }
+      );
+      return { actor: { ...sessionActor, email } };
+    }
+
+    if (name !== sessionActor.name) {
+      await Actor.update({ id: req.session.actorId }, { name, lowerCaseName });
+      return { actor: { ...sessionActor, name } };
+    }
+
+    return false;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async forgetMe(@Ctx() ctx: ApolloContext) {
+    const { actorId } = ctx.req.session;
     // TODO: Optimize database requests
     const createdSessions = await Session.findBy({ creatorId: actorId });
     const createdSessionsIds = createdSessions.map((session) => session.id);
@@ -273,6 +408,14 @@ export class ActorResolver {
     await Actor.delete({ id: actorId });
 
     await this.logout(ctx);
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async deleteDiscordIntegration(@Ctx() { req }: ApolloContext) {
+    await Discord.delete({ actorId: req.session.actorId });
 
     return true;
   }

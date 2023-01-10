@@ -1,34 +1,40 @@
 import { Link } from "react-router-dom";
+import { DiscordLogo } from "./DiscordLogo";
 import { GitHubLogo } from "./GitHubLogo";
 
 export function Footer() {
   return (
     <footer className="flex justify-around items-center bg-[#0d1526] p-4">
       <div className="flex gap-4 justify-between">
-        <Link to="/about" className="hover:text-blue-400">
-          About
-        </Link>
-        <a
-          className="hover:text-blue-400"
-          href="https://discord.gg/Ms3HUBSKXv"
-          target="_blank"
-        >
-          Contact
-        </a>
-        <Link to="/impressum" className="hover:text-blue-400">
+        <Link to="/impressum" className="hover:underline">
           Impressum
         </Link>
-        <Link to="/terms-of-service" className="hover:text-blue-400">
+        <Link to="/terms-of-service" className="hover:underline">
           Terms of Service
         </Link>
-        <Link to="/privacy-policy" className="hover:text-blue-400">
+        <Link to="/privacy-policy" className="hover:underline">
           Privacy Policy
         </Link>
       </div>
-      <div>
-        <a href="https://github.com/GenerativeGig/open" target="_blank">
-          <GitHubLogo />
-        </a>
+      <div className="flex gap-4">
+        <div>
+          <a
+            href="https://github.com/GenerativeGig/open"
+            target="_blank"
+            title="GitHub Repository"
+          >
+            <GitHubLogo />
+          </a>
+        </div>
+        <div>
+          <a
+            href="https://discord.gg/Ms3HUBSKXv"
+            target="_blank"
+            title="Discord Server"
+          >
+            <DiscordLogo />
+          </a>
+        </div>
       </div>
     </footer>
   );

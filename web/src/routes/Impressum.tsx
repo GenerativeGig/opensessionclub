@@ -9,7 +9,7 @@ import {
 
 export function Impressum() {
   return (
-    <div className="p-4">
+    <article className="p-4">
       <div>{IMPRESSUM_NAME}</div>
       <div>
         {IMPRESSUM_STREET} {IMPRESSUM_HOUSE_NUMBER}
@@ -19,10 +19,16 @@ export function Impressum() {
       </div>
       <br />
       <div>{IMPRESSUM_EMAIL}</div>
-    </div>
+    </article>
   );
 }
 
+// TODO MUST: Choose a Web Server Provider (+ email), what kinds of contracts exists?
+// Should be performant enough to account for lets say 50 concurrent users
+// Backing up database
+
 // TODO MUST: Remove who is privacy for opensession.club and opensessionclub.com
+// Yes is the correct thing to do?
 // TODO MUST: email
 // (with email address: info@opensession.club (/info@opensessionclub.com as redirect)),
+// TODO MUST: run lighthouse test

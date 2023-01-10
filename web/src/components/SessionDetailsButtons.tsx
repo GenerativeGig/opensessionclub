@@ -5,7 +5,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { DISCORD_CLIENT_ID } from "../constants";
+import { DISCORD_AUTH_URL } from "../constants";
 import {
   Session,
   useCancelSessionMutation,
@@ -85,14 +85,12 @@ export function SessionDetailsButtons({
           onClick={async () => {
             const response = await joinVoiceChannel({ id });
             if (!response.data?.joinSessionVoiceChannel) {
-              if (DISCORD_CLIENT_ID === "undefined") {
-                console.error("DISCORD_CLIENT_ID is undefined");
+              if (DISCORD_AUTH_URL === "undefined") {
+                console.error("DISCORD_AUTH_URL is undefined");
                 return;
               }
 
-              window.open(
-                `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fdiscord-authorization&response_type=code&scope=identify`
-              );
+              window.open(DISCORD_AUTH_URL);
             }
 
             const response2 = await joinVoiceChannel({ id });
