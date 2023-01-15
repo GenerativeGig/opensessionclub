@@ -1,17 +1,17 @@
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, ReactNode } from "react";
 import { useField, ErrorMessage } from "formik";
 
 export interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
-  info?: string;
+  info?: ReactNode;
 }
 
-export function InputField({ label, info, ...props }: InputFieldProps) {
+export function InputField({ label = "", info, ...props }: InputFieldProps) {
   const [field] = useField(props);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col md:flex-row">
       <div>
         <label htmlFor={field.name}>{label}</label>
         <input id={field.name} required {...field} {...props} />

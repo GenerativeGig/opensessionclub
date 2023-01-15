@@ -50,12 +50,10 @@ export function SessionDetails() {
 
   if (sessionData && !sessionFetching && meData && !meFetching) {
     if (!sessionData.session) {
-      console.log("session is undefined");
       return <Error />;
     }
 
     if (!meData.me) {
-      console.log("me is undefined");
       return <></>;
     }
 
@@ -80,14 +78,14 @@ export function SessionDetails() {
     editor?.commands.setContent(text || null);
 
     return (
-      <article className="flex flex-col">
+      <article className="flex flex-col m-2">
         <RouteTitle>{title}</RouteTitle>
         {isRemote && (
           <div className="self-end">
             <Remote />
           </div>
         )}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             {isCancelled && (
               <>
@@ -113,7 +111,7 @@ export function SessionDetails() {
         </div>
         <div className="flex justify-between items-center">
           <ActorLink actor={creator} />
-          <div className="self-end flex items-center">
+          <div className="self-end flex flex-col md:flex-row items-end md:items-center">
             <SessionDetailsButtons
               session={sessionData.session}
               isCreator={isCreator}

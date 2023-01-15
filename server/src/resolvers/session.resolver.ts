@@ -633,7 +633,6 @@ export class SessionResolver {
     });
 
     if (!discord) {
-      console.log("redirect discord auth");
       // TODO: Create exact return object
       return false;
     }
@@ -641,18 +640,15 @@ export class SessionResolver {
     const session = await Session.findOneBy({ id });
 
     if (!session) {
-      console.log("session null");
       return false;
     }
 
     if (!session?.voiceChannelId) {
-      console.log("voiceChannelId null");
       return false;
     }
 
     await joinVoiceChannel(discord.userId, session.voiceChannelId);
 
-    console.log("redirect voiceChannelUrl");
     return true;
   }
 }

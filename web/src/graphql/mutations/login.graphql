@@ -1,5 +1,5 @@
 mutation Login($nameOrEmail: String!, $password: String!) {
   login(nameOrEmail: $nameOrEmail, password: $password) {
-    ...BasicActorResponse
+    ...FullActorResponse
   }
 }

@@ -1,8 +1,7 @@
+import { AtSymbolIcon } from "@heroicons/react/24/solid";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Link } from "react-router-dom";
 import { Session } from "../generated/graphql";
-import { ActorLink } from "./ActorLink";
 import { Cancelled } from "./Cancelled";
 import { Location } from "./Location";
 import { NumberOfAttendees } from "./NumberOfAttendees";
@@ -55,19 +54,17 @@ export function SessionCard({
             : SessionDateTimeKind.Compact
         }
       />
-      <p className="flex flex-col">
-        <EditorContent editor={editor} />
-        {hasMoreText && (
-          <Link
-            to={`/session/${id}`}
-            className="text-teal-500 hover:text-teal-400 ml-2 self-end"
-          >
-            read more
-          </Link>
-        )}
-      </p>
+      <EditorContent editor={editor} />
+      {hasMoreText && (
+        <div className="text-teal-500 hover:text-teal-400 ml-2 self-end">
+          read more
+        </div>
+      )}
       <div className="flex justify-between items-center">
-        <ActorLink actor={creator} />
+        <div className="text-blue-500  truncate ...">
+          <AtSymbolIcon className="h-5 w-5 fill-blue-500  inline" />
+          {creator.name}
+        </div>
         <div className="self-end flex items-center justify-around">
           {location && <Location location={location} />}
           <NumberOfAttendees

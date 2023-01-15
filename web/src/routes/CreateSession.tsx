@@ -116,22 +116,22 @@ export function CreateSession() {
       >
         {({ isSubmitting, values: { isRemote } }) => (
           <Form className="h-full w-full flex flex-col items-center">
-            <div className="m-2 p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-pink-500">
-              <div className="p-2 flex flex-col items-start">
+            <div className="m-2 p-2 md:p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-pink-500">
+              <div className="flex flex-col items-start">
                 <InputField name="title" label="Title" placeholder="title" />
                 <div className="flex items-center w-full">
                   <label htmlFor="text">Text</label>
                   <EditorContent
                     label="text"
-                    className="w-[25.2em]"
+                    className="w-[11em] md:w-[25.2em]"
                     editor={editor}
                   />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col md:flex-row justify-between">
                   <InputField name="startDate" label="Start date" type="date" />
                   <InputField name="startTime" label="Start time" type="time" />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col md:flex-row justify-between">
                   <InputField name="stopDate" label="Stop date" type="date" />
                   <InputField name="stopTime" label="Stop time" type="time" />
                 </div>
@@ -144,9 +144,18 @@ export function CreateSession() {
                   defaultValue={5}
                 />
                 <InputField
+                  className="w-auto"
                   name="isRemote"
                   label="Remote"
-                  info={isRemote ? "Creates a voice channel" : ""}
+                  info={
+                    isRemote ? (
+                      <span className="hidden sm:inline">
+                        Creates a voice channel
+                      </span>
+                    ) : (
+                      ""
+                    )
+                  }
                   type="checkbox"
                   required={false}
                 />

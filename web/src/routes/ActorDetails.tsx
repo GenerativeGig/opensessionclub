@@ -30,12 +30,10 @@ export function ActorDetails() {
 
   if (actorData && !actorFetching && meData && !meFetching) {
     if (!actorData.actor) {
-      console.error("actor is undefined");
       return <Error />;
     }
 
     if (!meData.me) {
-      console.log("me is undefined");
       return <></>;
     }
 

@@ -5,7 +5,7 @@ export interface LocationProps {
 }
 export function Location({ location }: LocationProps) {
   return (
-    <div className="pr-2">
+    <div className="pr-2 truncate ...">
       <span className="text-slate-300">{location}</span>
       <MapPinIcon className="h-5 w-5 inline" />
     </div>

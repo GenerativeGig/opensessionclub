@@ -31,7 +31,6 @@ export function CreateSessionComment({ sessionId }: CreateSessionCommentProps) {
   });
 
   if (editor === null) {
-    console.error("editor is null");
     return <></>;
   }
 

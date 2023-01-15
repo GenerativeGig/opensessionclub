@@ -41,7 +41,7 @@ export function SessionDetailsButtons({
   return (
     <>
       {isCreator ? (
-        <div>
+        <>
           {!isCancelled && !isPast && (
             <button
               className="bg-rose-400 hover:bg-rose-300"
@@ -76,7 +76,7 @@ export function SessionDetailsButtons({
               </button>
             </Link>
           )}
-        </div>
+        </>
       ) : (
         <JoinOrLeaveSession session={session} />
       )}

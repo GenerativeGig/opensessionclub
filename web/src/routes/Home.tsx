@@ -18,7 +18,7 @@ export function Home() {
         open format. Create your own or join a session to get started.
       </p>
 
-      <div className="p-4 flex justify-between">
+      <div className="p-4 flex flex-col md:flex-row justify-between items-center md:items-baseline">
         <div className="p-4">
           <div className="flex items-center py-4">
             <ClipboardDocumentCheckIcon className="h-8 w-8" />

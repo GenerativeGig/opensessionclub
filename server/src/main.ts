@@ -34,7 +34,11 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: ["http://localhost:5173", "https://discord.com"],
+      origin: [
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "https://discord.com",
+      ],
       credentials: true,
     })
   );

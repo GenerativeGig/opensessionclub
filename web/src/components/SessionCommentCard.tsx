@@ -60,7 +60,6 @@ export function SessionCommentCard({
   const isCreator = me && me.id === sessionComment.creator.id;
 
   if (!editor) {
-    console.error("editor is null");
     return <></>;
   }
 
@@ -73,8 +72,11 @@ export function SessionCommentCard({
 
           const text = editor?.getHTML();
 
-          const { error } = await updateSessionComment({ id, text });
-          console.log({ error });
+          const response = await updateSessionComment({ id, text });
+
+          if (!response.data?.updateSessionComment) {
+            editor.commands.setContent(textBeforeEdit || null);
+          }
         }}
       >
         {({ isSubmitting }) => (

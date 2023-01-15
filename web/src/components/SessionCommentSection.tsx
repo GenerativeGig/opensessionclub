@@ -28,7 +28,7 @@ export function SessionCommentSection({
 
   if (data && !fetching) {
     return (
-      <div className="p-16">
+      <div className="p-4 md:p-16">
         <h2 className="text-xl text-center p-5">
           <ChatBubbleLeftRightIcon className="h-5 w-5 inline" />
           Comments

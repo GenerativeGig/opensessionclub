@@ -62,20 +62,29 @@ export function Header() {
 
   return (
     <div>
-      {routeTitle && (
-        <h1 className="text-4xl break-words ml-24 my-7">{routeTitle}</h1>
-      )}
-      <header className="transparent p-4 fixed top-0 flex justify-between w-full z-0 pointer-events-none bg-none">
+      <header
+        className={` ${
+          routeTitle && "md:absolute"
+        } p-4 top-0 flex justify-between w-full`}
+      >
         <div className="flex items-center">
-          <Link to="/" className="pointer-events-auto">
+          <Link
+            to="/"
+            className="pointer-events-auto"
+            aria-label="Go to the home page"
+          >
             <div></div>
-            <img className="h-16 w-16" src={OpenSessionClubLogoWhite} />
+            <img
+              alt="Open Session Club Logo"
+              className="h-16 w-16"
+              src={OpenSessionClubLogoWhite}
+            />
           </Link>
         </div>
         <div className="flex items-center pointer-events-auto">
           {pathname.includes("/sessions") ? (
             <Link to="/create-session">
-              <button className="bg-pink-600 hover:bg-pink-500">
+              <button className="bg-pink-600 hover:bg-pink-500 w-24 sm:w-auto">
                 Create Session
               </button>
             </Link>
@@ -88,7 +97,12 @@ export function Header() {
           )}
           {authenticationJsx}
         </div>
-      </header>
+      </header>{" "}
+      {routeTitle && (
+        <h1 className="text-4xl break-words md:ml-24 my-4 md:my-7 text-center md:text-left truncate ...">
+          {routeTitle}
+        </h1>
+      )}
     </div>
   );
 }

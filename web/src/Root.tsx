@@ -61,5 +61,3 @@ export function Root() {
     </UrqlProvider>
   );
 }
-
-// TODO: Make website responsive and work well on mobile devices

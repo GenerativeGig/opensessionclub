@@ -49,7 +49,7 @@ export function SessionsBasedOnTimeStatus({
           <li key={session.id}>
             <Link to={`/session/${session.id}`}>
               <div
-                className={`m-1 p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800 border-solid border-2 ${borderColor} ${borderHoverBackgroundColor}`}
+                className={`p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800 border-solid border-2 ${borderColor} ${borderHoverBackgroundColor}`}
               >
                 <SessionCard {...session} />
               </div>

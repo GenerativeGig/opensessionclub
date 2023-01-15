@@ -85,11 +85,11 @@ export class ActorResolver {
   }
 
   @Query(() => Actor, { nullable: true })
-  async actor(@Arg("id", () => Int) id: number) {
+  actor(@Arg("id", () => Int) id: number) {
     return Actor.findOne({ where: { id } });
   }
 
-  @Query(() => Actor)
+  @Query(() => Actor, { nullable: true })
   @UseMiddleware(isAuthenticated)
   me(@Ctx() { req }: ApolloContext) {
     return Actor.findOne({ where: { id: req.session.actorId } });
