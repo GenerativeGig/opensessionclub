@@ -1,6 +1,12 @@
 import path from "path";
 import { DataSource } from "typeorm";
-import { POSTGRES_PASSWORD, POSTGRES_USERNAME } from "./constants";
+import {
+  POSTGRES_HOST,
+  POSTGRES_USE_SSL,
+  POSTGRES_PASSWORD,
+  POSTGRES_USERNAME,
+  POSTGRES_PORT,
+} from "./constants";
 import { Actor } from "./entities/actor.entity";
 import { ActorSession } from "./entities/actorSession.entity";
 import { Discord } from "./entities/discord.entity";
@@ -16,4 +22,7 @@ export const dataSource: DataSource = new DataSource({
   type: "postgres",
   logging: true,
   synchronize: true,
+  host: POSTGRES_HOST,
+  port: POSTGRES_PORT,
+  ssl: POSTGRES_USE_SSL,
 });

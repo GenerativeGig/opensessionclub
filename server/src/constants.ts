@@ -6,6 +6,11 @@ export const ENCRYPT_SECRET = process.env.ENCRYPT_SECRET;
 
 export const POSTGRES_USERNAME = process.env.POSTGRESQL_USERNAME;
 export const POSTGRES_PASSWORD = process.env.POSTGRESQL_PASSWORD;
+export const POSTGRES_HOST = process.env.POSTGRESQL_HOST;
+export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
+  ? parseInt(process.env.POSTGRESQL_PORT)
+  : undefined;
+export const POSTGRES_USE_SSL = process.env.POSTGRESQL_SSL === "true";
 
 export const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
