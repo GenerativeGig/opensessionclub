@@ -26,6 +26,6 @@ export const dataSource: DataSource = new DataSource({
   synchronize: POSTGRES_SYNCHRONIZE,
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
-  ssl: { ca: POSTGRES_CA },
+  ssl: { cert: POSTGRES_CA },
   url: POSTGRES_URL,
 });
