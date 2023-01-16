@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "watch": "tsc --watch",
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 tsc",
     "dev": "nodemon dist/main.js",
     "dev-linux": "yarn psql && yarn redis && yarn dev",
     "start": "tsc && node dist/main.js",
