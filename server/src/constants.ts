@@ -1,3 +1,5 @@
+import fs from "fs";
+
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 export const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -10,7 +12,8 @@ export const POSTGRES_HOST = process.env.POSTGRESQL_HOST;
 export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
   ? parseInt(process.env.POSTGRESQL_PORT)
   : undefined;
-export const POSTGRES_CA = process.env.POSTGRESQL_CA;
+export const POSTGRES_CA =
+  process.env.POSTGRESQL_CA && fs.readFileSync(process.env.POSTGRESQL_CA);
 export const POSTGRES_SYNCHRONIZE =
   process.env.POSTGRESQL_SYNCHRONIZE === "true";
 export const POSTGRES_URL = process.env.POSTGRESQL_URL;

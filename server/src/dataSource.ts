@@ -15,6 +15,8 @@ import { Discord } from "./entities/discord.entity";
 import { Session } from "./entities/session.entity";
 import { SessionComment } from "./entities/sessionComment.entity";
 
+import fs from "fs";
+
 export const dataSource: DataSource = new DataSource({
   entities: [Actor, Discord, Session, SessionComment, ActorSession],
   migrations: [path.join(__dirname, "./migrations/*")],
