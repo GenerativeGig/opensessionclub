@@ -13,6 +13,7 @@ export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
 export const POSTGRES_USE_SSL = process.env.POSTGRESQL_USE_SSL === "true";
 export const POSTGRES_SYNCHRONIZE =
   process.env.POSTGRESQL_SYNCHRONIZE === "true";
+export const POSTGRES_URL = process.env.POSTGRESQL_URL;
 
 export const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 

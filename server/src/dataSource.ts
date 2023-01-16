@@ -1,5 +1,5 @@
 import path from "path";
-import { DataSource } from "typeorm";
+import { createConnection, DataSource } from "typeorm";
 import {
   POSTGRES_HOST,
   POSTGRES_USE_SSL,
@@ -7,6 +7,7 @@ import {
   POSTGRES_USERNAME,
   POSTGRES_PORT,
   POSTGRES_SYNCHRONIZE,
+  POSTGRES_URL,
 } from "./constants";
 import { Actor } from "./entities/actor.entity";
 import { ActorSession } from "./entities/actorSession.entity";
@@ -26,4 +27,5 @@ export const dataSource: DataSource = new DataSource({
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
   ssl: POSTGRES_USE_SSL,
+  url: POSTGRES_URL,
 });
