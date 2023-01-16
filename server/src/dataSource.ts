@@ -1,5 +1,5 @@
 import path from "path";
-import { createConnection, DataSource } from "typeorm";
+import { DataSource } from "typeorm";
 import {
   POSTGRES_HOST,
   POSTGRES_USE_SSL,
