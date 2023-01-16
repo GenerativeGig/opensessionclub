@@ -10,7 +10,7 @@ export const POSTGRES_HOST = process.env.POSTGRESQL_HOST;
 export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
   ? parseInt(process.env.POSTGRESQL_PORT)
   : undefined;
-export const POSTGRES_USE_SSL = process.env.POSTGRESQL_SSL === "true";
+export const POSTGRES_USE_SSL = Boolean(process.env.POSTGRESQL_USE_SSL);
 
 export const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
