@@ -6,6 +6,7 @@ import {
   POSTGRES_PASSWORD,
   POSTGRES_USERNAME,
   POSTGRES_PORT,
+  POSTGRES_SYNCHRONIZE,
 } from "./constants";
 import { Actor } from "./entities/actor.entity";
 import { ActorSession } from "./entities/actorSession.entity";
@@ -21,7 +22,7 @@ export const dataSource: DataSource = new DataSource({
   database: "open",
   type: "postgres",
   logging: true,
-  synchronize: true,
+  synchronize: POSTGRES_SYNCHRONIZE,
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
   ssl: POSTGRES_USE_SSL,
