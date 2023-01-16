@@ -2,7 +2,7 @@ import path from "path";
 import { DataSource } from "typeorm";
 import {
   POSTGRES_HOST,
-  POSTGRES_USE_SSL,
+  POSTGRES_CA,
   POSTGRES_PASSWORD,
   POSTGRES_USERNAME,
   POSTGRES_PORT,
@@ -26,6 +26,6 @@ export const dataSource: DataSource = new DataSource({
   synchronize: POSTGRES_SYNCHRONIZE,
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
-  ssl: POSTGRES_USE_SSL,
+  ssl: { ca: POSTGRES_CA },
   url: POSTGRES_URL,
 });
