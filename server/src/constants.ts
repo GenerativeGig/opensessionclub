@@ -13,7 +13,8 @@ export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
   ? parseInt(process.env.POSTGRESQL_PORT)
   : undefined;
 export const POSTGRES_CA =
-  process.env.POSTGRESQL_CA && fs.readFileSync(process.env.POSTGRESQL_CA);
+  process.env.POSTGRESQL_CA &&
+  fs.readFileSync(process.env.POSTGRESQL_CA, { encoding: "utf-8" });
 export const POSTGRES_SYNCHRONIZE =
   process.env.POSTGRESQL_SYNCHRONIZE === "true";
 export const POSTGRES_URL = process.env.POSTGRESQL_URL;
