@@ -15,6 +15,8 @@ import { Discord } from "./entities/discord.entity";
 import { Session } from "./entities/session.entity";
 import { SessionComment } from "./entities/sessionComment.entity";
 
+import fs from "fs";
+
 export const dataSource: DataSource = new DataSource({
   entities: [Actor, Discord, Session, SessionComment, ActorSession],
   migrations: [path.join(__dirname, "./migrations/*")],
@@ -26,6 +28,11 @@ export const dataSource: DataSource = new DataSource({
   synchronize: POSTGRES_SYNCHRONIZE,
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
-  ssl: POSTGRES_CA ? { ca: POSTGRES_CA } : undefined,
+  ssl: POSTGRES_CA
+    ? {
+        rejectUnauthorized: true,
+        ca: fs.readFileSync(POSTGRES_CA).toString(),
+      }
+    : undefined,
   url: POSTGRES_URL,
 });
