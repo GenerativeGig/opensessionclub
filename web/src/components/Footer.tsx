@@ -19,7 +19,7 @@ export function Footer() {
       <div className="flex gap-4">
         <div>
           <a
-            href="https://github.com/GenerativeGig/open"
+            href="https://github.com/GenerativeGig/opensessionclub"
             target="_blank"
             title="GitHub Repository"
           >
