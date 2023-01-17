@@ -83,6 +83,7 @@ const main = async () => {
       validate: false,
     }),
     context: ({ req, res }): ApolloContext => ({ req, res, redis }),
+    cache: "bounded",
   });
 
   await apolloServer.start();
