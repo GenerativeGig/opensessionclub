@@ -16,6 +16,8 @@ export const POSTGRES_SYNCHRONIZE =
   process.env.POSTGRESQL_SYNCHRONIZE === "true";
 export const POSTGRES_URL = process.env.POSTGRESQL_URL;
 
+export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+
 export const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
 export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;

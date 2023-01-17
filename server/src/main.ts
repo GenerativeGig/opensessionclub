@@ -17,6 +17,7 @@ import {
   IS_PRODUCTION,
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
+  REDIS_PASSWORD,
 } from "./constants";
 import { dataSource } from "./dataSource";
 import { ActorResolver } from "./resolvers/actor.resolver";
@@ -44,7 +45,7 @@ const main = async () => {
   );
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis({ password: REDIS_PASSWORD });
 
   const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
 
