@@ -16,6 +16,7 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import { redirect } from "react-router-dom";
+import { IS_PRODUCTION } from "../constants";
 
 const errorExchange: Exchange =
   ({ forward }) =>
@@ -67,7 +68,9 @@ const cursorPagination = (typename: string): Resolver => {
 };
 
 export const urqlClient = createClient({
-  url: "http://localhost:4000/graphql",
+  url: IS_PRODUCTION
+    ? "https://opensession.club/graphql"
+    : "http://localhost:4000/graphql",
   fetchOptions: { credentials: "include" as const },
   exchanges: [
     dedupExchange,

@@ -1,3 +1,5 @@
+export const IS_PRODUCTION: boolean = import.meta.env.PROD;
+
 export const DISCORD_AUTH_URL: string | undefined = import.meta.env
   .VITE_DISCORD_AUTH_URL;
 

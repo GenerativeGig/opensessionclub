@@ -95,7 +95,9 @@ const main = async () => {
   await loginDiscordClient();
 
   app.get("/discord-authorization", async (req, res) => {
-    const frontendUrl = "http://localhost:5173";
+    const frontendUrl = IS_PRODUCTION
+      ? "https://opensession.club"
+      : "http://localhost:5173";
 
     const discord = await Discord.findOne({
       where: { actorId: req.session.actorId },
@@ -157,7 +159,9 @@ const main = async () => {
               code,
               client_secret: DISCORD_CLIENT_SECRET,
               grant_type: "authorization_code",
-              redirect_uri: `http://localhost:4000/discord-authorization`,
+              redirect_uri: IS_PRODUCTION
+                ? "https://opensession.club/discord-authorization"
+                : "http://localhost:4000/discord-authorization",
               scope: "identify",
             }).toString(),
             headers: {

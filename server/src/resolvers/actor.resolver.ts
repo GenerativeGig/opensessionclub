@@ -15,7 +15,11 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { v4 } from "uuid";
-import { COOKIE_NAME, FORGOT_PASSWORD_PREFIX } from "../constants";
+import {
+  COOKIE_NAME,
+  FORGOT_PASSWORD_PREFIX,
+  IS_PRODUCTION,
+} from "../constants";
 import { dataSource } from "../dataSource";
 import { Actor } from "../entities/actor.entity";
 import { ApolloContext } from "../types";
@@ -220,7 +224,9 @@ export class ActorResolver {
 
     await sendEmail(
       email,
-      `<a href="http://localhost:5173/change-password/${token}">reset password</a>`
+      IS_PRODUCTION
+        ? `<a href="https://opensession.club/change-password/${token}">reset password</a>`
+        : `<a href="http://localhost:5173/change-password/${token}">reset password</a>`
     );
 
     return true;
