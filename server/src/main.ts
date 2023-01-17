@@ -35,11 +35,13 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: [
-        "http://localhost:5173",
-        "http://localhost:4173",
-        "https://discord.com",
-      ],
+      origin: IS_PRODUCTION
+        ? undefined
+        : [
+            "http://localhost:5173",
+            "http://localhost:4173",
+            "https://discord.com",
+          ],
       credentials: true,
     })
   );
@@ -73,7 +75,9 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    plugins: IS_PRODUCTION
+      ? undefined
+      : [ApolloServerPluginLandingPageGraphQLPlayground()],
     schema: await buildSchema({
       resolvers: [ActorResolver, SessionResolver, SessionCommentResolver],
       validate: false,
