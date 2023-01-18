@@ -23,6 +23,7 @@ export const dataSource: DataSource = new DataSource({
   database: "open",
   type: "postgres",
   logging: true,
+  synchronize: false,
   host: POSTGRES_HOST,
   port: POSTGRES_PORT,
   ssl: POSTGRES_CA
