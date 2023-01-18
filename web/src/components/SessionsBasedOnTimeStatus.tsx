@@ -37,7 +37,7 @@ export function SessionsBasedOnTimeStatus({
   if (sessions.length === 0) {
     return (
       <p className="text-center my-8">
-        No {TimeStatusText[timeStatus]} sessions.
+        No {TimeStatusText[timeStatus].toLowerCase()} sessions.
       </p>
     );
   }
