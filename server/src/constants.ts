@@ -12,8 +12,6 @@ export const POSTGRES_PORT = process.env.POSTGRESQL_PORT
   : undefined;
 export const POSTGRES_CA = process.env.POSTGRESQL_CA;
 
-export const POSTGRES_SYNCHRONIZE =
-  process.env.POSTGRESQL_SYNCHRONIZE === "true";
 export const POSTGRES_URL = process.env.POSTGRESQL_URL;
 
 export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
