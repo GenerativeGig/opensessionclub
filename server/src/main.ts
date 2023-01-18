@@ -55,6 +55,10 @@ const main = async () => {
     throw new Error("missing session secret");
   }
 
+  if (IS_PRODUCTION) {
+    app.set("trust proxy", 1);
+  }
+
   app.use(
     session({
       name: COOKIE_NAME,
