@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "psql": "sudo service postgresql restart",
     "redis": "sudo service redis-server restart",
-    "initial-migration": "typeorm migration:generate -n InitialMigration --dataSource ./src/dataSource"
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.18",
