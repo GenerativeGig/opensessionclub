@@ -36,7 +36,7 @@ const main = async () => {
   app.use(
     cors({
       origin: IS_PRODUCTION
-        ? undefined
+        ? "https://opensession.club"
         : [
             "http://localhost:5173",
             "http://localhost:4173",
