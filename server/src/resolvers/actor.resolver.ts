@@ -158,6 +158,9 @@ export class ActorResolver {
     @Arg("password", () => String) password: string,
     @Ctx() { req }: ApolloContext
   ): Promise<ActorResponse> {
+    console.log("login");
+    console.log(req);
+    console.log(req.session);
     const actor = await Actor.findOne(
       nameOrEmail.includes("@")
         ? { where: { lowerCaseEmail: nameOrEmail.toLowerCase() } }
@@ -178,8 +181,6 @@ export class ActorResolver {
     }
 
     // Log in actor
-    console.log(req);
-    console.log(req.session);
     req.session.actorId = actor.id;
     console.log(req.session.actorId);
     return {
