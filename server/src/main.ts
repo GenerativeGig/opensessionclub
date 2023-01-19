@@ -56,11 +56,7 @@ const main = async () => {
   redisClient.connect();
 
   const RedisStore = connectRedis(session);
-  console.log("const RedisStore = connectRedis(session);", { RedisStore });
   const redis = new Redis({ password: REDIS_PASSWORD });
-  console.log("const redis = new Redis({ password: REDIS_PASSWORD });", {
-    redis,
-  });
 
   if (!SESSION_SECRET) {
     throw new Error("missing session secret");
@@ -70,12 +66,6 @@ const main = async () => {
     client: redisClient,
     disableTouch: true,
   });
-  console.log(
-    "const redisStore = new RedisStore({ client: redis, disableTouch: true });",
-    { redisStore }
-  );
-
-  console.log(COOKIE_NAME);
 
   const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
 
@@ -94,7 +84,6 @@ const main = async () => {
     secret: SESSION_SECRET,
     resave: false,
   });
-  console.log({ sessionInstance });
 
   if (IS_PRODUCTION) {
     app.set("trust proxy", 1);
