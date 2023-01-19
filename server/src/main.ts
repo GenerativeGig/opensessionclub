@@ -47,7 +47,11 @@ const main = async () => {
   );
 
   const RedisStore = connectRedis(session);
+  console.log("const RedisStore = connectRedis(session);", { RedisStore });
   const redis = new Redis({ password: REDIS_PASSWORD });
+  console.log("const redis = new Redis({ password: REDIS_PASSWORD });", {
+    redis,
+  });
 
   const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
 
@@ -59,24 +63,28 @@ const main = async () => {
     app.set("trust proxy", 1);
   }
 
-  app.use(
-    session({
-      name: COOKIE_NAME,
-      store: new RedisStore({
-        client: redis,
-        disableTouch: true,
-      }),
-      cookie: {
-        maxAge: tenYearsInMs,
-        httpOnly: true,
-        sameSite: "lax",
-        secure: IS_PRODUCTION,
-      },
-      saveUninitialized: false,
-      secret: SESSION_SECRET,
-      resave: false,
-    })
+  const redisStore = new RedisStore({ client: redis, disableTouch: true });
+  console.log(
+    "const redisStore = new RedisStore({ client: redis, disableTouch: true });",
+    { redisStore }
   );
+
+  const sessionInstance = session({
+    name: COOKIE_NAME,
+    store: redisStore,
+    cookie: {
+      maxAge: tenYearsInMs,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: IS_PRODUCTION,
+    },
+    saveUninitialized: false,
+    secret: SESSION_SECRET,
+    resave: false,
+  });
+  console.log({ sessionInstance });
+
+  app.use(sessionInstance);
 
   const apolloServer = new ApolloServer({
     plugins: IS_PRODUCTION
