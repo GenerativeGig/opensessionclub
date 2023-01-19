@@ -46,6 +46,15 @@ const main = async () => {
     })
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { createClient } = require("redis");
+  const redisClient = createClient({ legacyMode: true });
+  redisClient.on("connect", () => console.log("Connected to Redis!"));
+  redisClient.on("error", (err: Error) =>
+    console.log("Redis Client Error", err)
+  );
+  redisClient.connect();
+
   const RedisStore = connectRedis(session);
   console.log("const RedisStore = connectRedis(session);", { RedisStore });
   const redis = new Redis({ password: REDIS_PASSWORD });
@@ -53,19 +62,23 @@ const main = async () => {
     redis,
   });
 
-  const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
-
   if (!SESSION_SECRET) {
     throw new Error("missing session secret");
   }
 
-  const redisStore = new RedisStore({ client: redis, disableTouch: true });
+  const redisStore = new RedisStore({
+    client: redisClient,
+    disableTouch: true,
+  });
   console.log(
     "const redisStore = new RedisStore({ client: redis, disableTouch: true });",
     { redisStore }
   );
 
   console.log(COOKIE_NAME);
+
+  const tenYearsInMs = 1000 * 60 * 60 * 24 * 365 * 10;
+
   const sessionInstance = session({
     proxy: IS_PRODUCTION ? true : undefined,
     name: COOKIE_NAME,
@@ -77,7 +90,9 @@ const main = async () => {
       sameSite: "lax",
       secure: IS_PRODUCTION,
     },
+    saveUninitialized: false,
     secret: SESSION_SECRET,
+    resave: false,
   });
   console.log({ sessionInstance });
 
