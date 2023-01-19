@@ -69,10 +69,12 @@ const main = async () => {
     { redisStore }
   );
 
+  console.log(COOKIE_NAME);
   const sessionInstance = session({
     name: COOKIE_NAME,
     store: redisStore,
     cookie: {
+      domain: "opensession.club",
       maxAge: tenYearsInMs,
       httpOnly: true,
       sameSite: "lax",
