@@ -31,10 +31,6 @@ Other TODOs before production ready:
 - Welcome page
 - Legality
 
-Preview from 04.12.2022:
-
-![Gif of Open Session Club from 04.12.2022](./media/04-12-2022.gif)
-
 ## Development
 
 ### Server `(cd server)`
