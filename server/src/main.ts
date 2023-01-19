@@ -59,10 +59,6 @@ const main = async () => {
     throw new Error("missing session secret");
   }
 
-  if (IS_PRODUCTION) {
-    app.set("trust proxy", 1);
-  }
-
   const redisStore = new RedisStore({ client: redis, disableTouch: true });
   console.log(
     "const redisStore = new RedisStore({ client: redis, disableTouch: true });",
@@ -71,10 +67,11 @@ const main = async () => {
 
   console.log(COOKIE_NAME);
   const sessionInstance = session({
+    proxy: IS_PRODUCTION ? true : undefined,
     name: COOKIE_NAME,
     store: redisStore,
     cookie: {
-      domain: "opensession.club",
+      domain: IS_PRODUCTION ? "opensession.club" : undefined,
       maxAge: tenYearsInMs,
       httpOnly: true,
       sameSite: "lax",
@@ -85,6 +82,10 @@ const main = async () => {
     resave: false,
   });
   console.log({ sessionInstance });
+
+  if (IS_PRODUCTION) {
+    app.set("trust proxy", 1);
+  }
 
   app.use(sessionInstance);
 
