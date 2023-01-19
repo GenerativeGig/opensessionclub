@@ -178,8 +178,10 @@ export class ActorResolver {
     }
 
     // Log in actor
+    console.log(req);
+    console.log(req.session);
     req.session.actorId = actor.id;
-
+    console.log(req.session.actorId);
     return {
       actor,
     };
