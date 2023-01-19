@@ -30,6 +30,10 @@ import { Discord } from "./entities/discord.entity";
 import { encrypt } from "./utils/Crypto";
 
 const main = async () => {
+  if (!SESSION_SECRET) {
+    throw new Error("missing session secret");
+  }
+
   await dataSource.initialize();
   const app = express();
 
@@ -46,24 +50,12 @@ const main = async () => {
     })
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { createClient } = require("redis");
-  const redisClient = createClient({ legacyMode: true });
-  redisClient.on("connect", () => console.log("Connected to Redis!"));
-  redisClient.on("error", (err: Error) =>
-    console.log("Redis Client Error", err)
-  );
-  redisClient.connect();
-
-  const RedisStore = connectRedis(session);
   const redis = new Redis({ password: REDIS_PASSWORD });
 
-  if (!SESSION_SECRET) {
-    throw new Error("missing session secret");
-  }
+  const RedisStore = connectRedis(session);
 
   const redisStore = new RedisStore({
-    client: redisClient,
+    client: redis,
     disableTouch: true,
   });
 
