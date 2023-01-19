@@ -77,9 +77,7 @@ const main = async () => {
       sameSite: "lax",
       secure: IS_PRODUCTION,
     },
-    saveUninitialized: false,
     secret: SESSION_SECRET,
-    resave: false,
   });
   console.log({ sessionInstance });
 
