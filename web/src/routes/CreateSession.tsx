@@ -58,8 +58,15 @@ export function CreateSession() {
           },
           { setErrors }
         ) => {
-          const start = new Date(startDate + ", " + startTime);
-          const stop = new Date(stopDate + ", " + stopTime);
+          const startTimeArray = startTime.split(":");
+          const start = new Date(startDate);
+          start.setHours(parseInt(startTimeArray[0]));
+          start.setMinutes(parseInt(startTimeArray[1]));
+
+          const stopTimeArray = stopTime.split(":");
+          const stop = new Date(stopDate);
+          stop.setHours(parseInt(stopTimeArray[0]));
+          stop.setMinutes(parseInt(stopTimeArray[1]));
 
           const current = new Date();
           const currentWithoutTime = new Date(current.toLocaleDateString());
