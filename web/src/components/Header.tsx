@@ -62,26 +62,26 @@ export function Header() {
 
   return (
     <div>
-      <header
-        className={` ${
-          routeTitle && "md:absolute"
-        } p-4 top-0 flex justify-between w-full`}
-      >
+      <header className="p-4 top-0 flex flex-col md:flex-row md:justify-between w-full">
         <div className="flex items-center">
           <Link
             to="/"
-            className="pointer-events-auto"
+            className="pointer-events-auto flex-shrink-0"
             aria-label="Go to the home page"
           >
-            <div></div>
             <img
               alt="Open Session Club Logo"
               className="h-16 w-16"
               src={OpenSessionClubLogoWhite}
             />
           </Link>
+          {routeTitle && (
+            <h1 className="ml-4 text-4xl text-center md:text-left truncate ...">
+              {routeTitle}
+            </h1>
+          )}
         </div>
-        <div className="flex items-center pointer-events-auto">
+        <div className="flex self-end mt-4 md:mt-0 md:self-center items-center pointer-events-auto">
           {pathname.includes("/sessions") ? (
             <Link to="/create-session">
               <button className="bg-pink-600 hover:bg-pink-500 w-24 sm:w-auto">
@@ -97,12 +97,7 @@ export function Header() {
           )}
           {authenticationJsx}
         </div>
-      </header>{" "}
-      {routeTitle && (
-        <h1 className="text-4xl break-words md:ml-24 my-4 md:my-7 text-center md:text-left truncate ...">
-          {routeTitle}
-        </h1>
-      )}
+      </header>
     </div>
   );
 }
@@ -110,6 +105,8 @@ export function Header() {
 // TODO: Make header no longer sticky/fixed. This looks weird and broken when scrolling (since transparent).
 // Come up with a nice idea for having the h1
 // in the header though so that I save space
+
+// TODO: Make new header design that makes sense for mobile as well
 
 // TODO: fetching checks for logoutMutation (are there others that I don't check)
 // Can the fetching check code be abstracted? Wrapped in my own hook
