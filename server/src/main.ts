@@ -40,7 +40,7 @@ const main = async () => {
   app.use(
     cors({
       origin: IS_PRODUCTION
-        ? "https://opensession.club"
+        ? ["https://opensession.club", "https://discord.com"]
         : [
             "http://localhost:5173",
             "http://localhost:4173",
