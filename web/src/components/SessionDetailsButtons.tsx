@@ -4,6 +4,7 @@ import {
   SpeakerWaveIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DISCORD_AUTH_URL } from "../constants";
 import {
@@ -37,6 +38,22 @@ export function SessionDetailsButtons({
     session;
 
   const isPast = timeStatus === TimeStatus.PAST;
+
+  const [canJoinVoiceChannel, setCanJoinVoiceChannel] = useState<
+    boolean | undefined
+  >();
+  const [joinVoiceChannelText, setJoinVoiceChannelText] =
+    useState<string>("Join Voice Channel");
+
+  const refreshCanJoinVoiceChannel = async () => {
+    setCanJoinVoiceChannel(
+      (await joinVoiceChannel({ id })).data?.joinSessionVoiceChannel
+    );
+  };
+
+  useEffect(() => {
+    refreshCanJoinVoiceChannel();
+  }, []);
 
   return (
     <>
@@ -82,29 +99,30 @@ export function SessionDetailsButtons({
       )}
       {actorIsPartOfSession && !isPast && voiceChannelUrl && (
         <button
-          onClick={async () => {
-            const response = await joinVoiceChannel({ id });
-            if (!response.data?.joinSessionVoiceChannel) {
+          onClick={() => {
+            if (!canJoinVoiceChannel) {
               if (DISCORD_AUTH_URL === "undefined") {
                 console.error("DISCORD_AUTH_URL is undefined");
                 return;
               }
-
               window.open(DISCORD_AUTH_URL);
+              setJoinVoiceChannelText("Please refresh the page");
+            } else {
+              window.open(voiceChannelUrl);
             }
 
-            const response2 = await joinVoiceChannel({ id });
+            refreshCanJoinVoiceChannel().then(() => {
+              if (!canJoinVoiceChannel) {
+                console.error("Unable to join voice channel");
+              }
 
-            if (!response2.data?.joinSessionVoiceChannel) {
-              console.error("Unable to join voice channel");
-            }
-
-            window.open(voiceChannelUrl);
+              window.open(voiceChannelUrl);
+            });
           }}
           className="bg-[#5865F2] hover:bg-[#7983f2]"
         >
           <SpeakerWaveIcon className="w-6 h-6 inline" />
-          Join Voice Channel
+          {joinVoiceChannelText}
         </button>
       )}
     </>
