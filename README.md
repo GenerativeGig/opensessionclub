@@ -13,23 +13,11 @@
 
 ## Project Status
 
-The MVP is being built.
+The project is up and running at https://opensession.club
 
-Main Features of the MVP:
+Right now working on refactoring the codebase and making technology changes.
 
-- Actor (user) Authentication, Authorization & Settings
-- Session CRUD & Sorting
-- Session Comments CRUD
-- Discord integration
-
-After the MVP is built and in production some code refactoring and restructuring will take place to make it more maintainable and improve extensibility.
-
-Other TODOs before production ready:
-
-- Logo
-- UI Design
-- Welcome page
-- Legality
+A list for upcoming features should be added to this README soon.
 
 ## Development
 
