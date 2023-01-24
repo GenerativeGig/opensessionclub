@@ -23,12 +23,5 @@ export function Impressum() {
   );
 }
 
-// TODO MUST: Choose a Web Server Provider (+ email), what kinds of contracts exists?
-// Should be performant enough to account for lets say 50 concurrent users
-// Backing up database
-
-// TODO MUST: Remove who is privacy for opensession.club and opensessionclub.com
-// Yes is the correct thing to do?
-// TODO MUST: email
-// (with email address: info@opensession.club (/info@opensessionclub.com as redirect)),
-// TODO MUST: run lighthouse test
+// TODO: Fix Lighthouse issues
+// TODO: Make the website a PWA (lighthouse)

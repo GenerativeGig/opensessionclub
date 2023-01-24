@@ -129,10 +129,7 @@ export function SessionDetailsButtons({
   );
 }
 
-// TODO: What does it mean when it is cancelled? What can still be done?
-// Can't join, edit or join voice channel (delete the voice channel) but the session lives on
-// Comments can be made
-// TODO: Add this logic to backend, how to not have to implement same logic in frontend and backend?
+// TODO: how to not have to implement same permission logic in frontend and backend?
 
 // Add field resolvers for permissions to Session/SessionComment
 // List of Action Permissions UPDATE DELETE CANCEL JoinVoice Join Leave Session
@@ -141,3 +138,5 @@ export function SessionDetailsButtons({
 
 // On client only implement logic for when to show using one boolean
 // On server return extra booleans if needed to make it easier on the client
+
+// TODO: After authentication open discord invite link instead of going to home page
