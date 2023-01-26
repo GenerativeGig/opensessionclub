@@ -8,5 +8,3 @@ Components
 - be simple
 - smaller
 - reusable
-
-After fixing imports replace all import with import and save
