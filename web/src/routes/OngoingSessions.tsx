@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { TimeStatus } from "../components/TimeStatus";
-import { useOngoingSessionsQuery } from "../generated/graphql";
+import { useOngoingSessionsQuery } from "../types/generatedTypes";
 import { SessionsBasedOnTimeStatus } from "../components/SessionsBasedOnTimeStatus";
 
 export function OngoingSessions() {

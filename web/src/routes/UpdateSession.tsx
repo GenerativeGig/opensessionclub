@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { UpdateSessionForm } from "../components/UpdateSessionForm";
-import { useSessionQuery } from "../generated/graphql";
+import { useSessionQuery } from "../types/generatedTypes";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function UpdateSession() {

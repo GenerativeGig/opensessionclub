@@ -1,6 +1,6 @@
 import { AtSymbolIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { Actor } from "../generated/graphql";
+import { Actor } from "../types/generatedTypes";
 
 export interface ActorLinkProps {
   actor: Actor;

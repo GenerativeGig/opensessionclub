@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { RouteTitle } from "../components/RouteTitle";
-import { useChangePasswordLoggedInMutation } from "../generated/graphql";
+import { useChangePasswordLoggedInMutation } from "../types/generatedTypes";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function ChangePasswordLoggedIn() {

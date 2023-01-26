@@ -8,7 +8,7 @@ import {
   SessionComment,
   useDeleteSessionCommentMutation,
   useUpdateSessionCommentMutation,
-} from "../generated/graphql";
+} from "../types/generatedTypes";
 import { ActorLink } from "./ActorLink";
 import StarterKit from "@tiptap/starter-kit";
 

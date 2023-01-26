@@ -11,7 +11,7 @@ import {
   MeDocument,
   LoginMutation,
   LogoutMutation,
-} from "../generated/graphql";
+} from "../types/generatedTypes";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";

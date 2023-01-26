@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { RouteTitle } from "../components/RouteTitle";
-import { useLoginMutation } from "../generated/graphql";
+import { useLoginMutation } from "../types/generatedTypes";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function Login() {

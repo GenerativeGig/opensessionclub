@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { RouteTitle } from "../components/RouteTitle";
-import { useForgotPasswordMutation } from "../generated/graphql";
+import { useForgotPasswordMutation } from "../types/generatedTypes";
 
 export function ForgotPassword() {
   const [, forgotPassword] = useForgotPasswordMutation();

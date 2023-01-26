@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import OpenSessionClubLogoWhite from "../assets/open-session-club-logo-white.png";
-import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../types/generatedTypes";
 import { ActorLink } from "./ActorLink";
 
 function getRouteTitle(pathname: string) {

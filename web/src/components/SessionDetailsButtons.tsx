@@ -12,7 +12,7 @@ import {
   useCancelSessionMutation,
   useDeleteSessionMutation,
   useJoinSessionVoiceChannelMutation,
-} from "../generated/graphql";
+} from "../types/generatedTypes";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 import { JoinOrLeaveSession } from "./JoinOrLeaveSession";
 import { TimeStatus } from "./TimeStatus";

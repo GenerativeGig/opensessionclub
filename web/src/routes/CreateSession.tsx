@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../components/InputField";
 import { RouteTitle } from "../components/RouteTitle";
-import { useCreateSessionMutation } from "../generated/graphql";
+import { useCreateSessionMutation } from "../types/generatedTypes";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 
 export function CreateSession() {

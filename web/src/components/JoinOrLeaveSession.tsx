@@ -3,7 +3,7 @@ import {
   Session,
   useJoinSessionMutation,
   useLeaveSessionMutation,
-} from "../generated/graphql";
+} from "../types/generatedTypes";
 import { TimeStatus } from "./TimeStatus";
 
 export interface JoinOrLeaveSessionProps {

@@ -1,4 +1,4 @@
-import { ActorFieldError } from "../generated/graphql";
+import { ActorFieldError } from "../types/generatedTypes";
 
 export function toErrorMap(errors: ActorFieldError[]) {
   const errorMap: Record<string, string> = {};

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FormContent } from "../components/BasicFormContent";
 import { InputField } from "../components/InputField";
 import { RouteTitle } from "../components/RouteTitle";
-import { useChangePasswordMutation } from "../generated/graphql";
+import { useChangePasswordMutation } from "../types/generatedTypes";
 import { toErrorMap } from "../utils/toErrorMap";
 
 export function ChangePassword() {

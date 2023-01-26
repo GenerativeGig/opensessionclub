@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDeleteDiscordIntegrationMutation } from "../generated/graphql";
+import { useDeleteDiscordIntegrationMutation } from "../types/generatedTypes";
 
 export function DeleteDiscordIntegration() {
   const navigate = useNavigate();

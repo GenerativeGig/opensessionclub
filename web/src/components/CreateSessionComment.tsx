@@ -3,7 +3,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useCreateSessionCommentMutation } from "../generated/graphql";
+import { useCreateSessionCommentMutation } from "../types/generatedTypes";
 
 export interface CreateSessionCommentProps {
   sessionId: number;

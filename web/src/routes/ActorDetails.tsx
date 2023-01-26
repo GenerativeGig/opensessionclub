@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FailedLoadingData } from "../components/FailedLoadingData";
 import { Loading } from "../components/Loading";
 import { RouteTitle } from "../components/RouteTitle";
-import { useActorQuery, useMeQuery } from "../generated/graphql";
+import { useActorQuery, useMeQuery } from "../types/generatedTypes";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 import { Error } from "./Error";
 import { ActorSettings } from "../components/ActorSettings";

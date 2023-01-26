@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMeQuery } from "../generated/graphql";
+import { useMeQuery } from "../types/generatedTypes";
 
 export function useIsAuthenticated() {
   const [{ data, fetching }] = useMeQuery();

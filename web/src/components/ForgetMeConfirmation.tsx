@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForgetMeMutation } from "../generated/graphql";
+import { useForgetMeMutation } from "../types/generatedTypes";
 
 export interface ForgetMeConfirmationProps {
   onCancel: () => void;

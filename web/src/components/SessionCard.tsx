@@ -1,7 +1,7 @@
 import { AtSymbolIcon } from "@heroicons/react/24/solid";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Session } from "../generated/graphql";
+import { Session } from "../types/generatedTypes";
 import { Cancelled } from "./Cancelled";
 import { Location } from "./Location";
 import { NumberOfAttendees } from "./NumberOfAttendees";

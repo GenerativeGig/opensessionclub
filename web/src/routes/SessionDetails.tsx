@@ -16,7 +16,7 @@ import {
 } from "../components/SessionDateTime";
 import { SessionDetailsButtons } from "../components/SessionDetailsButtons";
 import { TimeStatusTag } from "../components/TimeStatus";
-import { useMeQuery, useSessionQuery } from "../generated/graphql";
+import { useMeQuery, useSessionQuery } from "../types/generatedTypes";
 import { useIsAuthenticated } from "../utils/useIsAuthenticated";
 import { Error } from "./Error";
 

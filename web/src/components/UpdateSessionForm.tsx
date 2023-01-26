@@ -2,7 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { Session, useUpdateSessionMutation } from "../generated/graphql";
+import { Session, useUpdateSessionMutation } from "../types/generatedTypes";
 import { addMissingZeros } from "../utils/addMissingZeros";
 import { InputField } from "./InputField";
 import { RouteTitle } from "./RouteTitle";

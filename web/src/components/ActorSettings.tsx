@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import { Actor, useUpdateActorMutation } from "../generated/graphql";
+import { Actor, useUpdateActorMutation } from "../types/generatedTypes";
 import { toErrorMap } from "../utils/toErrorMap";
 import { DeleteDiscordIntegration } from "./DeleteDiscordIntegration";
 import { ForgetMe } from "./ForgetMe";

@@ -1,5 +1,5 @@
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
-import { Actor, useSessionCommentsQuery } from "../generated/graphql";
+import { Actor, useSessionCommentsQuery } from "../types/generatedTypes";
 import { CreateSessionComment } from "./CreateSessionComment";
 import { FailedLoadingData } from "./FailedLoadingData";
 import { Loading } from "./Loading";
