@@ -11,22 +11,22 @@ import session from "express-session";
 import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { request } from "undici";
 import {
   COOKIE_NAME,
-  SESSION_SECRET,
-  IS_PRODUCTION,
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
+  IS_PRODUCTION,
   REDIS_PASSWORD,
+  SESSION_SECRET,
 } from "./constants";
 import { dataSource } from "./dataSource";
+import { loginDiscordClient } from "./discord/discordClient";
+import { Discord } from "./entities/discord.entity";
 import { ActorResolver } from "./resolvers/actor.resolver";
 import { SessionResolver } from "./resolvers/session.resolver";
-import { ApolloContext } from "./types";
 import { SessionCommentResolver } from "./resolvers/sessionComment.resolver";
-import { loginDiscordClient } from "./discord/discordClient";
-import { request } from "undici";
-import { Discord } from "./entities/discord.entity";
+import { ApolloContext } from "./types";
 import { encrypt } from "./utils/Crypto";
 
 const main = async () => {

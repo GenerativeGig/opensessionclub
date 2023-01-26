@@ -1,5 +1,4 @@
 import argon2 from "argon2";
-import { isAuthenticated } from "../middleware/isAuthenticated";
 import {
   Arg,
   Ctx,
@@ -14,6 +13,7 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
+import { In } from "typeorm";
 import { v4 } from "uuid";
 import {
   COOKIE_NAME,
@@ -22,14 +22,14 @@ import {
 } from "../constants";
 import { dataSource } from "../dataSource";
 import { Actor } from "../entities/actor.entity";
+import { ActorSession } from "../entities/actorSession.entity";
+import { Discord } from "../entities/discord.entity";
+import { Session } from "../entities/session.entity";
+import { SessionComment } from "../entities/sessionComment.entity";
+import { isAuthenticated } from "../middleware/isAuthenticated";
 import { ApolloContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 import { validateSignup } from "../validation/signup.validation";
-import { SessionComment } from "../entities/sessionComment.entity";
-import { ActorSession } from "../entities/actorSession.entity";
-import { Session } from "../entities/session.entity";
-import { Discord } from "../entities/discord.entity";
-import { In } from "typeorm";
 
 @InputType()
 class ActorInput {
