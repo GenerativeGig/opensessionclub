@@ -1,22 +1,22 @@
+import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { redirect } from "react-router-dom";
 import {
   createClient,
   dedupExchange,
+  Exchange,
   fetchExchange,
   stringifyVariables,
 } from "urql";
-import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { pipe, tap } from "wonka";
+import { IS_PRODUCTION } from "../constants";
 import {
-  SignupMutation,
-  MeQuery,
-  MeDocument,
   LoginMutation,
   LogoutMutation,
+  MeDocument,
+  MeQuery,
+  SignupMutation,
 } from "../types/generatedTypes";
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import { pipe, tap } from "wonka";
-import { Exchange } from "urql";
-import { redirect } from "react-router-dom";
-import { IS_PRODUCTION } from "../constants";
 
 const errorExchange: Exchange =
   ({ forward }) =>
