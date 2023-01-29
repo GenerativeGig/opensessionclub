@@ -1,70 +1,53 @@
-import { useParams } from "react-router-dom";
-import { FailedLoadingData } from "../../common/components/FailedLoadingData";
-import { Loading } from "../../common/components/Loading";
+import { DataProvider } from "../../common/components/DataProvider";
 import { RouteTitle } from "../../common/components/RouteTitle";
-import { useIsAuthenticated } from "../../common/hooks/useIsAuthenticated";
+import { useAuthentication } from "../../common/hooks/useAuthentication";
+import { useIdParam } from "../../common/hooks/useIdParam";
 import { PageNotFound } from "../../common/routes/PageNotFound";
-import { useActorQuery, useMeQuery } from "../../generatedTypes";
+import { useActorQuery } from "../../generatedTypes";
 import { ActorSettings } from "../components/ActorSettings";
 
 export function ActorDetails() {
-  useIsAuthenticated();
+  const { me } = useAuthentication();
 
-  const { id } = useParams();
+  const { id } = useIdParam();
+
   if (!id) {
-    return <FailedLoadingData />;
-  }
-  const [{ data: actorData, fetching: actorFetching }] = useActorQuery({
-    variables: { id: parseInt(id!) },
-  });
-
-  const [{ data: meData, fetching: meFetching }] = useMeQuery();
-
-  if ((!actorData && actorFetching) || (!meData && meFetching)) {
-    return <Loading />;
+    return <PageNotFound />;
   }
 
-  if ((!actorData && !actorFetching) || (!meData && !meFetching)) {
-    return <FailedLoadingData />;
-  }
+  const isMe = me?.id === id;
 
-  if (actorData && !actorFetching && meData && !meFetching) {
-    if (!actorData.actor) {
-      return <PageNotFound />;
-    }
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
-    if (!meData.me) {
-      return <></>;
-    }
+  return (
+    <DataProvider useQuery={useActorQuery} variables={{ id }}>
+      {(data) => {
+        if (!data.actor) {
+          return <PageNotFound />;
+        }
 
-    const { name, createdAt } = actorData.actor;
+        const createdAtDate = new Date(parseInt(data.actor.createdAt));
 
-    const isOwnDetails = meData?.me?.id === parseInt(id);
-
-    const weekday = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-
-    const createdAtDate = new Date(parseInt(createdAt));
-
-    return (
-      <div>
-        <RouteTitle>{name}</RouteTitle>
-        <div className="py-6">
-          {`Member since ${
-            weekday[createdAtDate.getDay()]
-          } ${createdAtDate.toLocaleDateString()}.`}
-        </div>
-        {isOwnDetails && <ActorSettings actor={actorData.actor} />}
-      </div>
-    );
-  }
-
-  return <></>;
+        return (
+          <div>
+            <RouteTitle>{data.actor.name}</RouteTitle>
+            <div className="py-6">
+              {`Member since ${
+                weekdays[createdAtDate.getDay()]
+              } ${createdAtDate.toLocaleString()}.`}
+            </div>
+            {isMe && <ActorSettings actor={me} />}
+          </div>
+        );
+      }}
+    </DataProvider>
+  );
 }
