@@ -4,9 +4,9 @@ import { Header } from "../components/Header";
 
 export function Wrapper() {
   return (
-    <div className="flex flex-col h-screen relative">
+    <div className="flex flex-col h-screen">
       <Header />
-      <main className="flex-grow overflow-visible">
+      <main className="flex-grow overflow-visible bg-slate-900">
         <div className="px-2 max-w-[768px] mr-auto ml-auto flex flex-col pb-16 z-10">
           <Outlet />
         </div>
