@@ -3,15 +3,8 @@ import { redirect } from "react-router-dom";
 import { createClient, dedupExchange, Exchange, fetchExchange } from "urql";
 import { pipe, tap } from "wonka";
 import { IS_PRODUCTION } from "../constants";
-import {
-  LoginMutation,
-  LogoutMutation,
-  MeDocument,
-  MeQuery,
-  SignupMutation,
-} from "../generatedTypes";
-import { betterUpdateQuery } from "./betterUpdateQuery";
 import { cursorPagination } from "./cursorPagination";
+import { updateMutation } from "./updateMutation";
 
 const errorExchange: Exchange =
   ({ forward }) =>
@@ -47,44 +40,7 @@ export const urqlClient = createClient({
         },
       },
       updates: {
-        Mutation: {
-          signup: (result_, _args, cache, _info) => {
-            betterUpdateQuery<SignupMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              result_,
-              (result, query) => {
-                if (result.signup.errors) {
-                  return query;
-                } else {
-                  return { me: result.signup.actor };
-                }
-              }
-            );
-          },
-          login: (result_, _args, cache, _info) => {
-            betterUpdateQuery<LoginMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              result_,
-              (result, query) => {
-                if (result.login.errors) {
-                  return query;
-                } else {
-                  return { me: result.login.actor };
-                }
-              }
-            );
-          },
-          logout: (result_, _args, cache, _info) => {
-            betterUpdateQuery<LogoutMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              result_,
-              () => ({ me: null })
-            );
-          },
-        },
+        Mutation: updateMutation,
       },
     }),
     errorExchange,
