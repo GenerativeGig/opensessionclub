@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { ActorLink } from "../../actor/components/ActorLink";
-import { useLogoutMutation, useMeQuery } from "../../generatedTypes";
 import OpenSessionClubLogoWhite from "../assets/open-session-club-logo-white.png";
+import { HeaderActorButtons } from "./HeaderActorButtons";
 
 function getRouteTitle(pathname: string) {
   const firstPartAfterSlash = pathname.split("/")[1];
@@ -22,41 +21,7 @@ function getRouteTitle(pathname: string) {
 }
 
 export function Header() {
-  const [{ data, fetching: meFetching }] = useMeQuery();
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const { pathname } = useLocation();
-
-  let authenticationJsx;
-  if (meFetching) {
-    authenticationJsx = <></>;
-  } else if (!data?.me) {
-    authenticationJsx = (
-      <>
-        <Link to="/login">
-          <button className="hover:text-slate-200">Login</button>
-        </Link>
-        <Link to="/signup">
-          <button className="bg-slate-500  hover:bg-slate-400">Signup</button>
-        </Link>
-      </>
-    );
-  } else {
-    authenticationJsx = (
-      <>
-        <div className="m-3">
-          <ActorLink actor={data.me} />
-        </div>
-        <button
-          className="p-0 hover:text-slate-200"
-          onClick={() => {
-            logout({});
-          }}
-        >
-          Logout
-        </button>
-      </>
-    );
-  }
 
   const routeTitle = getRouteTitle(pathname);
 
@@ -94,7 +59,7 @@ export function Header() {
             </button>
           </Link>
         )}
-        {authenticationJsx}
+        <HeaderActorButtons />
       </div>
     </header>
   );
