@@ -17,7 +17,7 @@ export function InputField({ label = "", info, ...props }: InputFieldProps) {
         <input id={field.name} required {...field} {...props} />
         {info && <span>{info}</span>}
       </div>
-      <div className="place-self-end mr-2 text-red-600">
+      <div className="mr-2 place-self-end text-red-600">
         <ErrorMessage name={field.name} />
       </div>
     </div>

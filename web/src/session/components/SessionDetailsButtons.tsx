@@ -69,7 +69,7 @@ export function SessionDetailsButtons({
                 }
               }}
             >
-              <NoSymbolIcon className="h-6 w-6 inline" />
+              <NoSymbolIcon className="inline h-6 w-6" />
               Cancel
             </button>
           )}
@@ -82,13 +82,13 @@ export function SessionDetailsButtons({
               }
             }}
           >
-            <TrashIcon className="h-5 w-5 inline" />
+            <TrashIcon className="inline h-5 w-5" />
             Delete
           </button>
           {!isCancelled && !isPast && (
             <Link to={`/session/${id}/edit`}>
               <button className="bg-yellow-500 hover:bg-yellow-400">
-                <PencilIcon className="h-5 w-5 inline" />
+                <PencilIcon className="inline h-5 w-5" />
                 Edit
               </button>
             </Link>
@@ -121,7 +121,7 @@ export function SessionDetailsButtons({
           }}
           className="bg-[#5865F2] hover:bg-[#7983f2]"
         >
-          <SpeakerWaveIcon className="w-6 h-6 inline" />
+          <SpeakerWaveIcon className="inline h-6 w-6" />
           {joinVoiceChannelText}
         </button>
       )}

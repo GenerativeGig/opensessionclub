@@ -47,7 +47,7 @@ export function Header() {
           <ActorLink actor={data.me} />
         </div>
         <button
-          className="hover:text-slate-200 p-0"
+          className="p-0 hover:text-slate-200"
           onClick={() => {
             logout({});
           }}
@@ -61,7 +61,7 @@ export function Header() {
   const routeTitle = getRouteTitle(pathname);
 
   return (
-    <header className="p-4 top-0 flex flex-col md:flex-row md:justify-between w-full bg-slate-900">
+    <header className="top-0 flex w-full flex-col bg-slate-900 p-4 md:flex-row md:justify-between">
       <div className="flex items-center">
         <Link
           to="/"
@@ -75,15 +75,15 @@ export function Header() {
           />
         </Link>
         {routeTitle && (
-          <h1 className="ml-4 text-4xl text-center md:text-left truncate ...">
+          <h1 className="... ml-4 truncate text-center text-4xl md:text-left">
             {routeTitle}
           </h1>
         )}
       </div>
-      <div className="flex self-end mt-4 md:mt-0 md:self-center items-center pointer-events-auto">
+      <div className="pointer-events-auto mt-4 flex items-center self-end md:mt-0 md:self-center">
         {pathname.includes("/sessions") ? (
           <Link to="/create-session">
-            <button className="bg-pink-600 hover:bg-pink-500 w-24 sm:w-auto">
+            <button className="w-24 bg-pink-600 hover:bg-pink-500 sm:w-auto">
               Create Session
             </button>
           </Link>

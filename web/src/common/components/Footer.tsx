@@ -4,8 +4,8 @@ import { GitHubLogo } from "./logos/GitHubLogo";
 
 export function Footer() {
   return (
-    <footer className="flex justify-around items-center bg-[#0d1526] p-4">
-      <div className="flex flex-col md:flex-row md:gap-4 justify-between">
+    <footer className="flex items-center justify-around bg-[#0d1526] p-4">
+      <div className="flex flex-col justify-between md:flex-row md:gap-4">
         <Link to="/impressum" className="hover:underline">
           Impressum
         </Link>

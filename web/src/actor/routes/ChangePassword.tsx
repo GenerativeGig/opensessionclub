@@ -53,7 +53,7 @@ export function ChangePassword() {
                   <>
                     <span className="text-red-600">{tokenError}</span>
                     <Link
-                      className="hover:text-slate-400 hover:underline ml-2"
+                      className="ml-2 hover:text-slate-400 hover:underline"
                       to="/forgot-password"
                     >
                       Click here to get a new one

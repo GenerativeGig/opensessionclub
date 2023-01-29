@@ -31,7 +31,7 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
       return (
         <div className="self-end">
           Ongoing
-          <ClockIcon className="h-6 w-6 inline" />
+          <ClockIcon className="inline h-6 w-6" />
         </div>
       );
     case SessionDateTimeKind.Compact:
@@ -50,13 +50,13 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
               {addMissingZeros(startDate.getHours())}:
               {addMissingZeros(startDate.getMinutes())}
             </span>
-            <ClockIcon className="h-6 w-6 inline" />
+            <ClockIcon className="inline h-6 w-6" />
           </div>
         </>
       );
     case SessionDateTimeKind.Full:
       return (
-        <div className="self-end flex flex-col">
+        <div className="flex flex-col self-end">
           <div className="self-end">
             <span className="text-slate-300">
               {weekday[startDate.getDay()]}
@@ -70,10 +70,10 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
               {addMissingZeros(startDate.getHours())}:
               {addMissingZeros(startDate.getMinutes())}
             </span>
-            <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
+            <span className="mx-1 rounded bg-slate-50 px-1 text-slate-900">
               Start
             </span>
-            <ClockIcon className="h-6 w-6 inline" />
+            <ClockIcon className="inline h-6 w-6" />
           </div>
           <div className="self-end text-slate-300">
             <span className="text-slate-300">{weekday[stopDate.getDay()]}</span>
@@ -86,10 +86,10 @@ export function SessionDateTime({ start, stop, kind }: SessionDateTimeProps) {
               {addMissingZeros(stopDate.getHours())}:
               {addMissingZeros(stopDate.getMinutes())}
             </span>
-            <span className="bg-slate-50 text-slate-900 px-1 rounded mx-1">
+            <span className="mx-1 rounded bg-slate-50 px-1 text-slate-900">
               Stop
             </span>
-            <ClockIcon className="h-6 w-6 inline" />
+            <ClockIcon className="inline h-6 w-6" />
           </div>
         </div>
       );

@@ -20,14 +20,14 @@ export function InputTextArea({ label, noLabel, ...props }: InputFieldProps) {
           </label>
         )}
         <textarea
-          className="self-start w-[500px] h-[200px]"
+          className="h-[200px] w-[500px] self-start"
           placeholder={props.placeholder}
           id={field.name}
           {...field}
           {...props}
         />
       </div>
-      <div className="place-self-end mr-2 text-red-600">
+      <div className="mr-2 place-self-end text-red-600">
         <ErrorMessage name={field.name} />
       </div>
     </div>

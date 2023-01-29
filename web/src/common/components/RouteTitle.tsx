@@ -5,5 +5,5 @@ export interface RoutTitleProps {
 }
 
 export function RouteTitle({ children }: RoutTitleProps) {
-  return <h1 className="text-4xl break-words my-8 text-center">{children}</h1>;
+  return <h1 className="my-8 break-words text-center text-4xl">{children}</h1>;
 }

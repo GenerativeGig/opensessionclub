@@ -19,7 +19,7 @@ export function Sessions() {
               navigate("ongoing");
             }}
           >
-            <BoltIcon className="h-5 w-5 inline" />
+            <BoltIcon className="inline h-5 w-5" />
             {TimeStatusText.ONGOING}
           </button>
         </li>
@@ -30,7 +30,7 @@ export function Sessions() {
               navigate("upcoming");
             }}
           >
-            <CalendarDaysIcon className="h-5 w-5 inline" />
+            <CalendarDaysIcon className="inline h-5 w-5" />
             {TimeStatusText.UPCOMING}
           </button>
         </li>
@@ -41,7 +41,7 @@ export function Sessions() {
               navigate("archived");
             }}
           >
-            <ArchiveBoxIcon className="h-5 w-5 inline" />
+            <ArchiveBoxIcon className="inline h-5 w-5" />
             {TimeStatusText.PAST}
           </button>
         </li>

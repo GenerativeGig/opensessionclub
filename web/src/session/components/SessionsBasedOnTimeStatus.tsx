@@ -36,7 +36,7 @@ export function SessionsBasedOnTimeStatus({
 
   if (sessions.length === 0) {
     return (
-      <p className="text-center my-8">
+      <p className="my-8 text-center">
         No {TimeStatusText[timeStatus].toLowerCase()} sessions.
       </p>
     );
@@ -44,12 +44,12 @@ export function SessionsBasedOnTimeStatus({
 
   return (
     <>
-      <ol className="flex flex-col w-full">
+      <ol className="flex w-full flex-col">
         {sessions?.map((session) => (
           <li key={session.id}>
             <Link to={`/session/${session.id}`}>
               <div
-                className={`p-4 first:mt-2 last:mb-2 w-full rounded-md bg-slate-800 border-solid border-2 ${borderColor} ${borderHoverBackgroundColor}`}
+                className={`w-full rounded-md border-2 border-solid bg-slate-800 p-4 first:mt-2 last:mb-2 ${borderColor} ${borderHoverBackgroundColor}`}
               >
                 <SessionCard {...session} />
               </div>
@@ -59,7 +59,7 @@ export function SessionsBasedOnTimeStatus({
       </ol>
       {hasMore && (
         <button
-          className="bg-slate-500 hover:bg-slate-400 w-32 self-center"
+          className="w-32 self-center bg-slate-500 hover:bg-slate-400"
           onClick={() => setCursor(sessions[sessions.length - 1].start)}
         >
           Load more

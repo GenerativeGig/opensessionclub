@@ -122,7 +122,7 @@ export function SessionCommentCard({
                     }
                   }}
                 >
-                  <TrashIcon className="h-5 w-5 inline" />
+                  <TrashIcon className="inline h-5 w-5" />
                   Delete
                 </button>
                 <button
@@ -133,7 +133,7 @@ export function SessionCommentCard({
                     setTextBeforeEdit(editor?.getHTML());
                   }}
                 >
-                  <PencilIcon className="h-5 w-5 inline" />
+                  <PencilIcon className="inline h-5 w-5" />
                   Edit
                 </button>
               </div>

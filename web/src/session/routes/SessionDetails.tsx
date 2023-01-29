@@ -78,14 +78,14 @@ export function SessionDetails() {
     editor?.commands.setContent(text || null);
 
     return (
-      <article className="flex flex-col m-2">
+      <article className="m-2 flex flex-col">
         <RouteTitle>{title}</RouteTitle>
         {isRemote && (
           <div className="self-end">
             <Remote />
           </div>
         )}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div className="flex flex-col items-start justify-between md:flex-row md:items-center">
           <div>
             {isCancelled && (
               <>
@@ -102,16 +102,16 @@ export function SessionDetails() {
           />
         </div>
         <EditorContent editor={editor} />
-        <div className="self-end flex">
+        <div className="flex self-end">
           {location && <Location location={location} />}
           <NumberOfAttendees
             numberOfAttendees={numberOfAttendees}
             attendeeLimit={attendeeLimit}
           />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <ActorLink actor={creator} />
-          <div className="self-end flex flex-col md:flex-row items-end md:items-center">
+          <div className="flex flex-col items-end self-end md:flex-row md:items-center">
             <SessionDetailsButtons
               session={sessionData.session}
               isCreator={isCreator}

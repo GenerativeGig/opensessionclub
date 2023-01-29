@@ -8,9 +8,9 @@ export interface ActorLinkProps {
 
 export function ActorLink({ actor }: ActorLinkProps) {
   return (
-    <div className="group text-blue-500 hover:text-blue-400 truncate ...">
+    <div className="... group truncate text-blue-500 hover:text-blue-400">
       <Link to={`/actor/${actor.id}`}>
-        <AtSymbolIcon className="h-5 w-5 fill-blue-500 group-hover:fill-blue-400 inline" />
+        <AtSymbolIcon className="inline h-5 w-5 fill-blue-500 group-hover:fill-blue-400" />
         {actor.name}
       </Link>
     </div>

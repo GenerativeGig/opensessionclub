@@ -1,5 +1,5 @@
 export function Loading() {
-  return <span className="text-center my-8">Loading...</span>;
+  return <span className="my-8 text-center">Loading...</span>;
 }
 
 // TODO: Loading spinner

@@ -49,13 +49,13 @@ export function Login() {
               extraChildren={
                 <>
                   <Link
-                    className="hover:text-slate-400 hover:underline block text-right"
+                    className="block text-right hover:text-slate-400 hover:underline"
                     to="/forgot-password"
                   >
                     Forgot password?
                   </Link>
                   <Link
-                    className="hover:text-slate-400 hover:underline block text-right"
+                    className="block text-right hover:text-slate-400 hover:underline"
                     to="/signup"
                   >
                     Don't have an account yet?

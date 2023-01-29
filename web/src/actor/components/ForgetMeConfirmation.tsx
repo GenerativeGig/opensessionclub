@@ -26,7 +26,7 @@ export function ForgetMeConfirmation({ onCancel }: ForgetMeConfirmationProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-end items-center">
+      <div className="flex-end flex items-center">
         {timer !== 0 && timer}
         <button
           disabled={timer !== 0}

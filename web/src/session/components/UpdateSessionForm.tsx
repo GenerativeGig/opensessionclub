@@ -149,11 +149,11 @@ export function UpdateSessionForm({ session }: UpdateSessionFormProps) {
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="h-full w-full flex flex-col items-center">
-            <div className="m-2 p-2 md:p-8 w-full max-w-[768px] bg-slate-800 rounded-md border-solid border-2 border-green-500">
-              <div className="p-2 flex flex-col items-start">
+          <Form className="flex h-full w-full flex-col items-center">
+            <div className="m-2 w-full max-w-[768px] rounded-md border-2 border-solid border-green-500 bg-slate-800 p-2 md:p-8">
+              <div className="flex flex-col items-start p-2">
                 <InputField name="title" label="Title" placeholder="title" />{" "}
-                <div className="flex items-center w-full">
+                <div className="flex w-full items-center">
                   <label htmlFor="text">Text</label>
                   <EditorContent
                     label="text"
@@ -161,11 +161,11 @@ export function UpdateSessionForm({ session }: UpdateSessionFormProps) {
                     editor={editor}
                   />
                 </div>
-                <div className="flex flex-col md:flex-row justify-between">
+                <div className="flex flex-col justify-between md:flex-row">
                   <InputField name="startDate" label="Start date" type="date" />
                   <InputField name="startTime" label="Start time" type="time" />
                 </div>
-                <div className="flex flex-col md:flex-row justify-between">
+                <div className="flex flex-col justify-between md:flex-row">
                   <InputField name="stopDate" label="Stop date" type="date" />
                   <InputField name="stopTime" label="Stop time" type="time" />
                 </div>

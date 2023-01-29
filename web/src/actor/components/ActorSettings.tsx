@@ -19,7 +19,7 @@ export function ActorSettings({ actor }: ActorSettingsProps) {
 
   return (
     <>
-      <h2 className="text-right p-4">Account Settings</h2>
+      <h2 className="p-4 text-right">Account Settings</h2>
       <Formik
         initialValues={{ name, email }}
         onSubmit={async ({ name, email }, { setErrors }) => {

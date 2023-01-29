@@ -4,10 +4,10 @@ import { Header } from "../components/Header";
 
 export function Wrapper() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen flex-col">
       <Header />
       <main className="flex-grow overflow-visible bg-slate-900">
-        <div className="px-2 max-w-[768px] mr-auto ml-auto flex flex-col pb-16 z-10">
+        <div className="z-10 mr-auto ml-auto flex max-w-[768px] flex-col px-2 pb-16">
           <Outlet />
         </div>
       </main>
