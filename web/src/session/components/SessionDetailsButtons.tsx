@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useIsAuthenticated } from "../../common/hooks/useIsAuthenticated";
+import { useAuthentication } from "../../common/hooks/useAuthentication";
 import { DISCORD_AUTH_URL } from "../../constants";
 import {
   Session,
@@ -26,7 +26,7 @@ export function SessionDetailsButtons({
   session,
   isCreator,
 }: SessionDetailsButtonsProps) {
-  useIsAuthenticated();
+  useAuthentication();
 
   const navigate = useNavigate();
 

@@ -5,11 +5,12 @@ import { ActorLink } from "../../actor/components/ActorLink";
 import { FailedLoadingData } from "../../common/components/FailedLoadingData";
 import { Loading } from "../../common/components/Loading";
 import { RouteTitle } from "../../common/components/RouteTitle";
-import { useIsAuthenticated } from "../../common/hooks/useIsAuthenticated";
+import { useAuthentication } from "../../common/hooks/useAuthentication";
 import { PageNotFound } from "../../common/routes/PageNotFound";
 import { useMeQuery, useSessionQuery } from "../../generatedTypes";
 import { SessionCommentSection } from "../../sessionComments/components/SessionCommentSection";
 import { Cancelled } from "../components/Cancelled";
+import { Location } from "../components/Location";
 import { NumberOfAttendees } from "../components/NumberOfAttendees";
 import { Remote } from "../components/Remote";
 import {
@@ -20,7 +21,7 @@ import { SessionDetailsButtons } from "../components/SessionDetailsButtons";
 import { TimeStatusTag } from "../components/TimeStatus";
 
 export function SessionDetails() {
-  useIsAuthenticated();
+  useAuthentication();
 
   const { id } = useParams();
   if (!id) {

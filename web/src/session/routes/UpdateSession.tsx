@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import { FailedLoadingData } from "../../common/components/FailedLoadingData";
 import { Loading } from "../../common/components/Loading";
-import { useIsAuthenticated } from "../../common/hooks/useIsAuthenticated";
+import { useAuthentication } from "../../common/hooks/useAuthentication";
 import { useSessionQuery } from "../../generatedTypes";
 import { UpdateSessionForm } from "../components/UpdateSessionForm";
 
 export function UpdateSession() {
-  useIsAuthenticated();
+  useAuthentication();
+
   const { id } = useParams();
   if (!id) {
     return <FailedLoadingData />;

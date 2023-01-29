@@ -5,11 +5,11 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../../common/components/InputField";
 import { RouteTitle } from "../../common/components/RouteTitle";
-import { useIsAuthenticated } from "../../common/hooks/useIsAuthenticated";
+import { useAuthentication } from "../../common/hooks/useAuthentication";
 import { useCreateSessionMutation } from "../../generatedTypes";
 
 export function CreateSession() {
-  useIsAuthenticated();
+  useAuthentication();
 
   const [, createSession] = useCreateSessionMutation();
 
