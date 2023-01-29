@@ -7,7 +7,7 @@ import { SessionCommentCard } from "./SessionCommentCard";
 
 export interface SessionCommentSectionProps {
   sessionId: number;
-  me?: Actor;
+  me?: Actor | null;
 }
 
 export function SessionCommentSection({

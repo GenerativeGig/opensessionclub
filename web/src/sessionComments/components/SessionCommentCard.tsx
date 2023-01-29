@@ -14,7 +14,7 @@ import {
 
 export interface SessionCommentCardProps {
   sessionComment: SessionComment;
-  me?: Actor;
+  me?: Actor | null;
 }
 
 export function SessionCommentCard({
@@ -57,7 +57,7 @@ export function SessionCommentCard({
     editor?.setEditable(isEditing);
   }, [editor, isEditing]);
 
-  const isCreator = me && me.id === sessionComment.creator.id;
+  const isCreator = me?.id === sessionComment.creator.id;
 
   if (!editor) {
     return <></>;
