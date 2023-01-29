@@ -102,5 +102,4 @@ export function Header() {
 
 // TODO: Make new header design that makes sense for mobile as well
 
-// TODO: fetching checks for logoutMutation (are there others that I don't check)
-// Can the fetching check code be abstracted? Wrapped in my own hook
+// TODO: fetching checks for logoutMutation (are there others that I don't check). Can the fetching check code be abstracted? Wrapped in my own hook
