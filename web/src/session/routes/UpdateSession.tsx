@@ -1,30 +1,34 @@
-import { useParams } from "react-router-dom";
-import { FailedLoadingData } from "../../common/components/FailedLoadingData";
-import { Loading } from "../../common/components/Loading";
+import { DataProvider } from "../../common/components/DataProvider";
 import { useAuthentication } from "../../common/hooks/useAuthentication";
+import { useIdParam } from "../../common/hooks/useIdParam";
+import { PageNotFound } from "../../common/routes/PageNotFound";
+import { Unauthorized } from "../../common/routes/Unauthorized";
 import { useSessionQuery } from "../../generatedTypes";
 import { UpdateSessionForm } from "../components/UpdateSessionForm";
 
 export function UpdateSession() {
-  useAuthentication();
+  const { me } = useAuthentication();
 
-  const { id } = useParams();
+  const { id } = useIdParam();
   if (!id) {
-    return <FailedLoadingData />;
+    return <PageNotFound />;
   }
 
-  const [{ data: sessionData, fetching: sessionFetching }] = useSessionQuery({
-    variables: { id: parseInt(id) },
-  });
+  return (
+    <DataProvider useQuery={useSessionQuery} variables={{ id }}>
+      {(data) => {
+        if (!data.session) {
+          return <PageNotFound />;
+        }
 
-  if (!sessionData && sessionFetching) {
-    return <Loading />;
-  }
+        if (data.session.creator.id !== me?.id) {
+          return <Unauthorized />;
+        }
 
-  if (sessionData?.session) {
-    return <UpdateSessionForm session={sessionData.session} />;
-  }
-  return <FailedLoadingData />;
+        return <UpdateSessionForm session={data.session} />;
+      }}
+    </DataProvider>
+  );
 }
 
 // TODO: Combine parts of redundant code in edit and create into functions / components / as hook?
