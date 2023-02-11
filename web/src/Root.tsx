@@ -5,26 +5,26 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Provider as UrqlProvider } from "urql";
-import { ActorDetails } from "./actor/routes/ActorDetails";
-import { ChangePassword } from "./actor/routes/ChangePassword";
-import { ChangePasswordLoggedIn } from "./actor/routes/ChangePasswordLoggedIn";
-import { ForgotPassword } from "./actor/routes/ForgotPassword";
-import { Login } from "./actor/routes/Login";
-import { Signup } from "./actor/routes/Signup";
-import { Home } from "./common/routes/Home";
-import { Impressum } from "./common/routes/Impressum";
-import { PageNotFound } from "./common/routes/PageNotFound";
-import { PrivacyPolicy } from "./common/routes/PrivacyPolicy";
-import { TermsOfService } from "./common/routes/TermsOfService";
-import { Wrapper } from "./common/routes/Wrapper";
-import { CreateSession } from "./session/routes/CreateSession";
-import { OngoingSessions } from "./session/routes/OngoingSessions";
-import { PastSessions } from "./session/routes/PastSessions";
-import { SessionDetails } from "./session/routes/SessionDetails";
-import { Sessions } from "./session/routes/Sessions";
-import { UpcomingSessions } from "./session/routes/UpcomingSessions";
-import { UpdateSession } from "./session/routes/UpdateSession";
-import { urqlClient } from "./utils/urqlClient";
+import { ActorDetails } from "./Actor/ActorDetails/routes/ActorDetails";
+import { ChangePassword } from "./Actor/Common/routes/ChangePassword";
+import { ChangePasswordLoggedIn } from "./Actor/Common/routes/ChangePasswordLoggedIn";
+import { ForgotPassword } from "./Actor/Common/routes/ForgotPassword";
+import { Login } from "./Actor/Common/routes/Login";
+import { Signup } from "./Actor/Common/routes/Signup";
+import { Home } from "./Common/routes/Home";
+import { Impressum } from "./Common/routes/Impressum";
+import { PageNotFound } from "./Common/routes/PageNotFound";
+import { PrivacyPolicy } from "./Common/routes/PrivacyPolicy";
+import { TermsOfService } from "./Common/routes/TermsOfService";
+import { Wrapper } from "./Common/routes/Wrapper";
+import { urqlClient } from "./Common/utils/urqlClient";
+import { CreateSession } from "./Session/Common/routes/CreateSession";
+import { UpdateSession } from "./Session/Common/routes/UpdateSession";
+import { SessionDetails } from "./Session/SessionDetails/routes/SessionDetails";
+import { OngoingSessions } from "./Session/Sessions/routes/OngoingSessions";
+import { PastSessions } from "./Session/Sessions/routes/PastSessions";
+import { Sessions } from "./Session/Sessions/routes/Sessions";
+import { UpcomingSessions } from "./Session/Sessions/routes/UpcomingSessions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
