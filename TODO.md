@@ -24,5 +24,7 @@ Components
 
 - Don't use Formik, just use native forms
 
-- Remove unnecessary complexity in frontend by reusing more components
+Next todo:
+
+- Remove unnecessary complexity in frontend by reusing more components:
   SessionDetailsButtons, combine UpdateSessionForm & CreateSession -> One form component, SessionCommentCard
