@@ -27,4 +27,6 @@ Components
 Next todo:
 
 - Remove unnecessary complexity in frontend by reusing more components:
-  SessionDetailsButtons, combine UpdateSessionForm & CreateSession -> One form component, SessionCommentCard
+  SessionCommentCard
+
+- Fix bug when first creating a non remote session and later editing to be remote, then there is still no voiceChannelUrl

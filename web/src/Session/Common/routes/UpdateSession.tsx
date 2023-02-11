@@ -4,7 +4,7 @@ import { useIdParam } from "../../../Common/hooks/useIdParam";
 import { PageNotFound } from "../../../Common/routes/PageNotFound";
 import { Unauthorized } from "../../../Common/routes/Unauthorized";
 import { useSessionQuery } from "../../../generatedTypes";
-import { UpdateSessionForm } from "../components/UpdateSessionForm";
+import { SessionForm } from "../components/SessionForm";
 
 export function UpdateSession() {
   const { me } = useAuthentication();
@@ -25,7 +25,7 @@ export function UpdateSession() {
           return <Unauthorized />;
         }
 
-        return <UpdateSessionForm session={data.session} />;
+        return <SessionForm isEditing session={data.session} />;
       }}
     </DataProvider>
   );

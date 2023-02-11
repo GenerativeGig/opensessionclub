@@ -23,13 +23,19 @@ export function SessionDetailsButtons({
 
   const [, joinVoiceChannel] = useJoinSessionVoiceChannelMutation();
 
-  const { id, isCancelled, actorIsPartOfSession, voiceChannelUrl, timeStatus } =
-    session;
+  const {
+    id,
+    isCancelled,
+    actorIsPartOfSession,
+    isRemote,
+    voiceChannelUrl,
+    timeStatus,
+  } = session;
 
   const isPast = timeStatus === TimeStatus.PAST;
 
   const canJoinVoiceChannelPrecondition = Boolean(
-    actorIsPartOfSession && !isPast && voiceChannelUrl
+    actorIsPartOfSession && !isPast && isRemote && voiceChannelUrl
   );
 
   const [canJoinVoiceChannel, setCanJoinVoiceChannel] = useState<
