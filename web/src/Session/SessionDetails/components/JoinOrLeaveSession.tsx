@@ -26,13 +26,14 @@ export function JoinOrLeaveSession({ session }: JoinOrLeaveSessionProps) {
     isCancelled,
   } = session;
 
-  const allowJoin = () => {
-    const sessionHasSpots = numberOfAttendees < attendeeLimit;
-    const isPast = timeStatus === TimeStatus.PAST;
-    return !actorIsPartOfSession && sessionHasSpots && !isPast && !isCancelled;
-  };
+  const sessionHasSpots = numberOfAttendees < attendeeLimit;
 
-  if (allowJoin()) {
+  const isPast = timeStatus === TimeStatus.PAST;
+
+  const allowJoin =
+    !actorIsPartOfSession && sessionHasSpots && !isPast && !isCancelled;
+
+  if (allowJoin) {
     return (
       <button
         onClick={async () => {
@@ -48,11 +49,9 @@ export function JoinOrLeaveSession({ session }: JoinOrLeaveSessionProps) {
     );
   }
 
-  const allowLeave = () => {
-    return actorIsPartOfSession;
-  };
+  const allowLeave = actorIsPartOfSession;
 
-  if (allowLeave()) {
+  if (allowLeave) {
     return (
       <button
         onClick={async () => {

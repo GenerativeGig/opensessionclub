@@ -7,7 +7,7 @@ import {
   useJoinSessionVoiceChannelMutation,
 } from "../../../generatedTypes";
 import { TimeStatus } from "../../Common/components/TimeStatus";
-
+import { JoinOrLeaveSession } from "./JoinOrLeaveSession";
 import { SessionDetailsCreatorButtons } from "./SessionDetailsCreatorButtons";
 
 export interface SessionDetailsButtonsProps {
@@ -28,15 +28,21 @@ export function SessionDetailsButtons({
 
   const isPast = timeStatus === TimeStatus.PAST;
 
+  const canJoinVoiceChannelPrecondition = Boolean(
+    actorIsPartOfSession && !isPast && voiceChannelUrl
+  );
+
   const [canJoinVoiceChannel, setCanJoinVoiceChannel] = useState<
     boolean | undefined
   >();
+
   const [joinVoiceChannelText, setJoinVoiceChannelText] =
     useState<string>("Join Voice Channel");
 
   const refreshCanJoinVoiceChannel = async () => {
     setCanJoinVoiceChannel(
-      (await joinVoiceChannel({ id })).data?.joinSessionVoiceChannel
+      canJoinVoiceChannelPrecondition &&
+        (await joinVoiceChannel({ id })).data?.joinSessionVoiceChannel
     );
   };
 
@@ -44,15 +50,17 @@ export function SessionDetailsButtons({
     refreshCanJoinVoiceChannel();
   }, []);
 
-  const canJoinVoiceChannel = () => {
-    return actorIsPartOfSession && !isPast && voiceChannelUrl;
-  };
-
   return (
     <>
-      {isCreator && <SessionDetailsCreatorButtons />}
+      {isCreator && (
+        <SessionDetailsCreatorButtons
+          sessionId={id}
+          isCancelled={isCancelled}
+          isPast={isPast}
+        />
+      )}
       {!isCreator && <JoinOrLeaveSession session={session} />}
-      {canJoinVoiceChannel() && (
+      {canJoinVoiceChannelPrecondition && (
         <button
           onClick={() => {
             if (!canJoinVoiceChannel) {
@@ -63,7 +71,7 @@ export function SessionDetailsButtons({
               window.open(DISCORD_AUTH_URL);
               setJoinVoiceChannelText("Please refresh the page");
             } else {
-              window.open(voiceChannelUrl);
+              window.open(voiceChannelUrl!);
             }
 
             refreshCanJoinVoiceChannel().then(() => {
@@ -71,7 +79,7 @@ export function SessionDetailsButtons({
                 console.error("Unable to join voice channel");
               }
 
-              window.open(voiceChannelUrl);
+              window.open(voiceChannelUrl!);
             });
           }}
           className="bg-[#5865F2] hover:bg-[#7983f2]"

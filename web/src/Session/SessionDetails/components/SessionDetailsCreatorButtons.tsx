@@ -5,7 +5,17 @@ import {
   useDeleteSessionMutation,
 } from "../../../generatedTypes";
 
-export function SessionDetailsCreatorButtons() {
+export interface SessionDetailsCreatorButtonsProps {
+  sessionId: number;
+  isCancelled: boolean;
+  isPast: boolean;
+}
+
+export function SessionDetailsCreatorButtons({
+  sessionId: id,
+  isCancelled,
+  isPast,
+}: SessionDetailsCreatorButtonsProps) {
   const navigate = useNavigate();
 
   const [, cancelSession] = useCancelSessionMutation();
