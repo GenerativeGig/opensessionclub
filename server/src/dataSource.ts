@@ -2,12 +2,12 @@ import fs from "fs";
 import path from "path";
 import { DataSource } from "typeorm";
 import {
-  POSTGRES_HOST,
   POSTGRES_CA,
+  POSTGRES_HOST,
   POSTGRES_PASSWORD,
-  POSTGRES_USERNAME,
   POSTGRES_PORT,
   POSTGRES_URL,
+  POSTGRES_USERNAME,
 } from "./constants";
 import { Actor } from "./entities/actor.entity";
 import { ActorSession } from "./entities/actorSession.entity";

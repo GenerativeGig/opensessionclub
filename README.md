@@ -17,7 +17,9 @@ The project is up and running at https://opensession.club
 
 Right now working on refactoring the codebase and making technology changes.
 
-A list for upcoming features should be added to this README soon.
+### Features TODO:
+
+- Session details can be viewed without being logged in (session comments not)
 
 ## Development
 
