@@ -2,7 +2,17 @@
 
 ## General
 
+### Bugs
+
+- When first creating a non remote session and later editing to be remote, then there is still no voiceChannelUrl
+
 ## Server
+
+- use Nest.js
+
+### Refactoring
+
+Split code into smaller files, have the controller call other functions instead everything in once place.
 
 ## Web
 
@@ -23,10 +33,3 @@ Components
   There is no need to get data I am not using, that's a plus of graphql
 
 - Don't use Formik, just use native forms
-
-Next todo:
-
-- Remove unnecessary complexity in frontend by reusing more components:
-  SessionCommentCard
-
-- Fix bug when first creating a non remote session and later editing to be remote, then there is still no voiceChannelUrl
