@@ -20,6 +20,7 @@ Right now working on refactoring the codebase and making technology changes.
 ### Features TODO:
 
 - Session details can be viewed without being logged in (session comments not)
+- Create own VOIP to replace discord
 
 ## Development
 
