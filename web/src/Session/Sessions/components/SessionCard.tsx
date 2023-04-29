@@ -34,8 +34,6 @@ export function SessionCard({
     editorProps: { attributes: { class: "p-4" } },
   });
 
-  console.log("hello world");
-
   return (
     <article className="flex flex-col">
       <div className="flex justify-between">
