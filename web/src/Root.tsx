@@ -5,26 +5,26 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Provider as UrqlProvider } from "urql";
-import { ActorDetails } from "./routes/ActorDetails";
-import { ChangePassword } from "./routes/ChangePassword";
-import { CreateSession } from "./routes/CreateSession";
-import { UpdateSession } from "./routes/UpdateSession";
-import { Error } from "./routes/Error";
-import { ForgotPassword } from "./routes/ForgotPassword";
-import { Home } from "./routes/Home";
-import { Login } from "./routes/Login";
-import { OngoingSessions } from "./routes/OngoingSessions";
-import { PastSessions } from "./routes/PastSessions";
-import { SessionDetails } from "./routes/SessionDetails";
-import { Sessions } from "./routes/Sessions";
-import { Signup } from "./routes/Signup";
-import { UpcomingSessions } from "./routes/UpcomingSessions";
-import { Wrapper } from "./routes/Wrapper";
-import { urqlClient } from "./utils/urqlClient";
-import { Impressum } from "./routes/Impressum";
-import { TermsOfService } from "./routes/TermsOfService";
-import { PrivacyPolicy } from "./routes/PrivacyPolicy";
-import { ChangePasswordLoggedIn } from "./routes/ChangePasswordLoggedIn";
+import { ActorDetails } from "./Actor/ActorDetails/routes/ActorDetails";
+import { ChangePassword } from "./Actor/Common/routes/ChangePassword";
+import { ChangePasswordLoggedIn } from "./Actor/Common/routes/ChangePasswordLoggedIn";
+import { ForgotPassword } from "./Actor/Common/routes/ForgotPassword";
+import { Login } from "./Actor/Common/routes/Login";
+import { Signup } from "./Actor/Common/routes/Signup";
+import { Home } from "./Common/routes/Home";
+import { Impressum } from "./Common/routes/Impressum";
+import { PageNotFound } from "./Common/routes/PageNotFound";
+import { PrivacyPolicy } from "./Common/routes/PrivacyPolicy";
+import { TermsOfService } from "./Common/routes/TermsOfService";
+import { Wrapper } from "./Common/routes/Wrapper";
+import { urqlClient } from "./Common/utils/urqlClient";
+import { CreateSession } from "./Session/Common/routes/CreateSession";
+import { UpdateSession } from "./Session/Common/routes/UpdateSession";
+import { SessionDetails } from "./Session/SessionDetails/routes/SessionDetails";
+import { OngoingSessions } from "./Session/Sessions/routes/OngoingSessions";
+import { PastSessions } from "./Session/Sessions/routes/PastSessions";
+import { Sessions } from "./Session/Sessions/routes/Sessions";
+import { UpcomingSessions } from "./Session/Sessions/routes/UpcomingSessions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -49,7 +49,7 @@ const router = createBrowserRouter(
       <Route path="forgot-password" element={<ForgotPassword />} />
       <Route path="change-password/:token" element={<ChangePassword />} />
       <Route path="change-password" element={<ChangePasswordLoggedIn />} />
-      <Route path="*" element={<Error />} />
+      <Route path="*" element={<PageNotFound />} />
     </Route>
   )
 );
