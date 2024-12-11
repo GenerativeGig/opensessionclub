@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://opensession.club">
     <img width="150" src="./media/open-session-club-logo-white.png" alt="Open Session Club logo" />
-  </a>
 </p>
 <div align="center">
   <a href="https://discord.gg/Ms3HUBSKXv">
